@@ -93,7 +93,6 @@ public class MainActivity extends FragmentActivity {
         public Fragment getItem(int position) {
             return SuperAwesomeCardFragment.newInstance(position);
         }
-
     }
 
 }
