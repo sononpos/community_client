@@ -5,10 +5,17 @@
     android:layout_height="match_parent"
     tools:context="com.sononpos.communityviwerex.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="48dip" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_below="@+id/tabs"
+        tools:context=".MainActivity" />
 
     <!-- view for AdMob Banner Ad -->
     <com.google.android.gms.ads.AdView
