@@ -1,21 +1,29 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+<RelativeLayout
     xmlns:ads="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sononpos.communityviwerex.MainActivity">
+    android:orientation="vertical">
 
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/tabs"
         android:layout_width="match_parent"
-        android:layout_height="48dip" />
+        android:layout_height="48dip"
+        />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tabs"
-        tools:context=".MainActivity" />
+        android:layout_above="@+id/adView"
+         />
 
     <!-- view for AdMob Banner Ad -->
     <com.google.android.gms.ads.AdView
@@ -27,4 +35,23 @@
         ads:adSize="BANNER"
         ads:adUnitId="@string/banner_ad_unit_id" />
 
-</RelativeLayout>
+</RelativeLayout >
+<LinearLayout
+    android:id="@+id/drawer"
+    android:layout_gravity="start"
+    android:layout_width="240dp"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Drawer" />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        android:choiceMode="singleChoice"
+        android:dividerHeight="1dp">
+    </ListView>
+</LinearLayout>
+</android.support.v4.widget.DrawerLayout>

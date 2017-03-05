@@ -1,6 +1,7 @@
 package com.sononpos.communityviwerex;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,10 @@ public class ListViewAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.listviewitem, parent, false);
         }
 
+        convertView.setBackgroundColor(Color.parseColor("#fee0e8"));
+
         TextView titleTextView = (TextView) convertView.findViewById(R.id.textView1) ;
+        titleTextView.setTextColor(Color.parseColor("#fe6ea4"));
         TextView descTextView = (TextView) convertView.findViewById(R.id.textView2) ;
 
         ListViewItem item = listViewItemList.get(position);
@@ -62,5 +66,9 @@ public class ListViewAdapter extends BaseAdapter {
         item.m_sDesc = _sDesc;
 
         listViewItemList.add(item);
+    }
+
+    public void RemoveAll() {
+        listViewItemList.clear();
     }
 }
