@@ -27,5 +27,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.google.android.gms:play-services-ads:10.2.0'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
+    compile 'com.github.delight-im:Android-AdvancedWebView:v3.0.0'
     testCompile 'junit:junit:4.12'
 }

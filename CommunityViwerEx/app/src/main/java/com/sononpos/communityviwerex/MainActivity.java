@@ -46,6 +46,18 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager pager;
     private CommunityTypePagerAdapter adapter;
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        System.out.println("OnStart!");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        System.out.println("OnResume!");
+    }
+
     class MyHandler extends Handler {
         private MainActivity mainActivity;
 

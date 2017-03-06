@@ -48,23 +48,38 @@ public class ListViewAdapter extends BaseAdapter {
 
         convertView.setBackgroundColor(Color.parseColor("#fee0e8"));
 
-        TextView titleTextView = (TextView) convertView.findViewById(R.id.textView1) ;
+        TextView titleTextView = (TextView) convertView.findViewById(R.id.tvTitle) ;
         titleTextView.setTextColor(Color.parseColor("#fe6ea4"));
-        TextView descTextView = (TextView) convertView.findViewById(R.id.textView2) ;
+        TextView nameTextView = (TextView) convertView.findViewById(R.id.tvName) ;
+        TextView regDateTextView = (TextView) convertView.findViewById(R.id.tvRegDate) ;
+        TextView countTextView = (TextView) convertView.findViewById(R.id.tvCount) ;
 
         ListViewItem item = listViewItemList.get(position);
+        String sTitleRet = item.m_sTitle;
+        if( item.m_sTitle.length() > 30 ) {
+            sTitleRet = item.m_sTitle.substring(0, 30) + "...";
+        }
 
-        titleTextView.setText(item.m_sTitle);
-        descTextView.setText(item.m_sDesc);
+        if(item.m_sCommentCnt.isEmpty()) {
+            item.m_sCommentCnt = "0";
+        }
+        sTitleRet += "[" + item.m_sCommentCnt + "]";
+        titleTextView.setText(sTitleRet);
+        nameTextView.setText(item.m_sName);
+        regDateTextView.setText(item.m_sRegDate);
+        countTextView.setText("조회수 : " + item.m_sViewCnt);
 
         return convertView;
     }
 
-    public void AddItem(String _sTitle, String _sDesc){
+    public void AddItem(String _sTitle, String _sName, String _sRegDate, String _sViewCnt, String _sCommentCnt, String _sLink){
         ListViewItem item = new ListViewItem();
         item.m_sTitle = _sTitle;
-        item.m_sDesc = _sDesc;
-
+        item.m_sName = _sName;
+        item.m_sLink = _sLink;
+        item.m_sRegDate = _sRegDate;
+        item.m_sViewCnt = _sViewCnt;
+        item.m_sCommentCnt =_sCommentCnt;
         listViewItemList.add(item);
     }
 

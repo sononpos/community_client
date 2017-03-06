@@ -17,6 +17,7 @@
 package com.sononpos.communityviwerex;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -128,7 +129,11 @@ public class CommunityListFragment extends Fragment {
                 animation1.setDuration(4000);
                 view.startAnimation(animation1);
 
-                System.out.println("Item Clicked : " + position);
+                ListViewItem item = (ListViewItem)parent.getItemAtPosition(position);
+                System.out.println("Item Clicked : " + item.m_sLink);
+                Intent intent = new Intent(getActivity(), CommunityArticle.class);
+                intent.putExtra("URL", item.m_sLink);
+                startActivity(intent);
             }
         });
         fl.addView(listView);
@@ -166,6 +171,7 @@ public class CommunityListFragment extends Fragment {
     }
 
     private void LoadInner(){
+        if( G.liCommTypeInfo.size() == 0 ) return;
         loadingMore = true;
         bLoading = true;
         new Thread(new Runnable() {
@@ -207,7 +213,11 @@ public class CommunityListFragment extends Fragment {
                             JSONObject obj = jlist.getJSONObject(i);
                             String sTitle = obj.getString("title");
                             String sUserName = obj.getString("username");
-                            lvAdapter.AddItem(sTitle,sUserName);
+                            String sLink = obj.getString("link");
+                            String sRegDate = obj.getString("regdate");
+                            String sViewCnt = obj.getString("viewcnt");
+                            String sCommentCnt = obj.getString("commentcnt");
+                            lvAdapter.AddItem(sTitle,sUserName,sRegDate, sViewCnt, sCommentCnt, sLink);
                         }
 
                         Message msg = handler.obtainMessage();

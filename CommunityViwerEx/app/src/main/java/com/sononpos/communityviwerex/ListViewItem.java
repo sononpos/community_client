@@ -6,5 +6,9 @@ package com.sononpos.communityviwerex;
 
 public class ListViewItem {
     public String m_sTitle;
-    public String m_sDesc;
+    public String m_sName;
+    public String m_sRegDate;
+    public String m_sViewCnt;
+    public String m_sCommentCnt;
+    public String m_sLink;
 }
