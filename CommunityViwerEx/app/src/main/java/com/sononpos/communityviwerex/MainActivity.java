@@ -3,6 +3,11 @@ package com.sononpos.communityviwerex;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import android.app.AlertDialog;
+import android.app.Application;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +23,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -61,85 +70,6 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("OnResume!");
     }
 
-    class MyHandler extends Handler {
-        private MainActivity mainActivity;
-
-        public MyHandler(MainActivity act){
-            mainActivity = act;
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-            // Load an ad into the AdMob banner view.
-            AdView adView = (AdView) findViewById(R.id.adView);
-            AdRequest adRequest = new AdRequest.Builder()
-                    .setRequestAgent("android_studio:ad_template").build();
-            adView.loadAd(adRequest);
-
-            tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-            pager = (ViewPager) findViewById(R.id.pager);
-            adapter = new CommunityTypePagerAdapter(getSupportFragmentManager());
-            adapter.liData = G.liCommTypeInfo;
-            pager.setAdapter(adapter);
-            tabs.setViewPager(pager);
-            tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-                    List<Fragment> fragments = getSupportFragmentManager().getFragments();
-                    for(Fragment f: fragments) {
-                        if (f instanceof CommunityListFragment) {
-                            if ( ((CommunityListFragment)f).getPageNum() == (position+1) ) {
-                                //((CommunityListFragment)f).reload();
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-
-                }
-            });
-
-            //  Init DrawerLayout
-            dl = (DrawerLayout)findViewById(R.id.drawer_layout);
-            dlv = (View)findViewById(R.id.drawer);
-
-            /*
-            ArrayList<LeftMenuItem> aLeftMenuItem = new ArrayList<>();
-            LeftMenuItem item = new LeftMenuItem("Wang");
-            aLeftMenuItem.add(item);
-            adapterLeftMenu = new LeftMenuItemAdapter(MainActivity.this, R.layout.leftmenuitem, aLeftMenuItem);
-            ListView listLeft = (ListView)findViewById(R.id.list_left);
-            listLeft.setAdapter(adapterLeftMenu);
-            */
-
-            //  Setup ActionBar
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-            setSupportActionBar(toolbar);
-
-            ImageButton ibtn = (ImageButton)toolbar.findViewById(R.id.btn_leftmenu);
-            ibtn.setOnClickListener(new View.OnClickListener(){
-
-                @Override
-                public void onClick(View v) {
-                    dl.openDrawer(dlv);
-                }
-            });
-            //  리스트 추가
-            adapter.liData = G.liCommTypeInfo;
-        }
-    }
-
-    MyHandler handlerPager;
-
     //  DrawerLayout
     private DrawerLayout dl;
     private View dlv;
@@ -150,59 +80,92 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
-        handlerPager = new MyHandler(this);
-        G.liCommTypeInfo.clear();
 
-        new Thread(new Runnable() {
+        // Load an ad into the AdMob banner view.
+        AdView adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .setRequestAgent("android_studio:ad_template").build();
+        adView.loadAd(adRequest);
+
+        tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabs.setTextColor(Color.parseColor("#cccccc"));
+        pager = (ViewPager) findViewById(R.id.pager);
+        adapter = new CommunityTypePagerAdapter(getSupportFragmentManager());
+        adapter.liData = G.liCommTypeInfo;
+        /*
+        ArrayList<CommunityTypeInfo> filtered = new ArrayList<>();
+        Iterator<CommunityTypeInfo> iter = G.liCommTypeInfo.iterator();
+        while(iter.hasNext()) {
+            CommunityTypeInfo info = (CommunityTypeInfo)iter.next();
+            if(info.sKey.compareTo("clien") == 0){
+                filtered.add(info);
+            }
+        }
+
+        adapter.liData = filtered;
+        */
+        pager.setAdapter(adapter);
+        tabs.setViewPager(pager);
+        tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void run() {
-                try{
-                    URL url = new URL("http://52.79.205.198:3000/list");
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                    HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-                    conn.setRequestMethod("GET");
-                    conn.setConnectTimeout(3000);
-                    conn.setReadTimeout(3000);
+            }
 
-                    conn.connect();
-
-                    int responseCode = conn.getResponseCode();
-                    if( responseCode == HttpURLConnection.HTTP_OK){
-                        InputStream is   = null;
-                        ByteArrayOutputStream baos = null;
-                        String response;
-                        is = conn.getInputStream();
-                        baos = new ByteArrayOutputStream();
-                        byte[] byteBuffer = new byte[1024];
-                        byte[] byteData = null;
-                        int nLength = 0;
-
-                        while((nLength = is.read(byteBuffer, 0, byteBuffer.length)) != -1) {
-                            baos.write(byteBuffer, 0, nLength);
+            @Override
+            public void onPageSelected(int position) {
+                List<Fragment> fragments = getSupportFragmentManager().getFragments();
+                for (Fragment f : fragments) {
+                    if (f instanceof CommunityListFragment) {
+                        if (((CommunityListFragment) f).getPageNum() == (position + 1)) {
+                            //((CommunityListFragment)f).reload();
                         }
-                        byteData = baos.toByteArray();
-                        response = new String(byteData);
-                        JSONObject jobj = new JSONObject(response);
-                        Iterator<String> iter = jobj.keys();
-                        while(iter.hasNext()){
-                            String key = iter.next();
-                            JSONObject element = jobj.getJSONObject(key);
-                            String sName = element.getString("name");
-                            G.liCommTypeInfo.add(new CommunityTypeInfo(key, sName));
-                        }
-
-                        Message msg = handlerPager.obtainMessage();
-                        handlerPager.sendMessage(msg);
                     }
-                }catch(IOException e){
-                    e.printStackTrace();
-                }catch(JSONException e) {
-                    e.printStackTrace();
-                }finally {
                 }
             }
-        }).start();
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        //  Init DrawerLayout
+        dl = (DrawerLayout)findViewById(R.id.drawer_layout);
+        dlv = (View)findViewById(R.id.drawer);
+
+        ArrayList<LeftMenuItem> leftMenuList = new ArrayList<LeftMenuItem>();
+        Iterator iter = G.liCommTypeInfo.iterator();
+        while(iter.hasNext()) {
+            CommunityTypeInfo info = (CommunityTypeInfo)iter.next();
+            LeftMenuItem item = new LeftMenuItem(info.sName);
+            leftMenuList.add(item);
+        }
+        adapterLeftMenu = new LeftMenuItemAdapter(this, R.layout.leftmenuitem, leftMenuList);
+        ListView listLeft = (ListView)findViewById(R.id.list_left);
+        listLeft.setAdapter(adapterLeftMenu);
+        listLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //  메뉴 아이템 클릭
+                LeftMenuItem item =  (LeftMenuItem)parent.getItemAtPosition(position);
+                System.out.println("Menu Click : " + item.name);
+            }
+        });
+
+
+        //  Setup ActionBar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        setSupportActionBar(toolbar);
+
+        ImageButton ibtn = (ImageButton)toolbar.findViewById(R.id.btn_leftmenu);
+        ibtn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                dl.openDrawer(dlv);
+            }
+        });
     }
 
     @Override
@@ -226,6 +189,56 @@ public class MainActivity extends AppCompatActivity {
         */
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("앱 종료");
+        builder.setMessage("종료 하시겠습니까?");
+
+
+        builder.setPositiveButton("네", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+
+                dialog.dismiss();
+            }
+
+        });
+
+
+        builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Code that is <a href="http://www.numotgaming.com/series/eternal/"><span class="eternal-hover-card-container">execute</span></a>d when clicking NO
+
+                ArrayList<CommunityTypeInfo> filtered = new ArrayList<>();
+                Iterator<CommunityTypeInfo> iter = G.liCommTypeInfo.iterator();
+                while(iter.hasNext()) {
+                    CommunityTypeInfo info = (CommunityTypeInfo)iter.next();
+                    if(info.sKey.compareTo("ruliweb") == 0){
+                        filtered.add(info);
+                    }
+                }
+
+                adapter.liData = filtered;
+                adapter.notifyDataSetChanged();
+                tabs.notifyDataSetChanged();
+
+                dialog.dismiss();
+            }
+
+        });
+
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     public class CommunityTypePagerAdapter extends FragmentPagerAdapter {

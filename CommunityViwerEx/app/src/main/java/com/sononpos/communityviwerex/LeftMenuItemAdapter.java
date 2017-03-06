@@ -8,15 +8,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by nnnyy on 2017-03-05.
  */
 public class LeftMenuItemAdapter extends ArrayAdapter<LeftMenuItem> {
     Context mContext;
     int layoutResourceId;
-    LeftMenuItem menudata[];
+    List<LeftMenuItem> menudata;
 
-    public LeftMenuItemAdapter(Context mContext, int layoutResourceId, LeftMenuItem[] _data){
+    public LeftMenuItemAdapter(Context mContext, int layoutResourceId, List<LeftMenuItem> _data){
         super(mContext, layoutResourceId, _data);
 
         this.layoutResourceId = layoutResourceId;
@@ -32,7 +35,7 @@ public class LeftMenuItemAdapter extends ArrayAdapter<LeftMenuItem> {
         vListItem = inflater.inflate(layoutResourceId, parent, false);
 
         TextView tvName = (TextView)vListItem.findViewById(R.id.textViewName);
-        tvName.setText(menudata[position].name);
+        tvName.setText(menudata.get(position).name);
 
         return vListItem;
     }

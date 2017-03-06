@@ -9,5 +9,9 @@ import java.util.ArrayList;
  */
 public class G {
     public static ArrayList<CommunityTypeInfo> liCommTypeInfo = new ArrayList<>();
+    public static ArrayList<CommunityTypeInfo> GetFilteredList(){
+        ArrayList<CommunityTypeInfo> filtered = new ArrayList<>();
+        return filtered;
+    }
     public static final String SERV_ROOT = "http://52.79.205.198:3000/";
 }

@@ -18,6 +18,7 @@ package com.sononpos.communityviwerex;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -105,6 +106,8 @@ public class CommunityListFragment extends Fragment {
         if(lvAdapter == null) lvAdapter = new ListViewAdapter();
         listView = new ListView(getContext());
         listView.setAdapter(lvAdapter);
+        listView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, new int[]{0, 0xFF000000, 0}));
+        listView.setDividerHeight(1);
         View footerView;
         footerView = ((LayoutInflater)getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.list_footer, null, false);
         listView.addFooterView(footerView);

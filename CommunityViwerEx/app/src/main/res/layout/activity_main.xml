@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="#333333">
 
 <RelativeLayout
     xmlns:ads="http://schemas.android.com/apk/res-auto"
@@ -16,8 +17,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
-        android:background="#fee0e8">
-        <ImageButton android:src="@drawable/common_google_signin_btn_icon_dark"
+        android:background="#cccccc">
+        <ImageButton android:src="@drawable/icon_menu"
             android:background="?attr/actionBarItemBackground"
             android:layout_width="?attr/actionBarSize"
             android:layout_height="match_parent"
@@ -30,8 +31,8 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="24dp"
-            android:textColor="#fe6ea4"
-            android:text="커뮤니티 모아"
+            android:textColor="#999999"
+            android:text="Community MoA"
             />
     </android.support.v7.widget.Toolbar>
 
@@ -70,12 +71,18 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Drawer" />
+        android:background="#333333"
+        android:textColor="#999999"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:height="30dp"
+        android:text="활성화 메뉴" />
     <ListView
         android:id="@+id/list_left"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"
+        android:background="#333333"
         android:choiceMode="singleChoice"
         android:dividerHeight="1dp">
     </ListView>

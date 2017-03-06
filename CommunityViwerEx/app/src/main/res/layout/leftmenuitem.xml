@@ -12,7 +12,8 @@
         android:layout_centerVertical="true"
         android:paddingRight="10dp"
         android:text="Item Name"
-        android:textColor="@android:color/black"
+        android:textSize="18dp"
+        android:textColor="#999999"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
         />
 

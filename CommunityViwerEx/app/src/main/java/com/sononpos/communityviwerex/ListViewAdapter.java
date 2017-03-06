@@ -46,10 +46,10 @@ public class ListViewAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.listviewitem, parent, false);
         }
 
-        convertView.setBackgroundColor(Color.parseColor("#fee0e8"));
+        //convertView.setBackgroundColor(Color.parseColor("#fee0e8"));
 
         TextView titleTextView = (TextView) convertView.findViewById(R.id.tvTitle) ;
-        titleTextView.setTextColor(Color.parseColor("#fe6ea4"));
+        //titleTextView.setTextColor(Color.parseColor("#fe6ea4"));
         TextView nameTextView = (TextView) convertView.findViewById(R.id.tvName) ;
         TextView regDateTextView = (TextView) convertView.findViewById(R.id.tvRegDate) ;
         TextView countTextView = (TextView) convertView.findViewById(R.id.tvCount) ;
@@ -62,6 +62,10 @@ public class ListViewAdapter extends BaseAdapter {
 
         if(item.m_sCommentCnt.isEmpty()) {
             item.m_sCommentCnt = "0";
+        }
+
+        if(item.m_sName.isEmpty()) {
+            item.m_sName = "noname";
         }
         sTitleRet += "[" + item.m_sCommentCnt + "]";
         titleTextView.setText(sTitleRet);
