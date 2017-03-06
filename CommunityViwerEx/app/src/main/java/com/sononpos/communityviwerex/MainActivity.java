@@ -13,11 +13,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private PagerSlidingTabStrip tabs;
     private ViewPager pager;
     private CommunityTypePagerAdapter adapter;
+    private LeftMenuItemAdapter adapterLeftMenu;
 
     @Override
     protected void onStart() {
@@ -109,15 +112,20 @@ public class MainActivity extends AppCompatActivity {
             dl = (DrawerLayout)findViewById(R.id.drawer_layout);
             dlv = (View)findViewById(R.id.drawer);
 
+            /*
+            ArrayList<LeftMenuItem> aLeftMenuItem = new ArrayList<>();
+            LeftMenuItem item = new LeftMenuItem("Wang");
+            aLeftMenuItem.add(item);
+            adapterLeftMenu = new LeftMenuItemAdapter(MainActivity.this, R.layout.leftmenuitem, aLeftMenuItem);
+            ListView listLeft = (ListView)findViewById(R.id.list_left);
+            listLeft.setAdapter(adapterLeftMenu);
+            */
+
             //  Setup ActionBar
-            ActionBar ab = getSupportActionBar();
-            ab.setDisplayShowCustomEnabled(true);
-            ab.setDisplayHomeAsUpEnabled(false);
-            ab.setDisplayShowTitleEnabled(false);
-            LayoutInflater li = LayoutInflater.from(mainActivity);
-            View vCustomAB = li.inflate(R.layout.toolbar, null);
-            ab.setCustomView(vCustomAB);
-            ImageButton ibtn = (ImageButton)vCustomAB.findViewById(R.id.btn_leftmenu);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+            setSupportActionBar(toolbar);
+
+            ImageButton ibtn = (ImageButton)toolbar.findViewById(R.id.btn_leftmenu);
             ibtn.setOnClickListener(new View.OnClickListener(){
 
                 @Override
@@ -125,10 +133,8 @@ public class MainActivity extends AppCompatActivity {
                     dl.openDrawer(dlv);
                 }
             });
-
+            //  리스트 추가
             adapter.liData = G.liCommTypeInfo;
-
-
         }
     }
 
@@ -140,6 +146,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("OnCreate!");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         

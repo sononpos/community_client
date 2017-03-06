@@ -11,10 +11,35 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:background="#fee0e8">
+        <ImageButton android:src="@drawable/common_google_signin_btn_icon_dark"
+            android:background="?attr/actionBarItemBackground"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:id="@+id/btn_leftmenu"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:textColor="#fe6ea4"
+            android:text="커뮤니티 모아"
+            />
+    </android.support.v7.widget.Toolbar>
+
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="48dip"
+        android:layout_below="@id/toolBar"
         />
 
     <android.support.v4.view.ViewPager
@@ -47,6 +72,7 @@
         android:layout_height="wrap_content"
         android:text="Drawer" />
     <ListView
+        android:id="@+id/list_left"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF"

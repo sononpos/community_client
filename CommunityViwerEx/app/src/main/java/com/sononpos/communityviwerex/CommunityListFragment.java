@@ -126,7 +126,7 @@ public class CommunityListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Animation animation1 = new AlphaAnimation(0.3f, 1.0f);
-                animation1.setDuration(4000);
+                animation1.setDuration(1000);
                 view.startAnimation(animation1);
 
                 ListViewItem item = (ListViewItem)parent.getItemAtPosition(position);
