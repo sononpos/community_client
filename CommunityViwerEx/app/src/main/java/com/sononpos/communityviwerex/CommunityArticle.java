@@ -5,6 +5,9 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Activity;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import im.delight.android.webview.AdvancedWebView;
 
 public class CommunityArticle extends Activity implements AdvancedWebView.Listener {
@@ -22,6 +25,12 @@ public class CommunityArticle extends Activity implements AdvancedWebView.Listen
         Intent intent = getIntent();
         String sURL = intent.getStringExtra("URL");
         mWebView.loadUrl(sURL);
+
+        // Load an ad into the AdMob banner view.
+        AdView adView = (AdView) findViewById(R.id.adViewWeb);
+        AdRequest adRequest = new AdRequest.Builder()
+                .setRequestAgent("android_studio:ad_template").build();
+        adView.loadAd(adRequest);
     }
 
     @Override
