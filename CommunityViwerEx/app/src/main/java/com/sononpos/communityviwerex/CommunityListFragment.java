@@ -69,12 +69,19 @@ public class CommunityListFragment extends Fragment {
     Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
+
             super.handleMessage(msg);
-            nLoadOffset++;
+            if(msg.arg1 >= 0) {
+                nLoadOffset++;
+                lvAdapter.notifyDataSetChanged();
+            }
+            else {
+                Toast.makeText(getContext(), "갱신 실패", 1000).show();
+            }
+
             bLoading = false;
             loadingMore = false;
             fl.setRefreshing(false);
-            lvAdapter.notifyDataSetChanged();
         }
     };
 
@@ -133,6 +140,10 @@ public class CommunityListFragment extends Fragment {
                 Animation animation1 = new AlphaAnimation(0.3f, 1.0f);
                 animation1.setDuration(1000);
                 view.startAnimation(animation1);
+
+                if( !(parent.getItemAtPosition(position) instanceof ListViewItem) ) {
+                    return;
+                }
 
                 ListViewItem item = (ListViewItem)parent.getItemAtPosition(position);
                 System.out.println("Item Clicked : " + item.m_sLink);
@@ -224,6 +235,7 @@ public class CommunityListFragment extends Fragment {
                         for(int i = 0 ; i < len ; ++i) {
                             JSONObject obj = jlist.getJSONObject(i);
                             String sTitle = obj.getString("title");
+                            if(sTitle.isEmpty() || sTitle.compareTo("") == 0) continue;
                             String sUserName = obj.getString("username");
                             String sLink = obj.getString("link");
                             String sRegDate = obj.getString("regdate");
@@ -233,12 +245,24 @@ public class CommunityListFragment extends Fragment {
                         }
 
                         Message msg = handler.obtainMessage();
+                        msg.arg1 = 0;
+                        handler.sendMessage(msg);
+                    }
+                    else {
+                        Message msg = handler.obtainMessage();
+                        msg.arg1 = -3;
                         handler.sendMessage(msg);
                     }
                 }catch(IOException e){
                     e.printStackTrace();
+                    Message msg = handler.obtainMessage();
+                    msg.arg1 = -1;
+                    handler.sendMessage(msg);
                 }catch(JSONException e) {
                     e.printStackTrace();
+                    Message msg = handler.obtainMessage();
+                    msg.arg1 = -2;
+                    handler.sendMessage(msg);
                 }finally {
                 }
             }

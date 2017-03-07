@@ -105,10 +105,15 @@ public class LoadingActivity extends AppCompatActivity {
                         Message msg = handlerPager.obtainMessage();
                         handlerPager.sendMessage(msg);
                     }
+                    else {
+                        finish();
+                    }
                 }catch(IOException e){
                     e.printStackTrace();
+                    finish();
                 }catch(JSONException e) {
                     e.printStackTrace();
+                    finish();
                 }finally {
                 }
             }

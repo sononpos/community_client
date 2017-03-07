@@ -17,7 +17,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
-        android:background="#cccccc">
+        android:background="#2a2a2a">
         <ImageButton android:src="@drawable/icon_menu"
             android:background="?attr/actionBarItemBackground"
             android:layout_width="?attr/actionBarSize"
@@ -31,7 +31,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="24dp"
-            android:textColor="#333333"
+            android:textColor="#eeeeee"
             android:text="Community MoA"
             />
     </android.support.v7.widget.Toolbar>
@@ -70,14 +70,14 @@
     android:orientation="vertical">
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#333333"
+        android:layout_height="60dp"
+        android:background="#2a2a2a"
         android:textColor="#eeeeee"
         android:textAlignment="center"
         android:gravity="center"
         android:textSize="20dp"
         android:height="30dp"
-        android:text="활성화 버튼" />
+        android:text="Community MoA" />
     <ListView
         android:id="@+id/list_left"
         android:layout_width="match_parent"
