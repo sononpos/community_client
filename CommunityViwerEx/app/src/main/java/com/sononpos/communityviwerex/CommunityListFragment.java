@@ -61,6 +61,7 @@ public class CommunityListFragment extends Fragment {
 
     private int position;
     private int nLoadOffset = 0;
+    private String sNextURL = "";
     private boolean bLoading = false;
     private boolean loadingMore = false;
     SwipeRefreshLayout fl;
@@ -98,6 +99,7 @@ public class CommunityListFragment extends Fragment {
             @Override
             public void onRefresh() {
                 nLoadOffset = 0;
+                sNextURL = "";
                 lvAdapter.RemoveAll();
                 LoadList();
             }
@@ -181,7 +183,13 @@ public class CommunityListFragment extends Fragment {
             @Override
             public void run() {
                 try {
-                    URL url = new URL(G.SERV_ROOT + G.GetCommunityList().get(position).sKey + "/" + (nLoadOffset+1));
+                    URL url;
+                    if( nLoadOffset == 0 ) {
+                        url = new URL(G.SERV_ROOT + G.GetCommunityList().get(position).sKey + "/" + (nLoadOffset+1));
+                    }
+                    else {
+                        url = new URL(G.SERV_ROOT + G.GetCommunityList().get(position).sKey + "/" + sNextURL);
+                    }
 
                     HttpURLConnection conn = (HttpURLConnection)url.openConnection();
                     conn.setRequestMethod("GET");
@@ -209,6 +217,7 @@ public class CommunityListFragment extends Fragment {
 
                         System.out.println(response);
                         JSONArray jobj = new JSONArray(response);
+                        sNextURL = jobj.getJSONObject(0).getString("next_url");
                         JSONArray jlist = jobj.getJSONObject(0).getJSONArray("list");
                         int len = jlist.length();
 

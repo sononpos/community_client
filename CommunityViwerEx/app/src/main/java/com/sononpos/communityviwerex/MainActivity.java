@@ -84,14 +84,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Load an ad into the AdMob banner view.
-        AdView adView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .setRequestAgent("android_studio:ad_template").build();
-        adView.loadAd(adRequest);
-
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setTextColor(Color.parseColor("#cccccc"));
+        tabs.setTextSize(40);
         pager = (ViewPager) findViewById(R.id.pager);
         adapter = new CommunityTypePagerAdapter(getSupportFragmentManager());
         adapter.liData = G.GetCommunityList();
@@ -188,6 +183,12 @@ public class MainActivity extends AppCompatActivity {
                 dl.openDrawer(dlv);
             }
         });
+
+        // Load an ad into the AdMob banner view.
+        AdView adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .setRequestAgent("android_studio:ad_template").build();
+        adView.loadAd(adRequest);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.sononpos.communityviwerex;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,8 +57,8 @@ public class ListViewAdapter extends BaseAdapter {
 
         ListViewItem item = listViewItemList.get(position);
         String sTitleRet = item.m_sTitle;
-        if( item.m_sTitle.length() > 30 ) {
-            sTitleRet = item.m_sTitle.substring(0, 30) + "...";
+        if( item.m_sTitle.length() > 26 ) {
+            sTitleRet = item.m_sTitle.substring(0, 26) + "...";
         }
 
         if(item.m_sCommentCnt.isEmpty()) {
@@ -67,8 +68,14 @@ public class ListViewAdapter extends BaseAdapter {
         if(item.m_sName.isEmpty()) {
             item.m_sName = "noname";
         }
-        sTitleRet += "[" + item.m_sCommentCnt + "]";
-        titleTextView.setText(sTitleRet);
+        sTitleRet += " <font color='#f95959'>[" + item.m_sCommentCnt + "]</font>";
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N){
+            titleTextView.setText(Html.fromHtml(sTitleRet, Html.FROM_HTML_MODE_LEGACY));
+        }
+        else{
+            titleTextView.setText(Html.fromHtml(sTitleRet));
+        }
         nameTextView.setText(item.m_sName);
         regDateTextView.setText(item.m_sRegDate);
         countTextView.setText("조회수 : " + item.m_sViewCnt);
