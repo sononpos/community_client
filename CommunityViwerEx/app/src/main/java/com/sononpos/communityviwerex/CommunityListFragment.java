@@ -174,14 +174,14 @@ public class CommunityListFragment extends Fragment {
     }
 
     private void LoadInner(){
-        if( G.liCommTypeInfo.size() == 0 ) return;
+        if( G.GetCommunityList().size() == 0 ) return;
         loadingMore = true;
         bLoading = true;
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    URL url = new URL(G.SERV_ROOT + G.liCommTypeInfo.get(position).sKey + "/" + (nLoadOffset+1));
+                    URL url = new URL(G.SERV_ROOT + G.GetCommunityList().get(position).sKey + "/" + (nLoadOffset+1));
 
                     HttpURLConnection conn = (HttpURLConnection)url.openConnection();
                     conn.setRequestMethod("GET");

@@ -2,6 +2,7 @@ package com.sononpos.communityviwerex;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +35,19 @@ public class LeftMenuItemAdapter extends ArrayAdapter<LeftMenuItem> {
         LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
         vListItem = inflater.inflate(layoutResourceId, parent, false);
 
+        vListItem.setBackgroundColor(Color.parseColor("#333333"));
+
         TextView tvName = (TextView)vListItem.findViewById(R.id.textViewName);
         tvName.setText(menudata.get(position).name);
+
+        CommunityTypeInfo info = G.liCommTypeInfo.get(position);
+
+        if( G.liFiltered.contains(info.sKey) ) {
+            tvName.setTextColor(Color.parseColor("#555555"));
+        }
+        else {
+            tvName.setTextColor(Color.parseColor("#eeeeee"));
+        }
 
         return vListItem;
     }

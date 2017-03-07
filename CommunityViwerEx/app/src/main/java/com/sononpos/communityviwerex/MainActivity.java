@@ -29,6 +29,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -47,6 +48,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static com.sononpos.communityviwerex.G.liFiltered;
 
 public class MainActivity extends AppCompatActivity {
     // Remove the below line after defining your own ad unit ID.
@@ -91,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         tabs.setTextColor(Color.parseColor("#cccccc"));
         pager = (ViewPager) findViewById(R.id.pager);
         adapter = new CommunityTypePagerAdapter(getSupportFragmentManager());
-        adapter.liData = G.liCommTypeInfo;
+        adapter.liData = G.GetCommunityList();
         /*
         ArrayList<CommunityTypeInfo> filtered = new ArrayList<>();
         Iterator<CommunityTypeInfo> iter = G.liCommTypeInfo.iterator();
@@ -138,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         Iterator iter = G.liCommTypeInfo.iterator();
         while(iter.hasNext()) {
             CommunityTypeInfo info = (CommunityTypeInfo)iter.next();
-            LeftMenuItem item = new LeftMenuItem(info.sName);
+            LeftMenuItem item = new LeftMenuItem(info.sName, info.sKey);
             leftMenuList.add(item);
         }
         adapterLeftMenu = new LeftMenuItemAdapter(this, R.layout.leftmenuitem, leftMenuList);
@@ -149,7 +152,26 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //  메뉴 아이템 클릭
                 LeftMenuItem item =  (LeftMenuItem)parent.getItemAtPosition(position);
+                TextView tvName = (TextView)view.findViewById(R.id.textViewName);
+
                 System.out.println("Menu Click : " + item.name);
+                if( G.liFiltered.contains(item.sKey) ) {
+                    G.liFiltered.remove(item.sKey);
+                    tvName.setTextColor(Color.parseColor("#eeeeee"));
+                }
+                else {
+                    G.liFiltered.add(item.sKey);
+                    tvName.setTextColor(Color.parseColor("#555555"));
+                }
+
+                pager.setCurrentItem(0);
+
+                G.setStringArrayPref(getApplicationContext(), G.FILTERED_COMM, new ArrayList<String>(G.liFiltered));
+                G.RefreshFilteredInfo();
+
+                adapter.liData = G.GetCommunityList();
+                adapter.notifyDataSetChanged();
+                tabs.notifyDataSetChanged();
             }
         });
 
@@ -217,20 +239,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 
                 // Code that is <a href="http://www.numotgaming.com/series/eternal/"><span class="eternal-hover-card-container">execute</span></a>d when clicking NO
-
-                ArrayList<CommunityTypeInfo> filtered = new ArrayList<>();
-                Iterator<CommunityTypeInfo> iter = G.liCommTypeInfo.iterator();
-                while(iter.hasNext()) {
-                    CommunityTypeInfo info = (CommunityTypeInfo)iter.next();
-                    if(info.sKey.compareTo("ruliweb") == 0){
-                        filtered.add(info);
-                    }
-                }
-
-                adapter.liData = filtered;
-                adapter.notifyDataSetChanged();
-                tabs.notifyDataSetChanged();
-
                 dialog.dismiss();
             }
 

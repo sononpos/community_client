@@ -5,8 +5,10 @@ package com.sononpos.communityviwerex;
  */
 public class LeftMenuItem {
     public String name;
+    public String sKey;
 
-    public LeftMenuItem(String _name ) {
+    public LeftMenuItem(String _name, String _key ) {
         name = _name;
+        sKey = _key;
     }
 }

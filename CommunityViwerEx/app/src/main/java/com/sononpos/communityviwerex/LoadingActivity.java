@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 
 public class LoadingActivity extends AppCompatActivity {
@@ -45,6 +47,13 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
 
         G.liCommTypeInfo.clear();
+        ArrayList<String> aFiltered = G.getStringArrayPref(this, G.FILTERED_COMM);
+        if(aFiltered != null) {
+            G.liFiltered = new HashSet<String>(aFiltered);
+        }
+        else {
+            G.liFiltered.clear();
+        }
         handlerPager = new MyHandler(this);
 
         new Thread(new Runnable() {
@@ -90,6 +99,8 @@ public class LoadingActivity extends AppCompatActivity {
                             String sName = element.getString("name");
                             G.liCommTypeInfo.add(new CommunityTypeInfo(key, sName));
                         }
+
+                        G.RefreshFilteredInfo();
 
                         Message msg = handlerPager.obtainMessage();
                         handlerPager.sendMessage(msg);
