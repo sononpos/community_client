@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //  실제 서비스가 시작되면 주석 제거
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3598320494828213~8676238288");
 
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
@@ -177,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ImageButton ibtn = (ImageButton)toolbar.findViewById(R.id.btn_leftmenu);
-        ibtn.setOnClickListener(new View.OnClickListener(){
+        ibtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -187,7 +188,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Load an ad into the AdMob banner view.
         AdView adView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();  // An example device ID
         adView.loadAd(adRequest);
     }
 
