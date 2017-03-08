@@ -5,8 +5,10 @@ import com.google.android.gms.ads.AdView;
 
 import android.app.AlertDialog;
 import android.app.Application;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -62,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
     private CommunityTypePagerAdapter adapter;
     private LeftMenuItemAdapter adapterLeftMenu;
 
+    public SharedPreferences shortcutSharedPref;
+    public boolean isInstalled;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -71,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // Load an ad into the AdMob banner view.
+        AdView adView = (AdView) findViewById(R.id.adView);
+        adView.refreshDrawableState();
         System.out.println("OnResume!");
     }
 
@@ -86,24 +94,18 @@ public class MainActivity extends AppCompatActivity {
         //  실제 서비스가 시작되면 주석 제거
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3598320494828213~8676238288");
 
+        // Load an ad into the AdMob banner view.
+        AdView adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();  // An example device ID
+        adView.loadAd(adRequest);
+
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setTextColor(Color.parseColor("#cccccc"));
         tabs.setTextSize(40);
         pager = (ViewPager) findViewById(R.id.pager);
         adapter = new CommunityTypePagerAdapter(getSupportFragmentManager());
         adapter.liData = G.GetCommunityList();
-        /*
-        ArrayList<CommunityTypeInfo> filtered = new ArrayList<>();
-        Iterator<CommunityTypeInfo> iter = G.liCommTypeInfo.iterator();
-        while(iter.hasNext()) {
-            CommunityTypeInfo info = (CommunityTypeInfo)iter.next();
-            if(info.sKey.compareTo("clien") == 0){
-                filtered.add(info);
-            }
-        }
-
-        adapter.liData = filtered;
-        */
         pager.setAdapter(adapter);
         tabs.setViewPager(pager);
         tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -186,11 +188,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Load an ad into the AdMob banner view.
-        AdView adView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();  // An example device ID
-        adView.loadAd(adRequest);
+
     }
 
     @Override
