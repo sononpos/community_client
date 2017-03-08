@@ -16,6 +16,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -171,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
                 adapter.liData = G.GetCommunityList();
                 adapter.notifyDataSetChanged();
                 tabs.notifyDataSetChanged();
+
             }
         });
 
@@ -250,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
-    public class CommunityTypePagerAdapter extends FragmentPagerAdapter {
+    public class CommunityTypePagerAdapter extends FragmentStatePagerAdapter {
 
         private static final String ARG_POSITION = "position";
         ArrayList<CommunityTypeInfo> liData = new ArrayList<>();
@@ -280,11 +282,26 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
+            System.out.println("Fragment Adapter : getItem - " + position);
             CommunityListFragment f = new CommunityListFragment();
             Bundle b = new Bundle();
             b.putInt(ARG_POSITION, position);
             f.setArguments(b);
             return f;
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            CommunityListFragment fragment = (CommunityListFragment)object;
+            int nPageNum = fragment.getPageNum();
+
+            if(nPageNum == 0 ) fragment.Reload();
+
+            if (nPageNum >= 0) {
+                return nPageNum;
+            } else {
+                return POSITION_NONE;
+            }
         }
     }
 

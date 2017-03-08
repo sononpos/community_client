@@ -105,10 +105,7 @@ public class CommunityListFragment extends Fragment {
         fl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                nLoadOffset = 0;
-                sNextURL = "";
-                lvAdapter.RemoveAll();
-                LoadList();
+                Reload();
             }
         });
 
@@ -164,6 +161,13 @@ public class CommunityListFragment extends Fragment {
         if(menuVisible) {
             System.out.println("##########################" + position + "###########################");
         }
+    }
+
+    void Reload() {
+        nLoadOffset = 0;
+        sNextURL = "";
+        lvAdapter.RemoveAll();
+        LoadList();
     }
 
     void LoadMore() {
