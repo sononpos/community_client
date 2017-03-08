@@ -136,57 +136,6 @@ public class CommunityListFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-
-        backupString = "{" + backupString + "}";
-
-        outState.putString("backupList", backupString);
-
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-
-        if( savedInstanceState != null ) {
-            backupString = savedInstanceState.getString("backupList" , "");
-
-            try {
-                JSONObject firstobj = new JSONObject(backupString);
-                int nLen = firstobj.length();
-                for(int ix = 0 ; ix < nLen ; ++ix) {
-                    JSONArray jobj = (JSONArray)firstobj.get(String.valueOf(ix));
-                    sNextURL = jobj.getJSONObject(0).getString("next_url");
-                    JSONArray jlist = jobj.getJSONObject(0).getJSONArray("list");
-                    int len = jlist.length();
-
-                    for(int i = 0 ; i < len ; ++i) {
-                        JSONObject obj = jlist.getJSONObject(i);
-                        String sTitle = obj.getString("title");
-                        if(sTitle.isEmpty() || sTitle.compareTo("") == 0) continue;
-                        String sUserName = obj.getString("username");
-                        String sLink = obj.getString("link");
-                        String sRegDate = obj.getString("regdate");
-                        String sViewCnt = obj.getString("viewcnt");
-                        String sCommentCnt = obj.getString("commentcnt");
-                        lvAdapter.AddItem(sTitle,sUserName,sRegDate, sViewCnt, sCommentCnt, sLink);
-                    }
-                }
-            }catch(JSONException e) {
-
-            }
-
-            nLoadOffset++;
-            lvAdapter.notifyDataSetChanged();
-        }
-        else {
-            LoadList();
-        }
-
-        super.onViewStateRestored(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -241,6 +190,7 @@ public class CommunityListFragment extends Fragment {
             }
         });
         fl.addView(listView);
+        LoadList();
 
         return fl;
     }
