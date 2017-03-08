@@ -22,6 +22,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.TypedValue;
@@ -64,6 +65,9 @@ public class CommunityListFragment extends Fragment {
     private String sNextURL = "";
     private boolean bLoading = false;
     private boolean loadingMore = false;
+
+    private JSONArray jsBackup = new JSONArray();
+    private String backupString = "";
     SwipeRefreshLayout fl;
 
     Handler handler = new Handler(){
@@ -72,6 +76,42 @@ public class CommunityListFragment extends Fragment {
 
             super.handleMessage(msg);
             if(msg.arg1 >= 0) {
+
+                String response = (String)msg.obj;
+
+                try {
+                    jsBackup.put(nLoadOffset, response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if(backupString.isEmpty() || backupString == "") {
+                    backupString = "\"" + nLoadOffset + "\":" + response;
+                }
+                else {
+                    backupString += ",\"" + nLoadOffset + "\":" + response;
+                }
+
+                try {
+                    JSONArray jobj = new JSONArray(response);
+                    sNextURL = jobj.getJSONObject(0).getString("next_url");
+                    JSONArray jlist = jobj.getJSONObject(0).getJSONArray("list");
+                    int len = jlist.length();
+
+                    for(int i = 0 ; i < len ; ++i) {
+                        JSONObject obj = jlist.getJSONObject(i);
+                        String sTitle = obj.getString("title");
+                        if(sTitle.isEmpty() || sTitle.compareTo("") == 0) continue;
+                        String sUserName = obj.getString("username");
+                        String sLink = obj.getString("link");
+                        String sRegDate = obj.getString("regdate");
+                        String sViewCnt = obj.getString("viewcnt");
+                        String sCommentCnt = obj.getString("commentcnt");
+                        lvAdapter.AddItem(sTitle,sUserName,sRegDate, sViewCnt, sCommentCnt, sLink);
+                    }
+                }catch(JSONException e) {
+
+                }
+
                 nLoadOffset++;
                 lvAdapter.notifyDataSetChanged();
             }
@@ -93,6 +133,57 @@ public class CommunityListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         position = getArguments().getInt(ARG_POSITION);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        backupString = "{" + backupString + "}";
+
+        outState.putString("backupList", backupString);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+
+        if( savedInstanceState != null ) {
+            backupString = savedInstanceState.getString("backupList" , "");
+
+            try {
+                JSONObject firstobj = new JSONObject(backupString);
+                int nLen = firstobj.length();
+                for(int ix = 0 ; ix < nLen ; ++ix) {
+                    JSONArray jobj = (JSONArray)firstobj.get(String.valueOf(ix));
+                    sNextURL = jobj.getJSONObject(0).getString("next_url");
+                    JSONArray jlist = jobj.getJSONObject(0).getJSONArray("list");
+                    int len = jlist.length();
+
+                    for(int i = 0 ; i < len ; ++i) {
+                        JSONObject obj = jlist.getJSONObject(i);
+                        String sTitle = obj.getString("title");
+                        if(sTitle.isEmpty() || sTitle.compareTo("") == 0) continue;
+                        String sUserName = obj.getString("username");
+                        String sLink = obj.getString("link");
+                        String sRegDate = obj.getString("regdate");
+                        String sViewCnt = obj.getString("viewcnt");
+                        String sCommentCnt = obj.getString("commentcnt");
+                        lvAdapter.AddItem(sTitle,sUserName,sRegDate, sViewCnt, sCommentCnt, sLink);
+                    }
+                }
+            }catch(JSONException e) {
+
+            }
+
+            nLoadOffset++;
+            lvAdapter.notifyDataSetChanged();
+        }
+        else {
+            LoadList();
+        }
+
+        super.onViewStateRestored(savedInstanceState);
     }
 
     @Override
@@ -150,7 +241,6 @@ public class CommunityListFragment extends Fragment {
             }
         });
         fl.addView(listView);
-        LoadList();
 
         return fl;
     }
@@ -164,6 +254,8 @@ public class CommunityListFragment extends Fragment {
     }
 
     void Reload() {
+        backupString = "";
+        jsBackup = new JSONArray();
         nLoadOffset = 0;
         sNextURL = "";
         lvAdapter.RemoveAll();
@@ -197,6 +289,7 @@ public class CommunityListFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
+
                 try {
                     URL url;
                     if( nLoadOffset == 0 ) {
@@ -231,25 +324,9 @@ public class CommunityListFragment extends Fragment {
                         response = new String(byteData);
 
                         System.out.println(response);
-                        JSONArray jobj = new JSONArray(response);
-                        sNextURL = jobj.getJSONObject(0).getString("next_url");
-                        JSONArray jlist = jobj.getJSONObject(0).getJSONArray("list");
-                        int len = jlist.length();
-
-                        for(int i = 0 ; i < len ; ++i) {
-                            JSONObject obj = jlist.getJSONObject(i);
-                            String sTitle = obj.getString("title");
-                            if(sTitle.isEmpty() || sTitle.compareTo("") == 0) continue;
-                            String sUserName = obj.getString("username");
-                            String sLink = obj.getString("link");
-                            String sRegDate = obj.getString("regdate");
-                            String sViewCnt = obj.getString("viewcnt");
-                            String sCommentCnt = obj.getString("commentcnt");
-                            lvAdapter.AddItem(sTitle,sUserName,sRegDate, sViewCnt, sCommentCnt, sLink);
-                        }
-
                         Message msg = handler.obtainMessage();
                         msg.arg1 = 0;
+                        msg.obj = (Object)response;
                         handler.sendMessage(msg);
                     }
                     else {
@@ -261,11 +338,6 @@ public class CommunityListFragment extends Fragment {
                     e.printStackTrace();
                     Message msg = handler.obtainMessage();
                     msg.arg1 = -1;
-                    handler.sendMessage(msg);
-                }catch(JSONException e) {
-                    e.printStackTrace();
-                    Message msg = handler.obtainMessage();
-                    msg.arg1 = -2;
                     handler.sendMessage(msg);
                 }finally {
                 }

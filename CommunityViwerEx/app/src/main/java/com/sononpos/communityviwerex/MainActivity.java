@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -106,6 +107,12 @@ public class MainActivity extends AppCompatActivity {
         tabs.setTextSize(40);
         pager = (ViewPager) findViewById(R.id.pager);
         adapter = new CommunityTypePagerAdapter(getSupportFragmentManager());
+        adapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+            }
+        });
         adapter.liData = G.GetCommunityList();
         pager.setAdapter(adapter);
         tabs.setViewPager(pager);
