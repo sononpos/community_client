@@ -21,6 +21,20 @@ public class ThemeManager {
     private static final String ThemeWhite_LeftItemEnableColor = "#111111";
     private static final String ThemeWhite_LeftItemDisableColor = "#999999";
 
+    private static final String ThemeSakura_BasicFontColor = "#f25e8d";
+    private static final String ThemeSakura_SubFontColor = "#fb9bb9";
+    private static final String ThemeSakura_BgListColor = "#f3e5e2";
+    private static final String ThemeSakura_BgTitleColor = "#f3e5e2";
+    private static final String ThemeSakura_LeftItemEnableColor = "#f25e8d";
+    private static final String ThemeSakura_LeftItemDisableColor = "#dec7ce";
+
+    private static final String ThemeYellow_BasicFontColor = "#ff4a4a";
+    private static final String ThemeYellow_SubFontColor = "#c23838";
+    private static final String ThemeYellow_BgListColor = "#fee485";
+    private static final String ThemeYellow_BgTitleColor = "#fee485";
+    private static final String ThemeYellow_LeftItemEnableColor = "#ff4a4a";
+    private static final String ThemeYellow_LeftItemDisableColor = "#cfa7a7";
+
     static public class ThemeColorObject {
 
         public ThemeColorObject() {
@@ -48,6 +62,8 @@ public class ThemeManager {
         switch(themeNum) {
             case 0: return "검정색 테마";
             case 1: return "흰색 테마";
+            case 2: return "사쿠라 테마";
+            case 3: return "병아리 테마";
             default: return "검정색 테마";
         }
     }
@@ -70,6 +86,24 @@ public class ThemeManager {
                 themeColor.BgTitle = ThemeWhite_BgTitleColor;
                 themeColor.LeftEnable = ThemeWhite_LeftItemEnableColor;
                 themeColor.LeftDisable = ThemeWhite_LeftItemDisableColor;
+                break;
+
+            case 2:
+                themeColor.BasicFont = ThemeSakura_BasicFontColor;
+                themeColor.SubFont = ThemeSakura_SubFontColor;
+                themeColor.BgList = ThemeSakura_BgListColor;
+                themeColor.BgTitle = ThemeSakura_BgTitleColor;
+                themeColor.LeftEnable = ThemeSakura_LeftItemEnableColor;
+                themeColor.LeftDisable = ThemeSakura_LeftItemDisableColor;
+                break;
+
+            case 3:
+                themeColor.BasicFont = ThemeYellow_BasicFontColor;
+                themeColor.SubFont = ThemeYellow_SubFontColor;
+                themeColor.BgList = ThemeYellow_BgListColor;
+                themeColor.BgTitle = ThemeYellow_BgTitleColor;
+                themeColor.LeftEnable = ThemeYellow_LeftItemEnableColor;
+                themeColor.LeftDisable = ThemeYellow_LeftItemDisableColor;
                 break;
 
             default:

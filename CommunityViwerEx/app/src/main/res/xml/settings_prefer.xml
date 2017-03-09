@@ -8,5 +8,17 @@
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:summary="테스트"
-        android:title="테마 변경" />
+        android:title="테마 변경"
+        />
+
+    <Preference
+        android:key="app_recommand"
+        android:title="앱 평가하기"
+        />
+
+    <Preference
+        android:key="ver"
+        android:title="버전 정보"
+        android:summary="1.0"
+        />
 </PreferenceScreen>

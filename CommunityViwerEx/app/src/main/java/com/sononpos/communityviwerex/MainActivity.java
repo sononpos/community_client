@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -293,6 +294,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabs.setTextColor(Color.parseColor(theme.BasicFont));
         tabs.setBackgroundColor(Color.parseColor(theme.BgList));
+        tabs.setIndicatorColor(Color.parseColor(theme.BasicFont));
 
         Button btnSettings = (Button)dlv.findViewById(R.id.btn_settings);
         btnSettings.setBackgroundColor(Color.parseColor(theme.BgList));
