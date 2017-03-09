@@ -116,7 +116,12 @@ public class CommunityListFragment extends Fragment {
                 lvAdapter.notifyDataSetChanged();
             }
             else {
-                Toast.makeText(getContext(), "갱신 실패", 1000).show();
+                if( msg.arg1 == -3 ) {
+                    Toast.makeText(getContext(), "네트워크 상태를 확인 해 주세요", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getContext(), "알 수 없는 이유로 실패하였습니다", Toast.LENGTH_SHORT).show();
+                }
             }
 
             bLoading = false;
@@ -287,7 +292,7 @@ public class CommunityListFragment extends Fragment {
                 }catch(IOException e){
                     e.printStackTrace();
                     Message msg = handler.obtainMessage();
-                    msg.arg1 = -1;
+                    msg.arg1 = -3;
                     handler.sendMessage(msg);
                 }finally {
                 }

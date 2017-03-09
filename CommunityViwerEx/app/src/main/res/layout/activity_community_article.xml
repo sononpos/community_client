@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context="com.sononpos.communityviwerex.CommunityArticle">
 
-    <im.delight.android.webview.AdvancedWebView
+    <com.sononpos.communityviwerex.SwipeWebView
         android:id="@+id/webview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

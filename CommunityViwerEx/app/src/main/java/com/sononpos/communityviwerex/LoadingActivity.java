@@ -1,5 +1,7 @@
 package com.sononpos.communityviwerex;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -30,6 +32,11 @@ public class LoadingActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+
+            if(msg.arg1 == -1) {
+                finishApp();
+                return;
+            }
 
             Intent intent = new Intent(mainActivity, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -106,18 +113,46 @@ public class LoadingActivity extends AppCompatActivity {
                         handlerPager.sendMessage(msg);
                     }
                     else {
-                        finish();
+                        Message msg = handlerPager.obtainMessage();
+                        msg.arg1 = -1;
+                        handlerPager.sendMessage(msg);
                     }
                 }catch(IOException e){
                     e.printStackTrace();
-                    finish();
+                    Message msg = handlerPager.obtainMessage();
+                    msg.arg1 = -1;
+                    handlerPager.sendMessage(msg);
                 }catch(JSONException e) {
                     e.printStackTrace();
-                    finish();
+                    Message msg = handlerPager.obtainMessage();
+                    msg.arg1 = -1;
+                    handlerPager.sendMessage(msg);
                 }finally {
                 }
             }
         }).start();
+    }
 
+    public void finishApp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("앱 종료");
+        builder.setMessage("네트워크 연결을 확인해 주십시오.");
+        builder.setCancelable(false);
+
+
+        builder.setPositiveButton("그..그럴게요", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+
+                dialog.dismiss();
+            }
+
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

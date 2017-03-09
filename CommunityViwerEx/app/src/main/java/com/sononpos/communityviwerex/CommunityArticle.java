@@ -13,15 +13,21 @@ import im.delight.android.webview.AdvancedWebView;
 
 public class CommunityArticle extends Activity implements AdvancedWebView.Listener {
 
-    private AdvancedWebView mWebView;
+    private SwipeWebView mWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_article);
 
-        mWebView = (AdvancedWebView)findViewById(R.id.webview);
+        mWebView = (SwipeWebView)findViewById(R.id.webview);
         mWebView.setListener(this,this);
+        mWebView.setCallback(new SwipeWebView.SwipeCallback() {
+            @Override
+            public void OnRightToLeft() {
+                finish();
+            }
+        });
 
         Intent intent = getIntent();
         String sURL = intent.getStringExtra("URL");

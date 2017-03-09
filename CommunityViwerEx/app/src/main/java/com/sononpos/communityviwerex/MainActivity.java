@@ -4,8 +4,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import android.app.AlertDialog;
-import android.app.Application;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,23 +12,18 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,35 +32,16 @@ import android.widget.Toast;
 import com.astuetz.PagerSlidingTabStrip;
 import com.google.android.gms.ads.MobileAds;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
-import static com.sononpos.communityviwerex.G.liFiltered;
 
 public class MainActivity extends AppCompatActivity {
-    // Remove the below line after defining your own ad unit ID.
-    private static final String TOAST_TEXT = "Test ads are being shown. "
-            + "To show live ads, replace the ad unit ID in res/values/strings.xml with your own ad unit ID.";
 
     private PagerSlidingTabStrip tabs;
     private ViewPager pager;
     private CommunityTypePagerAdapter adapter;
     private LeftMenuItemAdapter adapterLeftMenu;
-
-    public SharedPreferences shortcutSharedPref;
-    public boolean isInstalled;
 
     @Override
     protected void onStart() {
@@ -78,10 +52,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Load an ad into the AdMob banner view.
-        AdView adView = (AdView) findViewById(R.id.adView);
-        adView.refreshDrawableState();
         System.out.println("OnResume!");
+
+        //  테스트
+        SharedPreferences setRefer = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        boolean bCheck = setRefer.getBoolean("checkbox", true);
+        //Toast.makeText(getApplicationContext(), "체크 : " + bCheck, Toast.LENGTH_SHORT).show();
     }
 
     //  DrawerLayout
@@ -193,11 +170,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+
                 dl.openDrawer(dlv);
+
+                //  테스트
+                //startActivity(new Intent(MainActivity.this,SettingsActivity.class));
+
             }
         });
-
-
     }
 
     @Override
@@ -223,40 +203,23 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private boolean exit = false;
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (exit) {
+            finish(); // finish activity
+        } else {
+            Toast.makeText(this, "한번 더 누르면 종료 됩니다",
+                    Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
 
-        builder.setTitle("앱 종료");
-        builder.setMessage("종료 하시겠습니까?");
-
-
-        builder.setPositiveButton("네", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-
-                dialog.dismiss();
-            }
-
-        });
-
-
-        builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                // Code that is <a href="http://www.numotgaming.com/series/eternal/"><span class="eternal-hover-card-container">execute</span></a>d when clicking NO
-                dialog.dismiss();
-            }
-
-        });
-
-
-        AlertDialog alert = builder.create();
-        alert.show();
+        }
     }
 
     public class CommunityTypePagerAdapter extends FragmentStatePagerAdapter {
