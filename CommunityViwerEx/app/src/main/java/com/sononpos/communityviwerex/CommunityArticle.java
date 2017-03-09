@@ -1,11 +1,14 @@
 package com.sononpos.communityviwerex;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -16,6 +19,7 @@ import im.delight.android.webview.AdvancedWebView;
 public class CommunityArticle extends Activity implements AdvancedWebView.Listener {
 
     private SwipeWebView mWebView;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,17 +28,27 @@ public class CommunityArticle extends Activity implements AdvancedWebView.Listen
 
         mWebView = (SwipeWebView)findViewById(R.id.webview);
         mWebView.getRootView().setBackgroundColor(Color.parseColor(ThemeManager.GetTheme().BgList));
-        mWebView.setListener(this,this);
+        mWebView.setListener(this, this);
+        View rootView = mWebView.getRootView();
         mWebView.setCallback(new SwipeWebView.SwipeCallback() {
             @Override
             public void OnRightToLeft() {
                 finish();
             }
+
+            @Override
+            public void OnLeftToRight() {
+                View rootView = mWebView.getRootView();
+                ClipboardManager clipboardManager = (ClipboardManager)rootView.getContext().getSystemService(rootView.getContext().CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText("label", url);
+                clipboardManager.setPrimaryClip(clipData);
+                Toast.makeText(rootView.getContext(), "클립보드에 복사 되었습니다", Toast.LENGTH_SHORT).show();
+            }
         });
 
         Intent intent = getIntent();
-        String sURL = intent.getStringExtra("URL");
-        mWebView.loadUrl(sURL);
+        url = intent.getStringExtra("URL");
+        mWebView.loadUrl(url);
 
         // Load an ad into the AdMob banner view.
         AdView adView = (AdView) findViewById(R.id.adViewWeb);

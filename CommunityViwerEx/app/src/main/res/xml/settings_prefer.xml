@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="일반">
     <ListPreference
         android:defaultValue="0"
         android:entries="@array/theme_type"
@@ -21,4 +22,16 @@
         android:title="버전 정보"
         android:summary="1.0"
         />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="개발자 도와주기">
+        <Preference
+            android:key="donate_coffee"
+            android:title="커피 한잔"
+            />
+        <Preference
+            android:key="donate_rice"
+            android:title="국밥 한그릇"
+            />
+    </PreferenceCategory>
 </PreferenceScreen>

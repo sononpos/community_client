@@ -21,18 +21,18 @@ public class ThemeManager {
     private static final String ThemeWhite_LeftItemEnableColor = "#111111";
     private static final String ThemeWhite_LeftItemDisableColor = "#999999";
 
-    private static final String ThemeSakura_BasicFontColor = "#f25e8d";
+    private static final String ThemeSakura_BasicFontColor = "#111111";
     private static final String ThemeSakura_SubFontColor = "#fb9bb9";
     private static final String ThemeSakura_BgListColor = "#f3e5e2";
     private static final String ThemeSakura_BgTitleColor = "#f3e5e2";
-    private static final String ThemeSakura_LeftItemEnableColor = "#f25e8d";
+    private static final String ThemeSakura_LeftItemEnableColor = "#111111";
     private static final String ThemeSakura_LeftItemDisableColor = "#dec7ce";
 
-    private static final String ThemeYellow_BasicFontColor = "#ff4a4a";
+    private static final String ThemeYellow_BasicFontColor = "#111111";
     private static final String ThemeYellow_SubFontColor = "#c23838";
     private static final String ThemeYellow_BgListColor = "#fee485";
     private static final String ThemeYellow_BgTitleColor = "#fee485";
-    private static final String ThemeYellow_LeftItemEnableColor = "#ff4a4a";
+    private static final String ThemeYellow_LeftItemEnableColor = "#111111";
     private static final String ThemeYellow_LeftItemDisableColor = "#cfa7a7";
 
     static public class ThemeColorObject {

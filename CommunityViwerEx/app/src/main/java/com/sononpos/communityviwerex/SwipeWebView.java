@@ -19,6 +19,7 @@ public class SwipeWebView extends AdvancedWebView {
 
     public interface SwipeCallback {
         public void OnRightToLeft();
+        public void OnLeftToRight();
     }
 
     private SwipeCallback _callback;
@@ -33,7 +34,11 @@ public class SwipeWebView extends AdvancedWebView {
                     if(e1.getX() - e2.getX() > 100 && Math.abs(velocityX) > 800) {
                         //do your stuff
                         System.out.println("Test : " + (e2.getY() - e1.getY()));
-                        return false;
+                        if( Math.abs(e2.getY() - e1.getY()) > 200 ) return false;
+                        if(_callback != null) {
+                            _callback.OnLeftToRight();
+                        }
+                        return true;
                     } //left to right swipe .. go to prev page
                     else if (e2.getX() - e1.getX() > 100 && Math.abs(velocityX) > 800) {
                         //do your stuff
