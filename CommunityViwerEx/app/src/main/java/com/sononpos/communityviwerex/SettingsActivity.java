@@ -1,6 +1,7 @@
 package com.sononpos.communityviwerex;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
 
 public class SettingsActivity extends AppCompatActivity {
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +26,8 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         getFragmentManager().beginTransaction().replace(R.id.content_frame, new MyPreferenceFragment()).commit();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //toolbar.getRootView().setBackgroundColor(Color.parseColor(ThemeManager.GetTheme().BgList));
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
