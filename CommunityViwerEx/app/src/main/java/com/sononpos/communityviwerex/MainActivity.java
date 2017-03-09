@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.google.android.gms.ads.MobileAds;
+import com.sononpos.communityviwerex.Funtional.ThemeManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -42,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager pager;
     private CommunityTypePagerAdapter adapter;
     private LeftMenuItemAdapter adapterLeftMenu;
+    Toolbar toolbar;
+    private DrawerLayout dl;
+    private View dlv;
 
     @Override
     protected void onStart() {
@@ -57,13 +62,11 @@ public class MainActivity extends AppCompatActivity {
         //  테스트
         SharedPreferences setRefer = PreferenceManager
                 .getDefaultSharedPreferences(this);
-        boolean bCheck = setRefer.getBoolean("checkbox", true);
-        //Toast.makeText(getApplicationContext(), "체크 : " + bCheck, Toast.LENGTH_SHORT).show();
-    }
+        int themeType = Integer.parseInt(setRefer.getString("theme_type", "0"));
+        ThemeManager.SetTheme(themeType);
 
-    //  DrawerLayout
-    private DrawerLayout dl;
-    private View dlv;
+        RefreshTheme();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
         adView.loadAd(adRequest);
 
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        tabs.setTextColor(Color.parseColor("#cccccc"));
         tabs.setTextSize(40);
         pager = (ViewPager) findViewById(R.id.pager);
         adapter = new CommunityTypePagerAdapter(getSupportFragmentManager());
@@ -138,14 +140,16 @@ public class MainActivity extends AppCompatActivity {
                 LeftMenuItem item =  (LeftMenuItem)parent.getItemAtPosition(position);
                 TextView tvName = (TextView)view.findViewById(R.id.textViewName);
 
+                ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
+
                 System.out.println("Menu Click : " + item.name);
                 if( G.liFiltered.contains(item.sKey) ) {
                     G.liFiltered.remove(item.sKey);
-                    tvName.setTextColor(Color.parseColor("#eeeeee"));
+                    tvName.setTextColor(Color.parseColor(theme.LeftEnable));
                 }
                 else {
                     G.liFiltered.add(item.sKey);
-                    tvName.setTextColor(Color.parseColor("#555555"));
+                    tvName.setTextColor(Color.parseColor(theme.LeftDisable));
                 }
 
                 pager.setCurrentItem(0);
@@ -162,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //  Setup ActionBar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        toolbar = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
         ImageButton ibtn = (ImageButton)toolbar.findViewById(R.id.btn_leftmenu);
@@ -173,11 +177,17 @@ public class MainActivity extends AppCompatActivity {
 
                 dl.openDrawer(dlv);
 
-                //  테스트
-                //startActivity(new Intent(MainActivity.this,SettingsActivity.class));
-
             }
         });
+        Button btnSettings = (Button)dlv.findViewById(R.id.btn_settings);
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,SettingsActivity.class));
+            }
+        });
+
+        RefreshTheme();
     }
 
     @Override
@@ -273,6 +283,20 @@ public class MainActivity extends AppCompatActivity {
                 return POSITION_NONE;
             }
         }
+    }
+
+    public void RefreshTheme() {
+        ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
+        toolbar.setBackgroundColor(Color.parseColor(theme.BgTitle));
+        dl.setBackgroundColor(Color.parseColor(theme.BgList));
+        toolbar.getRootView().setBackgroundColor(Color.parseColor(theme.BgList));
+
+        tabs.setTextColor(Color.parseColor(theme.BasicFont));
+        tabs.setBackgroundColor(Color.parseColor(theme.BgList));
+
+        Button btnSettings = (Button)dlv.findViewById(R.id.btn_settings);
+        btnSettings.setBackgroundColor(Color.parseColor(theme.BgList));
+        btnSettings.setTextColor(Color.parseColor(theme.BasicFont));
     }
 
 }

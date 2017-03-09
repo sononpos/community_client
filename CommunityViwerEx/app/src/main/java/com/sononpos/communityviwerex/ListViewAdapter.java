@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.sononpos.communityviwerex.Funtional.ThemeManager;
+
 import java.util.ArrayList;
 
 /**
@@ -42,18 +44,23 @@ public class ListViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         final Context context = parent.getContext();
 
+        ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
+
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.listviewitem, parent, false);
         }
 
-        //convertView.setBackgroundColor(Color.parseColor("#fee0e8"));
+        convertView.setBackgroundColor(Color.parseColor(theme.BgList));
 
         TextView titleTextView = (TextView) convertView.findViewById(R.id.tvTitle) ;
-        //titleTextView.setTextColor(Color.parseColor("#fe6ea4"));
+        titleTextView.setTextColor(Color.parseColor(theme.BasicFont));
         TextView nameTextView = (TextView) convertView.findViewById(R.id.tvName) ;
         TextView regDateTextView = (TextView) convertView.findViewById(R.id.tvRegDate) ;
         TextView countTextView = (TextView) convertView.findViewById(R.id.tvCount) ;
+        nameTextView.setTextColor(Color.parseColor(theme.SubFont));
+        regDateTextView.setTextColor(Color.parseColor(theme.SubFont));
+        countTextView.setTextColor(Color.parseColor(theme.SubFont));
 
         ListViewItem item = listViewItemList.get(position);
         String sTitleRet = item.m_sTitle;

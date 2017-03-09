@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="checkbox"
-        android:summary="@string/opt_setting"
-        android:title="Checkbox"/>
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/theme_type"
+        android:entryValues="@array/theme_type_val"
+        android:key="theme_type"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:summary="테스트"
+        android:title="테마 변경" />
 </PreferenceScreen>

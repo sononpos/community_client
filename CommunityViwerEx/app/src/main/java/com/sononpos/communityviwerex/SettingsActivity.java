@@ -1,6 +1,8 @@
 package com.sononpos.communityviwerex;
 
 import android.content.Intent;
+import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.sononpos.communityviwerex.Funtional.ThemeManager;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -42,6 +46,22 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View v = super.onCreateView(inflater, container, savedInstanceState);
+
+            ListPreference themeTypePref = (ListPreference)findPreference("theme_type");
+            int nTheme = Integer.parseInt(themeTypePref.getValue());
+            themeTypePref.setSummary(ThemeManager.GetName(nTheme));
+            themeTypePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int nTheme = Integer.parseInt((String)newValue);
+                    preference.setSummary(ThemeManager.GetName(nTheme));
+
+                    // return false; 로 리턴하면 변경을 취소합니다.
+                    return true;
+                }
+            });
+
             return v;
         }
     }

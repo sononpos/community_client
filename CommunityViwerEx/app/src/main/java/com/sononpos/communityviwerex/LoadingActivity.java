@@ -3,10 +3,14 @@ package com.sononpos.communityviwerex;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.sononpos.communityviwerex.Funtional.ThemeManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +21,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -42,6 +48,11 @@ public class LoadingActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+            SharedPreferences setRefer = PreferenceManager
+                    .getDefaultSharedPreferences(getApplicationContext());
+            int themeType = Integer.parseInt(setRefer.getString("theme_type", "0"));
+            ThemeManager.SetTheme(themeType);
             startActivity(intent);
         }
     }
@@ -104,8 +115,16 @@ public class LoadingActivity extends AppCompatActivity {
                             String key = iter.next();
                             JSONObject element = jobj.getJSONObject(key);
                             String sName = element.getString("name");
-                            G.liCommTypeInfo.add(new CommunityTypeInfo(key, sName));
+                            int nIndex = element.getInt("index");
+                            G.liCommTypeInfo.add(new CommunityTypeInfo(key, sName, nIndex));
                         }
+
+                        Collections.sort(G.liCommTypeInfo, new Comparator<CommunityTypeInfo>() {
+                            @Override
+                            public int compare(CommunityTypeInfo o1, CommunityTypeInfo o2) {
+                                return o1.index < o2.index ? -1 : 1;
+                            }
+                        });
 
                         G.RefreshFilteredInfo();
 

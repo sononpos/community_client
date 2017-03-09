@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.sononpos.communityviwerex.Funtional.ThemeManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,10 +34,12 @@ public class LeftMenuItemAdapter extends ArrayAdapter<LeftMenuItem> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View vListItem = convertView;
 
+        ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
+
         LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
         vListItem = inflater.inflate(layoutResourceId, parent, false);
 
-        vListItem.setBackgroundColor(Color.parseColor("#333333"));
+        vListItem.setBackgroundColor(Color.parseColor(theme.BgList));
 
         TextView tvName = (TextView)vListItem.findViewById(R.id.textViewName);
         tvName.setText(menudata.get(position).name);
@@ -43,10 +47,10 @@ public class LeftMenuItemAdapter extends ArrayAdapter<LeftMenuItem> {
         CommunityTypeInfo info = G.liCommTypeInfo.get(position);
 
         if( G.liFiltered.contains(info.sKey) ) {
-            tvName.setTextColor(Color.parseColor("#555555"));
+            tvName.setTextColor(Color.parseColor(theme.LeftDisable));
         }
         else {
-            tvName.setTextColor(Color.parseColor("#eeeeee"));
+            tvName.setTextColor(Color.parseColor(theme.LeftEnable));
         }
 
         return vListItem;
