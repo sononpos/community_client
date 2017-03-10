@@ -29,9 +29,5 @@
             android:key="donate_coffee"
             android:title="커피 한잔"
             />
-        <Preference
-            android:key="donate_rice"
-            android:title="국밥 한그릇"
-            />
     </PreferenceCategory>
 </PreferenceScreen>

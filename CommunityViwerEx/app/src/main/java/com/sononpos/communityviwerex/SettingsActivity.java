@@ -150,18 +150,6 @@ public class SettingsActivity extends AppCompatActivity {
                     return false;
                 }
             });
-
-            Preference pfDonateRice = (Preference)findPreference("donate_rice");
-            pfDonateRice.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    SettingsActivity context = (SettingsActivity) preference.getContext();
-                    context.Buy("nodab_rice");
-                    return false;
-                }
-            });
-
             return v;
         }
     }
