@@ -102,35 +102,39 @@ public class SettingsActivity extends AppCompatActivity {
             View v = super.onCreateView(inflater, container, savedInstanceState);
 
             ListPreference themeTypePref = (ListPreference)findPreference("theme_type");
-            int nTheme = Integer.parseInt(themeTypePref.getValue());
-            themeTypePref.setSummary(ThemeManager.GetName(nTheme));
-            themeTypePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            if( themeTypePref != null ) {
+                int nTheme = Integer.parseInt(themeTypePref.getValue());
+                themeTypePref.setSummary(ThemeManager.GetName(nTheme));
+                themeTypePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int nTheme = Integer.parseInt((String) newValue);
-                    preference.setSummary(ThemeManager.GetName(nTheme));
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        int nTheme = Integer.parseInt((String) newValue);
+                        preference.setSummary(ThemeManager.GetName(nTheme));
 
-                    ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
+                        ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
 
-                    // return false; 로 리턴하면 변경을 취소합니다.
-                    return true;
-                }
-            });
+                        // return false; 로 리턴하면 변경을 취소합니다.
+                        return true;
+                    }
+                });
+            }
 
             Preference pfRecommand = (Preference)findPreference("app_recommand");
-            pfRecommand.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            if(pfRecommand != null ) {
+                pfRecommand.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    SettingsActivity context = (SettingsActivity) preference.getContext();
-                    Intent marketLaunch = new Intent(Intent.ACTION_VIEW);
-                    marketLaunch.setData(Uri.parse("market://details?id=com.sononpos.communityviwerex"));
-                    startActivity(marketLaunch);
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        SettingsActivity context = (SettingsActivity) preference.getContext();
+                        Intent marketLaunch = new Intent(Intent.ACTION_VIEW);
+                        marketLaunch.setData(Uri.parse("market://details?id=com.sononpos.communityviwerex"));
+                        startActivity(marketLaunch);
 
-                    return false;
-                }
-            });
+                        return false;
+                    }
+                });
+            }
 
             Preference pfVer = (Preference)findPreference("ver");
             try {
@@ -141,15 +145,17 @@ public class SettingsActivity extends AppCompatActivity {
             } catch(PackageManager.NameNotFoundException e) { }
 
             Preference pfDonateCoffee = (Preference)findPreference("donate_coffee");
-            pfDonateCoffee.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            if(pfDonateCoffee != null) {
+                pfDonateCoffee.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    SettingsActivity context = (SettingsActivity) preference.getContext();
-                    context.Buy("nodab_americano");
-                    return false;
-                }
-            });
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        SettingsActivity context = (SettingsActivity) preference.getContext();
+                        context.Buy("nodab_americano");
+                        return false;
+                    }
+                });
+            }
             return v;
         }
     }
