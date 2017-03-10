@@ -21,6 +21,7 @@ public class G {
     public static HashSet<String> liFiltered = new HashSet<>();
     public static final String SERV_ROOT = "http://52.79.205.198:3000/";
     public static final String FILTERED_COMM = "FilteredCommunity";
+    public static final String FIRST_USE = "FirstUse";
 
     public static void setStringArrayPref(Context context , String sKey, ArrayList<String> values){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

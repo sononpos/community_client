@@ -21,6 +21,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,13 +53,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        System.out.println("OnStart!");
+        Log.d("VLog","OnStart!");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        System.out.println("OnResume!");
+        Log.d("VLog","OnResume!");
 
         //  테스트
         SharedPreferences setRefer = PreferenceManager
@@ -143,7 +144,6 @@ public class MainActivity extends AppCompatActivity {
 
                 ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
 
-                System.out.println("Menu Click : " + item.name);
                 if( G.liFiltered.contains(item.sKey) ) {
                     G.liFiltered.remove(item.sKey);
                     tvName.setTextColor(Color.parseColor(theme.LeftEnable));
@@ -263,7 +263,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            System.out.println("Fragment Adapter : getItem - " + position);
             CommunityListFragment f = new CommunityListFragment();
             Bundle b = new Bundle();
             b.putInt(ARG_POSITION, position);

@@ -25,6 +25,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -117,10 +118,12 @@ public class CommunityListFragment extends Fragment {
             }
             else {
                 if( msg.arg1 == -3 ) {
-                    Toast.makeText(getContext(), "네트워크 상태를 확인 해 주세요", Toast.LENGTH_SHORT).show();
+                    if( getContext() != null )
+                        Toast.makeText(getContext(), "네트워크 상태를 확인 해 주세요", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(getContext(), "알 수 없는 이유로 실패하였습니다", Toast.LENGTH_SHORT).show();
+                    if( getContext() != null )
+                        Toast.makeText(getContext(), "알 수 없는 이유로 실패하였습니다", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -188,7 +191,7 @@ public class CommunityListFragment extends Fragment {
                 }
 
                 ListViewItem item = (ListViewItem)parent.getItemAtPosition(position);
-                System.out.println("Item Clicked : " + item.m_sLink);
+                Log.d("VLog","Item Clicked : " + item.m_sLink);
                 Intent intent = new Intent(getActivity(), CommunityArticle.class);
                 intent.putExtra("URL", item.m_sLink);
                 startActivity(intent);
@@ -204,7 +207,6 @@ public class CommunityListFragment extends Fragment {
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
         if(menuVisible) {
-            System.out.println("##########################" + position + "###########################");
         }
     }
 
@@ -221,7 +223,6 @@ public class CommunityListFragment extends Fragment {
         if(loadingMore) return;
 
         if(nLoadOffset==0)  {
-            LoadList();
             return;
         }
 
@@ -278,7 +279,7 @@ public class CommunityListFragment extends Fragment {
                         byteData = baos.toByteArray();
                         response = new String(byteData);
 
-                        System.out.println(response);
+                        Log.d("VLog",response);
                         Message msg = handler.obtainMessage();
                         msg.arg1 = 0;
                         msg.obj = (Object)response;

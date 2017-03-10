@@ -190,7 +190,8 @@ public class SettingsActivity extends AppCompatActivity {
             PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
 
             if (pendingIntent != null) {
-                mHelper.launchPurchaseFlow(this, getPackageName(), 1001,  mPurchaseFinishedListener, "test");
+                //mHelper.launchPurchaseFlow(this, getPackageName(), 1001,  mPurchaseFinishedListener, "test");
+                startIntentSenderForResult(pendingIntent.getIntentSender(), 1001, new Intent(), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0));
 
             } else {
                 // 결제가 막혔다면
