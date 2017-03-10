@@ -191,7 +191,6 @@ public class CommunityListFragment extends Fragment {
                 }
 
                 ListViewItem item = (ListViewItem)parent.getItemAtPosition(position);
-                Log.d("VLog","Item Clicked : " + item.m_sLink);
                 Intent intent = new Intent(getActivity(), CommunityArticle.class);
                 intent.putExtra("URL", item.m_sLink);
                 startActivity(intent);

@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     private DrawerLayout dl;
     private View dlv;
+    private AdView mAdView;
 
     @Override
     protected void onStart() {
@@ -58,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
         Log.d("VLog","OnResume!");
 
         //  테스트
@@ -68,6 +68,28 @@ public class MainActivity extends AppCompatActivity {
         ThemeManager.SetTheme(themeType);
 
         RefreshTheme();
+
+        if(mAdView != null) {
+            mAdView.resume();
+        }
+
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        if(mAdView != null) {
+            mAdView.pause();
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(mAdView != null) {
+            mAdView.destroy();
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -79,11 +101,6 @@ public class MainActivity extends AppCompatActivity {
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3598320494828213~8676238288");
 
         // Load an ad into the AdMob banner view.
-        AdView adView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();  // An example device ID
-        adView.loadAd(adRequest);
-
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setTextSize(40);
         pager = (ViewPager) findViewById(R.id.pager);
@@ -187,6 +204,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         RefreshTheme();
+
+        mAdView = (AdView) findViewById(R.id.adViewMain);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
+                .build();  // An example device ID
+        mAdView.loadAd(adRequest);
     }
 
     @Override

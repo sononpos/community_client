@@ -20,6 +20,7 @@ public class CommunityArticle extends Activity implements AdvancedWebView.Listen
 
     private SwipeWebView mWebView;
     private String url;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +52,10 @@ public class CommunityArticle extends Activity implements AdvancedWebView.Listen
         mWebView.loadUrl(url);
 
         // Load an ad into the AdMob banner view.
-        AdView adView = (AdView) findViewById(R.id.adViewWeb);
+        adView = (AdView) findViewById(R.id.adViewWeb);
         AdRequest adRequest = new AdRequest.Builder()
-                .setRequestAgent("android_studio:ad_template").build();
+                .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
+                .build();
         adView.loadAd(adRequest);
     }
 
@@ -71,18 +73,27 @@ public class CommunityArticle extends Activity implements AdvancedWebView.Listen
     protected void onResume() {
         super.onResume();
         mWebView.onResume();
+        if(adView != null) {
+            adView.resume();
+        }
     }
 
     @Override
     protected void onPause() {
         mWebView.onPause();
         super.onPause();
+        if(adView != null) {
+            adView.pause();
+        }
     }
 
     @Override
     protected void onDestroy() {
         mWebView.onDestroy();
         super.onDestroy();
+        if(adView != null) {
+            adView.destroy();
+        }
     }
 
     @Override
