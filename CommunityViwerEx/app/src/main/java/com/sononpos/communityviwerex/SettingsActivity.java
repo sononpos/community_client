@@ -66,7 +66,10 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         //  인앱 결제 초기화
-        bindService(new Intent("com.android.vending.billing.InAppBillingService.BIND"), mServiceConn, Context.BIND_AUTO_CREATE);
+        Intent serviceIntent =
+                new Intent("com.android.vending.billing.InAppBillingService.BIND");
+        serviceIntent.setPackage("com.android.vending");
+        bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
 
         // 구글에서 발급받은 바이너리키를 입력해줍니다
         String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy23CcPAVmLIIw+sc2sqKoStYINIr6oIVsEj+7G1mBg0W0mZy/pUy+VGrUxmnB3O3yJbXOX1GMdfGJzF2Dt19A+R71nTqlWyXM+d/DTxAZGwEX3Bt1uretPVpOyX/7gnq9W5qfJVdFFp82vjozHKJ/zyNZe/QZZxM7Gzag8bsGdczrp0GLf6ueEznLvUemaDelMc2YSDMkO4dPOtQD+X7FYo0xfZBPg1zzQstiYIDo/AZ0dLRSj/VqBaZWKmRCz1WjtsSDprGPfBc5ywmEgD+v7quBgshMV47yOcweOvgKFg8QpS32IyS5CKVwrbMirG6MsGtI8kYPuG49zvXRzyUjQIDAQAB";

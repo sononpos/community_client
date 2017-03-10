@@ -153,8 +153,6 @@ public class MainActivity extends AppCompatActivity {
                     tvName.setTextColor(Color.parseColor(theme.LeftDisable));
                 }
 
-                pager.setCurrentItem(0);
-
                 G.setStringArrayPref(getApplicationContext(), G.FILTERED_COMM, new ArrayList<String>(G.liFiltered));
                 G.RefreshFilteredInfo();
 
@@ -275,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
             CommunityListFragment fragment = (CommunityListFragment)object;
             int nPageNum = fragment.getPageNum();
 
-            if(nPageNum == 0 ) fragment.Reload();
+            fragment.Reload();
 
             if (nPageNum >= 0) {
                 return nPageNum;
