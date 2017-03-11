@@ -20,6 +20,7 @@ public class CommunityArticle extends Activity implements AdvancedWebView.Listen
 
     private SwipeWebView mWebView;
     private String url;
+    private String title;
     private AdView adView;
 
     @Override
@@ -43,11 +44,20 @@ public class CommunityArticle extends Activity implements AdvancedWebView.Listen
                 ClipData clipData = ClipData.newPlainText("label", url);
                 clipboardManager.setPrimaryClip(clipData);
                 Toast.makeText(rootView.getContext(), "클립보드에 복사 되었습니다", Toast.LENGTH_SHORT).show();
+
+                Intent msg = new Intent(Intent.ACTION_SEND);
+                msg.addCategory(Intent.CATEGORY_DEFAULT);
+                msg.putExtra(Intent.EXTRA_SUBJECT, title);
+                msg.putExtra(Intent.EXTRA_TEXT, url);
+                msg.putExtra(Intent.EXTRA_TITLE, title);
+                msg.setType("text/plain");
+                startActivity(Intent.createChooser(msg, "공유하기"));
             }
         });
 
         Intent intent = getIntent();
         url = intent.getStringExtra("URL");
+        title = intent.getStringExtra("TITLE");
         mWebView.loadUrl(url);
 
         // Load an ad into the AdMob banner view.

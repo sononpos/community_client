@@ -162,6 +162,12 @@ public class MainActivity extends AppCompatActivity {
 
                 ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
 
+                int nPrevSize = G.GetCommunityList().size();
+                if(nPrevSize <= 1 ){
+                    Toast.makeText(MainActivity.this, "하나 이상은 남겨두어야 합니다.", Toast.LENGTH_SHORT);
+                    return;
+                }
+
                 if( G.liFiltered.contains(item.sKey) ) {
                     G.liFiltered.remove(item.sKey);
                     tvName.setTextColor(Color.parseColor(theme.LeftEnable));
@@ -169,6 +175,9 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     G.liFiltered.add(item.sKey);
                     tvName.setTextColor(Color.parseColor(theme.LeftDisable));
+                    if( (nPrevSize-1) <= pager.getCurrentItem() ){
+                        pager.setCurrentItem(pager.getCurrentItem()-1);
+                    }
                 }
 
                 G.setStringArrayPref(getApplicationContext(), G.FILTERED_COMM, new ArrayList<String>(G.liFiltered));
@@ -296,6 +305,9 @@ public class MainActivity extends AppCompatActivity {
         public int getItemPosition(Object object) {
             CommunityListFragment fragment = (CommunityListFragment)object;
             int nPageNum = fragment.getPageNum();
+            if( nPageNum >= G.GetCommunityList().size()) {
+                return POSITION_NONE;
+            }
 
             fragment.Reload();
 

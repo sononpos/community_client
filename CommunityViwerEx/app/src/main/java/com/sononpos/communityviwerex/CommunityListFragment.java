@@ -193,6 +193,7 @@ public class CommunityListFragment extends Fragment {
                 ListViewItem item = (ListViewItem)parent.getItemAtPosition(position);
                 Intent intent = new Intent(getActivity(), CommunityArticle.class);
                 intent.putExtra("URL", item.m_sLink);
+                intent.putExtra("TITLE", item.m_sTitle);
                 startActivity(intent);
             }
         });
