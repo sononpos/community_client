@@ -1,8 +1,14 @@
 package com.sononpos.communityviwerex;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.preference.PreferenceManager;
 import android.text.Html;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,18 +70,38 @@ public class ListViewAdapter extends BaseAdapter {
 
         ListViewItem item = listViewItemList.get(position);
         String sTitleRet = item.m_sTitle;
-        if( item.m_sTitle.length() > 26 ) {
-            sTitleRet = item.m_sTitle.substring(0, 26) + "...";
-        }
 
         if(item.m_sCommentCnt.isEmpty()) {
             item.m_sCommentCnt = "0";
         }
 
+        String sComment = " <font color='#f95959'>[" + item.m_sCommentCnt + "]</font>";
+        String sCommentForCalc = " [" + item.m_sCommentCnt + "]";
+
         if(item.m_sName.isEmpty()) {
             item.m_sName = "noname";
         }
-        sTitleRet += " <font color='#f95959'>[" + item.m_sCommentCnt + "]</font>";
+
+        Rect bounds = new Rect();
+        Rect boundsComment = new Rect();
+        Paint textPaint = titleTextView.getPaint();
+
+        int rootViewWidth = parent.getRootView().getWidth();
+
+        textPaint.getTextBounds(item.m_sTitle, 0, item.m_sTitle.length(), bounds);
+        textPaint.getTextBounds(sCommentForCalc, 0, sCommentForCalc.length(), boundsComment);
+
+        SharedPreferences setRefer = PreferenceManager
+                .getDefaultSharedPreferences(parent.getContext());
+        boolean bShort = setRefer.getBoolean("list_short", true);
+
+        if( bShort && bounds.width() > (rootViewWidth - 200 - boundsComment.width()) ) {
+            float f = 1.0f - ((float)bounds.width() - (rootViewWidth - 200 - boundsComment.width())) / (float)bounds.width();
+            int nAdjustLen = (int)((float)item.m_sTitle.length() * f);
+            sTitleRet = item.m_sTitle.substring(0, nAdjustLen) + "...";
+        }
+
+        sTitleRet += sComment;
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N){
             titleTextView.setText(Html.fromHtml(sTitleRet, Html.FROM_HTML_MODE_LEGACY));

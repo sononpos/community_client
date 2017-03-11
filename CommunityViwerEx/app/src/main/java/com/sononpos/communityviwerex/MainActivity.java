@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(mAdView != null) {
             mAdView.resume();
+            mAdView.refreshDrawableState();
         }
 
         super.onResume();

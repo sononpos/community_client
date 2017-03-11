@@ -12,17 +12,7 @@
         android:id="@+id/webview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_close"
-        android:layout_above="@+id/adView" />
-
-    <Button
-        android:id="@+id/btn_close"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="돌아가기"
-        android:onClick="BtnClose"
-        android:height="30dp"
-        />
+        android:layout_above="@+id/adViewWeb" />
 
     <!-- view for AdMob Banner Ad -->
     <com.google.android.gms.ads.AdView

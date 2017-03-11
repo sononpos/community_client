@@ -30,7 +30,6 @@ public class CommunityArticle extends Activity implements AdvancedWebView.Listen
         mWebView = (SwipeWebView)findViewById(R.id.webview);
         mWebView.getRootView().setBackgroundColor(Color.parseColor(ThemeManager.GetTheme().BgList));
         mWebView.setListener(this, this);
-        View rootView = mWebView.getRootView();
         mWebView.setCallback(new SwipeWebView.SwipeCallback() {
             @Override
             public void OnRightToLeft() {
@@ -57,10 +56,6 @@ public class CommunityArticle extends Activity implements AdvancedWebView.Listen
                 .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
                 .build();
         adView.loadAd(adRequest);
-    }
-
-    public void BtnClose(View v) {
-        finish();
     }
 
     @Override
