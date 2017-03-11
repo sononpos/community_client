@@ -163,16 +163,17 @@ public class MainActivity extends AppCompatActivity {
                 ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
 
                 int nPrevSize = G.GetCommunityList().size();
-                if(nPrevSize <= 1 ){
-                    Toast.makeText(MainActivity.this, "하나 이상은 남겨두어야 합니다.", Toast.LENGTH_SHORT);
-                    return;
-                }
 
                 if( G.liFiltered.contains(item.sKey) ) {
                     G.liFiltered.remove(item.sKey);
                     tvName.setTextColor(Color.parseColor(theme.LeftEnable));
                 }
                 else {
+                    if(nPrevSize <= 1 ){
+                        Toast.makeText(view.getContext(), "하나 이상은 남겨두어야 합니다.", Toast.LENGTH_SHORT);
+                        return;
+                    }
+
                     G.liFiltered.add(item.sKey);
                     tvName.setTextColor(Color.parseColor(theme.LeftDisable));
                     if( (nPrevSize-1) <= pager.getCurrentItem() ){
