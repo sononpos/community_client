@@ -4,11 +4,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
 
@@ -56,14 +59,90 @@ public class LoadingActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-
     MyHandler handlerPager;
+
+    class CheckUpdateHandler extends Handler {
+        public CheckUpdateHandler(){}
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            if(msg.arg1 == -1) {
+                finishApp();
+                return;
+            }
+
+            if( msg.arg1 == 0 ) {
+                LoadCommunityList();
+            }
+            else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoadingActivity.this);
+
+                builder.setTitle("업데이트 확인");
+                builder.setMessage("마켓에 새 버전이 있습니다. 업데이트 하시겠습니까?");
+
+
+                builder.setPositiveButton("네", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent marketLaunch = new Intent(Intent.ACTION_VIEW);
+                        marketLaunch.setData(Uri.parse("market://details?id=com.sononpos.communityviwerex"));
+                        startActivity(marketLaunch);
+                        finish();
+                        dialog.dismiss();
+                    }
+
+                });
+
+                builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        LoadCommunityList();
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        }
+    }
+
+    CheckUpdateHandler handlerUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
+        CheckUpdate();
+    }
+
+    private void CheckUpdate() {
+        handlerUpdate = new CheckUpdateHandler();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Message msg = handlerUpdate.obtainMessage();
+                try {
+                    String device_version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+                    int nState = MarketVersionChecker.getVersionState(device_version);
+                    msg.arg1 = nState;
+                    handlerUpdate.sendMessage(msg);
+                } catch (PackageManager.NameNotFoundException e) {
+                    msg.arg1 = -1;
+                    handlerUpdate.sendMessage(msg);
+                    return;
+                }
+            }
+        }).start();
+    }
+
+    private void LoadCommunityList() {
         G.liCommTypeInfo.clear();
         ArrayList<String> aFiltered = G.getStringArrayPref(this, G.FILTERED_COMM);
         if(aFiltered != null) {
