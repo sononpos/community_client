@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.util.Log;
@@ -68,6 +70,15 @@ public class ListViewAdapter extends BaseAdapter {
         regDateTextView.setTextColor(Color.parseColor(theme.SubFont));
         countTextView.setTextColor(Color.parseColor(theme.SubFont));
 
+        /*
+        GradientDrawable gd = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[] {0xFF616261,0xFF131313});
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            convertView.setBackground(gd);
+        }
+        */
+
         ListViewItem item = listViewItemList.get(position);
         String sTitleRet = item.m_sTitle;
 
@@ -103,7 +114,7 @@ public class ListViewAdapter extends BaseAdapter {
 
         sTitleRet += sComment;
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
             titleTextView.setText(Html.fromHtml(sTitleRet, Html.FROM_HTML_MODE_LEGACY));
         }
         else{

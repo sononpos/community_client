@@ -22,6 +22,16 @@
             android:title="제목 줄여서 표시하기" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="컨텐츠 액션">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="webview_slide_action"
+            android:summary="좌,우 슬라이드로 닫기, 공유하기 기능 사용"
+            android:switchTextOff="OFF"
+            android:switchTextOn="ON"
+            android:title="슬라이드 액션 사용" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="앱 정보">
         <Preference
             android:key="app_recommand"

@@ -60,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         Log.d("VLog","OnResume!");
+        if( G.GetCommunityList().size() <= 0 ) {
+            G.ReloadCommunityListFromSharedPref(getApplicationContext());
+            adapter.liData = G.GetCommunityList();
+            adapter.notifyDataSetChanged();
+            tabs.notifyDataSetChanged();
+        }
 
         //  테스트
         SharedPreferences setRefer = PreferenceManager

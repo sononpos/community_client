@@ -31,17 +31,17 @@ public class SwipeWebView extends AdvancedWebView {
             if(e1.getPointerCount() > 1 || e2.getPointerCount() > 1) return false;
             else {
                 try { // right to left swipe .. go to next page
-                    if(e1.getX() - e2.getX() > 100 && Math.abs(velocityX) > 800) {
+                    if(e1.getX() - e2.getX() > 100 && Math.abs(velocityX) > 900) {
                         //do your stuff
-                        if( Math.abs(e2.getY() - e1.getY()) > 200 ) return false;
+                        if( Math.abs(e2.getY() - e1.getY()) > 180 ) return false;
                         if(_callback != null) {
                             _callback.OnLeftToRight();
                         }
                         return true;
                     } //left to right swipe .. go to prev page
-                    else if (e2.getX() - e1.getX() > 100 && Math.abs(velocityX) > 800) {
+                    else if (e2.getX() - e1.getX() > 100 && Math.abs(velocityX) > 900) {
                         //do your stuff
-                        if( Math.abs(e2.getY() - e1.getY()) > 200 ) return false;
+                        if( Math.abs(e2.getY() - e1.getY()) > 180 ) return false;
                         if(_callback != null) {
                             _callback.OnRightToLeft();
                         }

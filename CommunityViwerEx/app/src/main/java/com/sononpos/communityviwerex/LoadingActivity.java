@@ -47,6 +47,18 @@ public class LoadingActivity extends AppCompatActivity {
                 return;
             }
 
+            String response = (String)msg.obj;
+            G.LoadCommunityList(response);
+
+            Collections.sort(G.liCommTypeInfo, new Comparator<CommunityTypeInfo>() {
+                @Override
+                public int compare(CommunityTypeInfo o1, CommunityTypeInfo o2) {
+                    return o1.index < o2.index ? -1 : 1;
+                }
+            });
+
+            G.RefreshFilteredInfo();
+
             Intent intent = new Intent(mainActivity, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -56,6 +68,9 @@ public class LoadingActivity extends AppCompatActivity {
                     .getDefaultSharedPreferences(getApplicationContext());
             int themeType = Integer.parseInt(setRefer.getString("theme_type", "0"));
             ThemeManager.SetTheme(themeType);
+            SharedPreferences.Editor editor = setRefer.edit();
+            editor.putString("list_backup", response);
+            editor.apply();
             startActivity(intent);
         }
     }
@@ -188,26 +203,10 @@ public class LoadingActivity extends AppCompatActivity {
                         }
                         byteData = baos.toByteArray();
                         response = new String(byteData);
-                        JSONObject jobj = new JSONObject(response);
-                        Iterator<String> iter = jobj.keys();
-                        while(iter.hasNext()){
-                            String key = iter.next();
-                            JSONObject element = jobj.getJSONObject(key);
-                            String sName = element.getString("name");
-                            int nIndex = element.getInt("index");
-                            G.liCommTypeInfo.add(new CommunityTypeInfo(key, sName, nIndex));
-                        }
-
-                        Collections.sort(G.liCommTypeInfo, new Comparator<CommunityTypeInfo>() {
-                            @Override
-                            public int compare(CommunityTypeInfo o1, CommunityTypeInfo o2) {
-                                return o1.index < o2.index ? -1 : 1;
-                            }
-                        });
-
-                        G.RefreshFilteredInfo();
 
                         Message msg = handlerPager.obtainMessage();
+                        msg.arg1 = 0;
+                        msg.obj = response;
                         handlerPager.sendMessage(msg);
                     }
                     else {
@@ -216,11 +215,6 @@ public class LoadingActivity extends AppCompatActivity {
                         handlerPager.sendMessage(msg);
                     }
                 }catch(IOException e){
-                    e.printStackTrace();
-                    Message msg = handlerPager.obtainMessage();
-                    msg.arg1 = -1;
-                    handlerPager.sendMessage(msg);
-                }catch(JSONException e) {
                     e.printStackTrace();
                     Message msg = handlerPager.obtainMessage();
                     msg.arg1 = -1;
