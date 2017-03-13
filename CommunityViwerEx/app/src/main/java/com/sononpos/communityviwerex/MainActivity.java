@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else {
                     if(nPrevSize <= 1 ){
-                        Toast.makeText(view.getContext(), "하나 이상은 남겨두어야 합니다.", Toast.LENGTH_SHORT);
+                        Toast.makeText(view.getContext(), "하나 이상은 남겨두어야 합니다.", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
