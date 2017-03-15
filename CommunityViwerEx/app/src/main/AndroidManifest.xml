@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.android.vending.BILLING" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -45,6 +45,10 @@
         <activity
             android:name=".TutorialActivity"
             android:label="@string/title_activity_tutorial"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".FirstSettings.FirstSetting_ThemeActivity"
+            android:label="@string/title_activity_first_setting__theme"
             android:theme="@style/AppTheme"></activity>
     </application>
 

@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.sononpos.communityviwerex.FirstSettings.FirstSetting_ThemeActivity;
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
 
 import org.json.JSONException;
@@ -57,21 +58,38 @@ public class LoadingActivity extends AppCompatActivity {
                 }
             });
 
-            G.RefreshFilteredInfo();
+            // 첫번째 실행이면 FirstSetting으로
+            if(G.IsFirstUse(getApplicationContext())){
+                //G.SetFirstUse();    //  이후부터는 첫번째 실행이 아니게 된다
+                Intent intent = new Intent(mainActivity, FirstSetting_ThemeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-            Intent intent = new Intent(mainActivity, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                SharedPreferences setRefer = PreferenceManager
+                        .getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = setRefer.edit();
+                editor.putString("list_backup", response);
+                editor.apply();
+                startActivity(intent);
+            }
+            else {
+                G.RefreshFilteredInfo();
 
-            SharedPreferences setRefer = PreferenceManager
-                    .getDefaultSharedPreferences(getApplicationContext());
-            int themeType = Integer.parseInt(setRefer.getString("theme_type", "0"));
-            ThemeManager.SetTheme(themeType);
-            SharedPreferences.Editor editor = setRefer.edit();
-            editor.putString("list_backup", response);
-            editor.apply();
-            startActivity(intent);
+                Intent intent = new Intent(mainActivity, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                SharedPreferences setRefer = PreferenceManager
+                        .getDefaultSharedPreferences(getApplicationContext());
+                int themeType = Integer.parseInt(setRefer.getString("theme_type", "0"));
+                ThemeManager.SetTheme(themeType);
+                SharedPreferences.Editor editor = setRefer.edit();
+                editor.putString("list_backup", response);
+                editor.apply();
+                startActivity(intent);
+            }
         }
     }
     MyHandler handlerPager;
@@ -132,6 +150,8 @@ public class LoadingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+
+        ThemeManager.Init();
 
         CheckUpdate();
     }

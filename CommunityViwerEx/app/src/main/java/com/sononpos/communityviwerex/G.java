@@ -25,6 +25,19 @@ public class G {
     public static final String FILTERED_COMM = "FilteredCommunity";
     public static final String FIRST_USE = "FirstUse";
 
+    public static boolean IsFirstUse(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean bFirstUse = prefs.getBoolean(FIRST_USE, true);
+        return bFirstUse;
+    }
+
+    public static void SetFirstUse(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(FIRST_USE, false);
+        editor.apply();
+    }
+
     public static void setStringArrayPref(Context context , String sKey, ArrayList<String> values){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();

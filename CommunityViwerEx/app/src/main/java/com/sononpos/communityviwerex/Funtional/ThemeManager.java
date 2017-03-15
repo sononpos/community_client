@@ -1,5 +1,7 @@
 package com.sononpos.communityviwerex.Funtional;
 
+import java.util.ArrayList;
+
 /**
  * Created by nnnyyy on 2017-03-09.
  */
@@ -35,6 +37,8 @@ public class ThemeManager {
     private static final String ThemeYellow_LeftItemEnableColor = "#111111";
     private static final String ThemeYellow_LeftItemDisableColor = "#cfa7a7";
 
+    private static ArrayList<ThemeColorObject> aThemes = new ArrayList<ThemeColorObject>();
+
     static public class ThemeColorObject {
 
         public ThemeColorObject() {
@@ -49,7 +53,45 @@ public class ThemeManager {
         public String LeftDisable = ThemeManager.ThemeBlack_LeftItemDisableColor;
     }
 
-    private static final ThemeColorObject themeColor = new ThemeColorObject();
+    public static void Init() {
+        ThemeColorObject temp = new ThemeColorObject();
+        temp.BasicFont = ThemeBlack_BasicFontColor;
+        temp.SubFont = ThemeBlack_SubFontColor;
+        temp.BgList = ThemeBlack_BgListColor;
+        temp.BgTitle = ThemeBlack_BgTitleColor;
+        temp.LeftEnable = ThemeBlack_LeftItemEnableColor;
+        temp.LeftDisable = ThemeBlack_LeftItemDisableColor;
+        aThemes.add(temp);
+
+        temp = new ThemeColorObject();
+        temp.BasicFont = ThemeWhite_BasicFontColor;
+        temp.SubFont = ThemeWhite_SubFontColor;
+        temp.BgList = ThemeWhite_BgListColor;
+        temp.BgTitle = ThemeWhite_BgTitleColor;
+        temp.LeftEnable = ThemeWhite_LeftItemEnableColor;
+        temp.LeftDisable = ThemeWhite_LeftItemDisableColor;
+        aThemes.add(temp);
+
+        temp = new ThemeColorObject();
+        temp.BasicFont = ThemeSakura_BasicFontColor;
+        temp.SubFont = ThemeSakura_SubFontColor;
+        temp.BgList = ThemeSakura_BgListColor;
+        temp.BgTitle = ThemeSakura_BgTitleColor;
+        temp.LeftEnable = ThemeSakura_LeftItemEnableColor;
+        temp.LeftDisable = ThemeSakura_LeftItemDisableColor;
+        aThemes.add(temp);
+
+        temp = new ThemeColorObject();
+        temp.BasicFont = ThemeYellow_BasicFontColor;
+        temp.SubFont = ThemeYellow_SubFontColor;
+        temp.BgList = ThemeYellow_BgListColor;
+        temp.BgTitle = ThemeYellow_BgTitleColor;
+        temp.LeftEnable = ThemeYellow_LeftItemEnableColor;
+        temp.LeftDisable = ThemeYellow_LeftItemDisableColor;
+        aThemes.add(temp);
+    }
+
+    private static ThemeColorObject themeColor = new ThemeColorObject();
 
     public static String GetBasicFontColor() { return themeColor.BasicFont; }
     public static String GetSubFontColor() { return themeColor.SubFont; }
@@ -57,6 +99,7 @@ public class ThemeManager {
     public static String GetBgTitleColor() { return themeColor.BgTitle; }
 
     public static ThemeColorObject GetTheme() { return themeColor; }
+    public static ThemeColorObject GetTheme(int themeNum ) { return aThemes.get(themeNum); }
 
     public static String GetName(int themeNum) {
         switch(themeNum) {
@@ -69,51 +112,10 @@ public class ThemeManager {
     }
 
     public static void SetTheme(int themeNum ) {
-        switch(themeNum) {
-            case 0:
-                themeColor.BasicFont = ThemeBlack_BasicFontColor;
-                themeColor.SubFont = ThemeBlack_SubFontColor;
-                themeColor.BgList = ThemeBlack_BgListColor;
-                themeColor.BgTitle = ThemeBlack_BgTitleColor;
-                themeColor.LeftEnable = ThemeBlack_LeftItemEnableColor;
-                themeColor.LeftDisable = ThemeBlack_LeftItemDisableColor;
-                break;
-
-            case 1:
-                themeColor.BasicFont = ThemeWhite_BasicFontColor;
-                themeColor.SubFont = ThemeWhite_SubFontColor;
-                themeColor.BgList = ThemeWhite_BgListColor;
-                themeColor.BgTitle = ThemeWhite_BgTitleColor;
-                themeColor.LeftEnable = ThemeWhite_LeftItemEnableColor;
-                themeColor.LeftDisable = ThemeWhite_LeftItemDisableColor;
-                break;
-
-            case 2:
-                themeColor.BasicFont = ThemeSakura_BasicFontColor;
-                themeColor.SubFont = ThemeSakura_SubFontColor;
-                themeColor.BgList = ThemeSakura_BgListColor;
-                themeColor.BgTitle = ThemeSakura_BgTitleColor;
-                themeColor.LeftEnable = ThemeSakura_LeftItemEnableColor;
-                themeColor.LeftDisable = ThemeSakura_LeftItemDisableColor;
-                break;
-
-            case 3:
-                themeColor.BasicFont = ThemeYellow_BasicFontColor;
-                themeColor.SubFont = ThemeYellow_SubFontColor;
-                themeColor.BgList = ThemeYellow_BgListColor;
-                themeColor.BgTitle = ThemeYellow_BgTitleColor;
-                themeColor.LeftEnable = ThemeYellow_LeftItemEnableColor;
-                themeColor.LeftDisable = ThemeYellow_LeftItemDisableColor;
-                break;
-
-            default:
-                themeColor.BasicFont = ThemeBlack_BasicFontColor;
-                themeColor.SubFont = ThemeBlack_SubFontColor;
-                themeColor.BgList = ThemeBlack_BgListColor;
-                themeColor.BgTitle = ThemeBlack_BgTitleColor;
-                themeColor.LeftEnable = ThemeBlack_LeftItemEnableColor;
-                themeColor.LeftDisable = ThemeBlack_LeftItemDisableColor;
-                break;
+        if(aThemes.size() <= themeNum) {
+            return;
         }
+
+        themeColor = aThemes.get(themeNum);
     }
 }
