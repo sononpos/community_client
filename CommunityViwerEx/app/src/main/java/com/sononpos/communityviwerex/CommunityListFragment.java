@@ -18,6 +18,7 @@ package com.sononpos.communityviwerex;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,6 +42,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sononpos.communityviwerex.Funtional.ThemeManager;
 import com.sononpos.communityviwerex.R;
 
 import org.json.JSONArray;
@@ -69,7 +71,10 @@ public class CommunityListFragment extends Fragment {
 
     private JSONArray jsBackup = new JSONArray();
     private String backupString = "";
+
     SwipeRefreshLayout fl;
+    ListView listView;
+    ListViewAdapter lvAdapter;
 
     Handler handler = new Handler(){
         @Override
@@ -133,9 +138,6 @@ public class CommunityListFragment extends Fragment {
         }
     };
 
-    ListView listView;
-    ListViewAdapter lvAdapter;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,10 +159,12 @@ public class CommunityListFragment extends Fragment {
             }
         });
 
+        ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
+        int fontColor = Color.parseColor(theme.BasicFont);
         if(lvAdapter == null) lvAdapter = new ListViewAdapter();
         listView = new ListView(getContext());
         listView.setAdapter(lvAdapter);
-        listView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, new int[]{0, 0xFF000000, 0}));
+        listView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, new int[]{0, fontColor, fontColor, fontColor, 0}));
         listView.setDividerHeight(1);
         View footerView;
         footerView = ((LayoutInflater)getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.list_footer, null, false);

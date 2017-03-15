@@ -332,6 +332,10 @@ public class MainActivity extends AppCompatActivity {
         tabs.setTextColor(Color.parseColor(theme.BasicFont));
         tabs.setBackgroundColor(Color.parseColor(theme.BgList));
         tabs.setIndicatorColor(Color.parseColor(theme.BasicFont));
+        tabs.setIndicatorHeight(8);
+
+        tabs.setUnderlineColor(Color.TRANSPARENT);
+        tabs.setDividerColor(Color.parseColor(theme.BasicFont));
 
         Button btnSettings = (Button)dlv.findViewById(R.id.btn_settings);
         btnSettings.setBackgroundColor(Color.parseColor(theme.BgList));
