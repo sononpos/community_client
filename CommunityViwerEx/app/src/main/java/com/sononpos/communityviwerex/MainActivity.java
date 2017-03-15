@@ -327,9 +327,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void RefreshTheme() {
         ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
-        toolbar.setBackgroundColor(Color.parseColor(theme.BgTitle));
+        //toolbar.setBackgroundColor(Color.parseColor(theme.BgTitle));
         dl.setBackgroundColor(Color.parseColor(theme.BgList));
         toolbar.getRootView().setBackgroundColor(Color.parseColor(theme.BgList));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         tabs.setTextColor(Color.parseColor(theme.BasicFont));
         tabs.setBackgroundColor(Color.parseColor(theme.BgList));

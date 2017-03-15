@@ -12,36 +12,40 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/toolBar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:background="#2a2a2a">
-        <ImageButton android:src="@drawable/icon_menu"
-            android:background="?attr/actionBarItemBackground"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:scaleType="centerInside"
-            android:id="@+id/btn_leftmenu"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="20dp"/>
+    <RelativeLayout
+        android:id="@+id/rl_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:src="@drawable/title"
-            android:maxWidth="100dp"
-            />
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/contop"/>
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/toolBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:title=""
+            >
+            <ImageButton android:src="@drawable/icon_menu"
+                android:background="?attr/actionBarItemBackground"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:scaleType="centerInside"
+                android:id="@+id/btn_leftmenu"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="20dp"/>
 
-    </android.support.v7.widget.Toolbar>
+        </android.support.v7.widget.Toolbar>
+    </RelativeLayout>
 
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="48dip"
-        android:layout_below="@id/toolBar"
+        android:layout_below="@id/rl_toolbar"
         />
 
     <android.support.v4.view.ViewPager
