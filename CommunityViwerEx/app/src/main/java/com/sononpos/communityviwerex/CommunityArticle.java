@@ -11,6 +11,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Activity;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -21,7 +23,7 @@ import com.sononpos.communityviwerex.Funtional.ThemeManager;
 
 import im.delight.android.webview.AdvancedWebView;
 
-public class CommunityArticle extends Activity implements AdvancedWebView.Listener {
+public class CommunityArticle extends AppCompatActivity implements AdvancedWebView.Listener {
 
     private SwipeWebView mWebView;
     private String url;
@@ -32,6 +34,11 @@ public class CommunityArticle extends Activity implements AdvancedWebView.Listen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_article);
+
+        //  Setup ActionBar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBarArticle);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mWebView = (SwipeWebView)findViewById(R.id.webview);
         mWebView.getRootView().setBackgroundColor(Color.parseColor(ThemeManager.GetTheme().BgList));

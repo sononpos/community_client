@@ -198,6 +198,7 @@ public class CommunityListFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), CommunityArticle.class);
                 intent.putExtra("URL", item.m_sLink);
                 intent.putExtra("TITLE", item.m_sTitle);
+                getActivity().overridePendingTransition(R.xml.fade, R.xml.cycle_7);
                 startActivity(intent);
             }
         });
@@ -299,7 +300,13 @@ public class CommunityListFragment extends Fragment {
                     Message msg = handler.obtainMessage();
                     msg.arg1 = -3;
                     handler.sendMessage(msg);
-                }finally {
+                }catch(IndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                    Message msg = handler.obtainMessage();
+                    msg.arg1 = -3;
+                    handler.sendMessage(msg);
+                }
+                finally {
                 }
             }
         }).start();

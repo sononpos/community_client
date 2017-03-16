@@ -8,10 +8,30 @@
     android:orientation="vertical"
     tools:context="com.sononpos.communityviwerex.CommunityArticle">
 
+    <RelativeLayout
+        android:id="@+id/rl_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/contop"/>
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/toolBarArticle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:title=""
+            >
+        </android.support.v7.widget.Toolbar>
+    </RelativeLayout>
+
     <com.sononpos.communityviwerex.SwipeWebView
         android:id="@+id/webview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_toolbar"
         android:layout_above="@+id/adViewWeb" />
 
     <!-- view for AdMob Banner Ad -->

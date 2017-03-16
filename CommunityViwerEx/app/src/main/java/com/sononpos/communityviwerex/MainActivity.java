@@ -189,10 +189,14 @@ public class MainActivity extends AppCompatActivity {
                 G.setStringArrayPref(getApplicationContext(), G.FILTERED_COMM, new ArrayList<String>(G.liFiltered));
                 G.RefreshFilteredInfo();
 
-                adapter.liData = G.GetCommunityList();
-                adapter.notifyDataSetChanged();
-                tabs.notifyDataSetChanged();
-
+                try{
+                    adapter.liData = G.GetCommunityList();
+                    adapter.notifyDataSetChanged();
+                    tabs.notifyDataSetChanged();
+                }
+                catch(NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
