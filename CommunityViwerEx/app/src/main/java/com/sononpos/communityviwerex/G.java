@@ -21,9 +21,18 @@ public class G {
     public static ArrayList<CommunityTypeInfo> liCommTypeInfo = new ArrayList<>();
     public static ArrayList<CommunityTypeInfo> liFilteredInfo = new ArrayList<>();
     public static HashSet<String> liFiltered = new HashSet<>();
+    private static ArrayList<String> liRecentArticle = new ArrayList<>();
     public static final String SERV_ROOT = "http://52.79.205.198:3000/";
-    public static final String FILTERED_COMM = "FilteredCommunity";
+    public static final String KEY_FILTERED_COMM = "FilteredCommunity";
+    public static final String KEY_RECENT_ARTICLES = "RecentArticles";
+    public static final String KEY_SHOW_RECENT= "list_show_recent";
     public static final String FIRST_USE = "FirstUse";
+
+    public static boolean IsShowRecent(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean bFirstUse = prefs.getBoolean(KEY_SHOW_RECENT, false);
+        return bFirstUse;
+    }
 
     public static boolean IsFirstUse(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -97,7 +106,7 @@ public class G {
         String list_backup = prefs.getString("list_backup", "");
         LoadCommunityList(list_backup);
 
-        ArrayList<String> aFiltered = G.getStringArrayPref(context, G.FILTERED_COMM);
+        ArrayList<String> aFiltered = G.getStringArrayPref(context, G.KEY_FILTERED_COMM);
         if(aFiltered != null)
             G.liFiltered = new HashSet<String>(aFiltered);
         RefreshFilteredInfo();
@@ -126,8 +135,22 @@ public class G {
     }
 
     public static ArrayList<CommunityTypeInfo> GetCommunityList() {
-        if(IsFiltered()) return liFilteredInfo;
+        if(IsFiltered()) {
+            return liFilteredInfo;
+        }
 
         return liCommTypeInfo;
+    }
+
+    public static void SaveRecentArticle(Context context, ListViewItem item) {
+        if(liRecentArticle.size() >= 10) {
+            liRecentArticle.remove(liRecentArticle.size()-1);
+        }
+        liRecentArticle.add(0,item.m_sJsonString);
+        setStringArrayPref(context, KEY_RECENT_ARTICLES, liRecentArticle);
+    }
+
+    public static void LoadRecentArticle(Context context) {
+        liRecentArticle = getStringArrayPref(context, KEY_RECENT_ARTICLES);
     }
 }

@@ -54,6 +54,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -81,7 +82,7 @@ public class CommunityListFragment extends Fragment {
         public void handleMessage(Message msg) {
 
             super.handleMessage(msg);
-            if(msg.arg1 >= 0) {
+            if(msg.arg1 == 0) {
 
                 String response = (String)msg.obj;
 
@@ -105,6 +106,7 @@ public class CommunityListFragment extends Fragment {
 
                     for(int i = 0 ; i < len ; ++i) {
                         JSONObject obj = jlist.getJSONObject(i);
+                        String sJsonString = obj.toString();
                         String sTitle = obj.getString("title");
                         if(sTitle.isEmpty() || sTitle.compareTo("") == 0) continue;
                         String sUserName = obj.getString("username");
@@ -112,13 +114,35 @@ public class CommunityListFragment extends Fragment {
                         String sRegDate = obj.getString("regdate");
                         String sViewCnt = obj.getString("viewcnt");
                         String sCommentCnt = obj.getString("commentcnt");
-                        lvAdapter.AddItem(sTitle,sUserName,sRegDate, sViewCnt, sCommentCnt, sLink);
+                        lvAdapter.AddItem(sTitle,sUserName,sRegDate, sViewCnt, sCommentCnt, sLink, sJsonString);
                     }
                 }catch(JSONException e) {
 
                 }
 
                 nLoadOffset++;
+                lvAdapter.notifyDataSetChanged();
+            }
+            else if( msg.arg1 == 1) {
+                //  최근 글 목록
+                ArrayList<String> aJsonList = G.getStringArrayPref(getContext(), G.KEY_RECENT_ARTICLES);
+                for (String s : aJsonList) {
+                    JSONObject obj = null;
+                    try {
+                        obj = new JSONObject(s);
+                        String sTitle = obj.getString("title");
+                        if(sTitle.isEmpty() || sTitle.compareTo("") == 0) continue;
+                        String sUserName = obj.getString("username");
+                        String sLink = obj.getString("link");
+                        String sRegDate = obj.getString("regdate");
+                        String sViewCnt = obj.getString("viewcnt");
+                        String sCommentCnt = obj.getString("commentcnt");
+                        lvAdapter.AddItem(sTitle,sUserName,sRegDate, sViewCnt, sCommentCnt, sLink, "");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 lvAdapter.notifyDataSetChanged();
             }
             else {
@@ -168,7 +192,13 @@ public class CommunityListFragment extends Fragment {
         listView.setDividerHeight(1);
         View footerView;
         footerView = ((LayoutInflater)getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.list_footer, null, false);
-        listView.addFooterView(footerView);
+        if(G.IsShowRecent(getContext())){
+            if(position != 0)
+                listView.addFooterView(footerView);
+        }
+        else
+            listView.addFooterView(footerView);
+
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -183,6 +213,8 @@ public class CommunityListFragment extends Fragment {
                 }
             }
         });
+
+        //  커뮤니티 글 제목을 클릭했을 때, 상세 뷰로
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -198,8 +230,10 @@ public class CommunityListFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), CommunityArticle.class);
                 intent.putExtra("URL", item.m_sLink);
                 intent.putExtra("TITLE", item.m_sTitle);
-                getActivity().overridePendingTransition(R.xml.fade, R.xml.cycle_7);
                 startActivity(intent);
+
+                if(!item.m_sJsonString.isEmpty())
+                    G.SaveRecentArticle(getContext(), item);
             }
         });
         fl.addView(listView);
@@ -250,14 +284,24 @@ public class CommunityListFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                ArrayList<CommunityTypeInfo> liTemp = new ArrayList<CommunityTypeInfo>(G.GetCommunityList());
+                if(G.IsShowRecent(getContext())) {
+                    liTemp.add(0,new CommunityTypeInfo("recent", "최근 본 글", -1));
+                }
+                if( liTemp.get(position).index == -1 ) {
+                    Message msg = handler.obtainMessage();
+                    msg.arg1 = 1;
+                    handler.sendMessage(msg);
+                    return;
+                }
 
                 try {
                     URL url;
                     if( nLoadOffset == 0 ) {
-                        url = new URL(G.SERV_ROOT + G.GetCommunityList().get(position).sKey + "/" + (nLoadOffset+1));
+                        url = new URL(G.SERV_ROOT + liTemp.get(position).sKey + "/" + (nLoadOffset+1));
                     }
                     else {
-                        url = new URL(G.SERV_ROOT + G.GetCommunityList().get(position).sKey + "/" + sNextURL);
+                        url = new URL(G.SERV_ROOT + liTemp.get(position).sKey + "/" + sNextURL);
                     }
 
                     HttpURLConnection conn = (HttpURLConnection)url.openConnection();

@@ -17,14 +17,14 @@ public class ThemeManager {
 
     // White Theme
     private static final String ThemeWhite_BasicFontColor = "#000000";
-    private static final String ThemeWhite_SubFontColor = "#111111";
+    private static final String ThemeWhite_SubFontColor = "#727272";
     private static final String ThemeWhite_BgListColor = "#ffffff";
     private static final String ThemeWhite_BgTitleColor = "#fcfcfc";
     private static final String ThemeWhite_LeftItemEnableColor = "#111111";
     private static final String ThemeWhite_LeftItemDisableColor = "#999999";
 
     private static final String ThemeSakura_BasicFontColor = "#111111";
-    private static final String ThemeSakura_SubFontColor = "#fb9bb9";
+    private static final String ThemeSakura_SubFontColor = "#ea3789";
     private static final String ThemeSakura_BgListColor = "#f3e5e2";
     private static final String ThemeSakura_BgTitleColor = "#f3e5e2";
     private static final String ThemeSakura_LeftItemEnableColor = "#111111";
@@ -92,11 +92,6 @@ public class ThemeManager {
     }
 
     private static ThemeColorObject themeColor = new ThemeColorObject();
-
-    public static String GetBasicFontColor() { return themeColor.BasicFont; }
-    public static String GetSubFontColor() { return themeColor.SubFont; }
-    public static String GetBgListColor() { return themeColor.BgList; }
-    public static String GetBgTitleColor() { return themeColor.BgTitle; }
 
     public static ThemeColorObject GetTheme() { return themeColor; }
     public static ThemeColorObject GetTheme(int themeNum ) { return aThemes.get(themeNum); }

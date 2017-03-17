@@ -11,4 +11,5 @@ public class ListViewItem {
     public String m_sViewCnt;
     public String m_sCommentCnt;
     public String m_sLink;
+    public String m_sJsonString;
 }

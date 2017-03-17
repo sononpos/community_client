@@ -13,22 +13,26 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="리스트 표시">
-        <SwitchPreference
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="list_show_recent"
+            android:summaryOn="표시합니다"
+            android:summaryOff="표시하지 않습니다"
+            android:title="최근 읽은 글 표시" />
+        <CheckBoxPreference
             android:defaultValue="true"
             android:key="list_short"
-            android:summary="리스트 제목을 줄여서 표시하기 여부"
-            android:switchTextOff="OFF"
-            android:switchTextOn="ON"
+            android:summaryOn="사용합니다"
+            android:summaryOff="사용하지 않습니다"
             android:title="제목 줄여서 표시하기" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="컨텐츠 액션">
-        <SwitchPreference
+        <CheckBoxPreference
             android:defaultValue="true"
             android:key="webview_slide_action"
-            android:summary="좌,우 슬라이드로 닫기, 공유하기 기능 사용"
-            android:switchTextOff="OFF"
-            android:switchTextOn="ON"
+            android:summaryOn="슬라이드 액션을 사용합니다"
+            android:summaryOff="슬라이드 액션을 사용하지 않습니다"
             android:title="슬라이드 액션 사용" />
     </PreferenceCategory>
 

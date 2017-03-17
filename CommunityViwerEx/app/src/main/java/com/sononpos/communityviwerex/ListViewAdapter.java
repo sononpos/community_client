@@ -127,7 +127,7 @@ public class ListViewAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void AddItem(String _sTitle, String _sName, String _sRegDate, String _sViewCnt, String _sCommentCnt, String _sLink){
+    public void AddItem(String _sTitle, String _sName, String _sRegDate, String _sViewCnt, String _sCommentCnt, String _sLink, String _sJsonString){
         ListViewItem item = new ListViewItem();
         item.m_sTitle = _sTitle;
         item.m_sName = _sName;
@@ -135,6 +135,7 @@ public class ListViewAdapter extends BaseAdapter {
         item.m_sRegDate = _sRegDate;
         item.m_sViewCnt = _sViewCnt;
         item.m_sCommentCnt =_sCommentCnt;
+        item.m_sJsonString = _sJsonString;
         listViewItemList.add(item);
     }
 

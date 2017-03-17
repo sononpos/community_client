@@ -50,6 +50,7 @@ public class LoadingActivity extends AppCompatActivity {
 
             String response = (String)msg.obj;
             G.LoadCommunityList(response);
+            G.LoadRecentArticle(getApplicationContext());
 
             Collections.sort(G.liCommTypeInfo, new Comparator<CommunityTypeInfo>() {
                 @Override
@@ -179,7 +180,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     private void LoadCommunityList() {
         G.liCommTypeInfo.clear();
-        ArrayList<String> aFiltered = G.getStringArrayPref(this, G.FILTERED_COMM);
+        ArrayList<String> aFiltered = G.getStringArrayPref(this, G.KEY_FILTERED_COMM);
         if(aFiltered != null) {
             G.liFiltered = new HashSet<String>(aFiltered);
         }

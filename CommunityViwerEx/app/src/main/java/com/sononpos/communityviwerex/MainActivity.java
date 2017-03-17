@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager pager;
     private CommunityTypePagerAdapter adapter;
     private LeftMenuItemAdapter adapterLeftMenu;
+    CommunityTypeInfo recent;
     Toolbar toolbar;
     private DrawerLayout dl;
     private View dlv;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("VLog","OnResume!");
         if( G.GetCommunityList().size() <= 0 ) {
             G.ReloadCommunityListFromSharedPref(getApplicationContext());
-            adapter.liData = G.GetCommunityList();
+            ResetArticleList();
             adapter.notifyDataSetChanged();
             tabs.notifyDataSetChanged();
         }
@@ -117,7 +118,10 @@ public class MainActivity extends AppCompatActivity {
                 super.onChanged();
             }
         });
-        adapter.liData = G.GetCommunityList();
+
+        recent = new CommunityTypeInfo("recent", "최근 본 글", -1);
+
+        ResetArticleList();
         pager.setAdapter(adapter);
         tabs.setViewPager(pager);
         tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -131,8 +135,10 @@ public class MainActivity extends AppCompatActivity {
                 List<Fragment> fragments = getSupportFragmentManager().getFragments();
                 for (Fragment f : fragments) {
                     if (f instanceof CommunityListFragment) {
-                        if (((CommunityListFragment) f).getPageNum() == (position + 1)) {
-                            //((CommunityListFragment)f).reload();
+                        Log.e("Error","onPageSelected" + ((CommunityListFragment) f).getPageNum());
+                        CommunityListFragment cf = ((CommunityListFragment) f);
+                        if(G.IsShowRecent(getApplicationContext()) && cf.getPageNum() == 0) {
+                            cf.Reload();
                         }
                     }
                 }
@@ -186,11 +192,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                G.setStringArrayPref(getApplicationContext(), G.FILTERED_COMM, new ArrayList<String>(G.liFiltered));
+                G.setStringArrayPref(getApplicationContext(), G.KEY_FILTERED_COMM, new ArrayList<String>(G.liFiltered));
                 G.RefreshFilteredInfo();
 
                 try{
-                    adapter.liData = G.GetCommunityList();
+                    ResetArticleList();
                     adapter.notifyDataSetChanged();
                     tabs.notifyDataSetChanged();
                 }
@@ -352,4 +358,12 @@ public class MainActivity extends AppCompatActivity {
         btnSettings.setTextColor(Color.parseColor(theme.BasicFont));
     }
 
+    private void ResetArticleList() {
+        adapter.liData.clear();
+        ArrayList<CommunityTypeInfo> renew = new ArrayList<>(G.GetCommunityList());
+        if(G.IsShowRecent(getApplicationContext())){
+            renew.add(0,recent);
+        }
+        adapter.liData.addAll(renew);
+    }
 }
