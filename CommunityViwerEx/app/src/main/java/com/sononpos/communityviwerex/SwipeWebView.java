@@ -39,9 +39,9 @@ public class SwipeWebView extends AdvancedWebView {
                         }
                         return true;
                     } //left to right swipe .. go to prev page
-                    else if (e2.getX() - e1.getX() > 100 && Math.abs(velocityX) > 900) {
+                    else if (e2.getX() - e1.getX() > 200 && Math.abs(velocityX) > 900) {
                         //do your stuff
-                        if( Math.abs(e2.getY() - e1.getY()) > 180 ) return false;
+                        if( Math.abs(e2.getY() - e1.getY()) > 100 ) return false;
                         if(_callback != null) {
                             _callback.OnRightToLeft();
                         }

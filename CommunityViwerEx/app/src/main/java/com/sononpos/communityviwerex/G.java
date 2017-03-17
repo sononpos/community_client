@@ -143,7 +143,7 @@ public class G {
     }
 
     public static void SaveRecentArticle(Context context, ListViewItem item) {
-        if(liRecentArticle.size() >= 10) {
+        if(liRecentArticle.size() >= 30) {
             liRecentArticle.remove(liRecentArticle.size()-1);
         }
         liRecentArticle.add(0,item.m_sJsonString);
@@ -152,5 +152,10 @@ public class G {
 
     public static void LoadRecentArticle(Context context) {
         liRecentArticle = getStringArrayPref(context, KEY_RECENT_ARTICLES);
+    }
+
+    public static void ClearRecentArticle(Context context) {
+        liRecentArticle.clear();
+        setStringArrayPref(context, KEY_RECENT_ARTICLES, liRecentArticle);
     }
 }
