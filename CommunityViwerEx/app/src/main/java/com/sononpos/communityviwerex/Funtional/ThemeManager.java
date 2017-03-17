@@ -23,9 +23,9 @@ public class ThemeManager {
     private static final String ThemeWhite_LeftItemEnableColor = "#111111";
     private static final String ThemeWhite_LeftItemDisableColor = "#999999";
 
-    private static final String ThemeSakura_BasicFontColor = "#111111";
-    private static final String ThemeSakura_SubFontColor = "#ea3789";
-    private static final String ThemeSakura_BgListColor = "#f3e5e2";
+    private static final String ThemeSakura_BasicFontColor = "#342831";
+    private static final String ThemeSakura_SubFontColor = "#735A6E";
+    private static final String ThemeSakura_BgListColor = "#F3D6E6";
     private static final String ThemeSakura_BgTitleColor = "#f3e5e2";
     private static final String ThemeSakura_LeftItemEnableColor = "#111111";
     private static final String ThemeSakura_LeftItemDisableColor = "#dec7ce";
