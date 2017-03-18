@@ -148,11 +148,11 @@ public class CommunityListFragment extends Fragment {
             else {
                 if( msg.arg1 == -3 ) {
                     if( getContext() != null )
-                        Toast.makeText(getContext(), "네트워크 상태를 확인 해 주세요", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.alert_please_check_network_state, Toast.LENGTH_SHORT).show();
                 }
                 else {
                     if( getContext() != null )
-                        Toast.makeText(getContext(), "알 수 없는 이유로 실패하였습니다", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.alert_unknown_problem, Toast.LENGTH_SHORT).show();
                 }
             }
 

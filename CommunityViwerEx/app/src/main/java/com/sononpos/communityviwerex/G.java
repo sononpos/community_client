@@ -26,6 +26,7 @@ public class G {
     public static final String KEY_FILTERED_COMM = "FilteredCommunity";
     public static final String KEY_RECENT_ARTICLES = "RecentArticles";
     public static final String KEY_SHOW_RECENT= "list_show_recent";
+    public static final String KEY_TUTORIAL_COMPLETE = "tutorial_complete";
     public static final String FIRST_USE = "FirstUse";
 
     public static boolean IsShowRecent(Context context) {

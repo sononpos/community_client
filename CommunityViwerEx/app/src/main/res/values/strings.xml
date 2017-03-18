@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">핫 커뮤니티</string>
-
     <string name="action_settings">설 정</string>
-
     <string name="opt_setting">체크박스</string>
+    <string name="at_least_one_community">하나 이상은 남겨두어야 합니다</string>
+    <string name="recent_show_list">최근 본 글</string>
+    <string name="tutorial_desc">튜토리얼 설명</string>
+    <string name="alert_please_check_network_state">네트워크 상태를 확인 해 주세요</string>
+    <string name="alert_unknown_problem">알 수 없는 이유로 실패하였습니다</string>
 
     <!-- -
         This is an ad unit ID for a banner test ad. Replace with your own banner ad unit id.

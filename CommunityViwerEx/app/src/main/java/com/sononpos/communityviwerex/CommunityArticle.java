@@ -44,11 +44,11 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
         mWebView.getRootView().setBackgroundColor(Color.parseColor(ThemeManager.GetTheme().BgList));
         mWebView.setListener(this, this);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean bTutorial = pref.getBoolean("tutorial_complete" , false);
+        boolean bTutorial = pref.getBoolean(G.KEY_TUTORIAL_COMPLETE , false);
 
         if(!bTutorial) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("튜토리얼 설명");
+            builder.setTitle(R.string.tutorial_desc);
             builder.setMessage("-> 슬라이드 : 닫기\r\n<- 슬라이드 : 공유하기");
             builder.setCancelable(false);
             builder.setPositiveButton("다신 안 봄", new DialogInterface.OnClickListener() {
@@ -57,7 +57,7 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
                 public void onClick(DialogInterface dialog, int which) {
                     SharedPreferences pref_inner = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     SharedPreferences.Editor editor = pref_inner.edit();
-                    editor.putBoolean("tutorial_complete", true);
+                    editor.putBoolean(G.KEY_TUTORIAL_COMPLETE, true);
                     editor.apply();
                     dialog.dismiss();
                 }

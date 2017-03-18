@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager pager;
     private CommunityTypePagerAdapter adapter;
     private LeftMenuItemAdapter adapterLeftMenu;
-    CommunityTypeInfo recent;
-    Toolbar toolbar;
+    private CommunityTypeInfo recent;
+    private Toolbar toolbar;
     private DrawerLayout dl;
     private View dlv;
     private AdView mAdView;
@@ -112,13 +112,6 @@ public class MainActivity extends AppCompatActivity {
         tabs.setTextSize(40);
         pager = (ViewPager) findViewById(R.id.pager);
         adapter = new CommunityTypePagerAdapter(getSupportFragmentManager());
-        adapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-            }
-        });
-
         recent = new CommunityTypeInfo("recent", "최근 본 글", -1);
 
         ResetArticleList();
@@ -135,9 +128,9 @@ public class MainActivity extends AppCompatActivity {
                 List<Fragment> fragments = getSupportFragmentManager().getFragments();
                 for (Fragment f : fragments) {
                     if (f instanceof CommunityListFragment) {
-                        Log.e("Error","onPageSelected" + ((CommunityListFragment) f).getPageNum());
+                        Log.e("Error", "onPageSelected" + ((CommunityListFragment) f).getPageNum());
                         CommunityListFragment cf = ((CommunityListFragment) f);
-                        if(G.IsShowRecent(getApplicationContext()) && cf.getPageNum() == 0) {
+                        if (G.IsShowRecent(getApplicationContext()) && cf.getPageNum() == 0) {
                             cf.Reload();
                         }
                     }
@@ -150,85 +143,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //  Init DrawerLayout
-        dl = (DrawerLayout)findViewById(R.id.drawer_layout);
-        dlv = (View)findViewById(R.id.drawer);
-
-        ArrayList<LeftMenuItem> leftMenuList = new ArrayList<LeftMenuItem>();
-        Iterator iter = G.liCommTypeInfo.iterator();
-        while(iter.hasNext()) {
-            CommunityTypeInfo info = (CommunityTypeInfo)iter.next();
-            LeftMenuItem item = new LeftMenuItem(info.sName, info.sKey);
-            leftMenuList.add(item);
-        }
-        adapterLeftMenu = new LeftMenuItemAdapter(this, R.layout.leftmenuitem, leftMenuList);
-        ListView listLeft = (ListView)findViewById(R.id.list_left);
-        listLeft.setAdapter(adapterLeftMenu);
-        listLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //  메뉴 아이템 클릭
-                LeftMenuItem item =  (LeftMenuItem)parent.getItemAtPosition(position);
-                TextView tvName = (TextView)view.findViewById(R.id.textViewName);
-
-                ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
-
-                int nPrevSize = G.GetCommunityList().size();
-
-                if( G.liFiltered.contains(item.sKey) ) {
-                    G.liFiltered.remove(item.sKey);
-                    tvName.setTextColor(Color.parseColor(theme.LeftEnable));
-                }
-                else {
-                    if(nPrevSize <= 1 ){
-                        Toast.makeText(view.getContext(), "하나 이상은 남겨두어야 합니다.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    G.liFiltered.add(item.sKey);
-                    tvName.setTextColor(Color.parseColor(theme.LeftDisable));
-                    if( (nPrevSize-1) <= pager.getCurrentItem() ){
-                        pager.setCurrentItem(pager.getCurrentItem()-1);
-                    }
-                }
-
-                G.setStringArrayPref(getApplicationContext(), G.KEY_FILTERED_COMM, new ArrayList<String>(G.liFiltered));
-                G.RefreshFilteredInfo();
-
-                try{
-                    ResetArticleList();
-                    adapter.notifyDataSetChanged();
-                    tabs.notifyDataSetChanged();
-                }
-                catch(NullPointerException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-
         //  Setup ActionBar
         toolbar = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
-        ImageButton ibtn = (ImageButton)toolbar.findViewById(R.id.btn_leftmenu);
-        ibtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                dl.openDrawer(dlv);
-
-            }
-        });
-        Button btnSettings = (Button)dlv.findViewById(R.id.btn_settings);
-        btnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,SettingsActivity.class));
-            }
-        });
-
+        InitLeftMenu();
         RefreshTheme();
 
         mAdView = (AdView) findViewById(R.id.adViewMain);
@@ -365,5 +284,81 @@ public class MainActivity extends AppCompatActivity {
             renew.add(0,recent);
         }
         adapter.liData.addAll(renew);
+    }
+
+    private void InitLeftMenu() {
+        //  Init DrawerLayout
+        dl = (DrawerLayout)findViewById(R.id.drawer_layout);
+        dlv = (View)findViewById(R.id.drawer);
+
+        ArrayList<LeftMenuItem> leftMenuList = new ArrayList<LeftMenuItem>();
+        Iterator iter = G.liCommTypeInfo.iterator();
+        while(iter.hasNext()) {
+            CommunityTypeInfo info = (CommunityTypeInfo)iter.next();
+            LeftMenuItem item = new LeftMenuItem(info.sName, info.sKey);
+            leftMenuList.add(item);
+        }
+        adapterLeftMenu = new LeftMenuItemAdapter(this, R.layout.leftmenuitem, leftMenuList);
+        ListView listLeft = (ListView)findViewById(R.id.list_left);
+        listLeft.setAdapter(adapterLeftMenu);
+        listLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //  메뉴 아이템 클릭
+                LeftMenuItem item =  (LeftMenuItem)parent.getItemAtPosition(position);
+                TextView tvName = (TextView)view.findViewById(R.id.textViewName);
+
+                ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
+
+                int nPrevSize = G.GetCommunityList().size();
+
+                if( G.liFiltered.contains(item.sKey) ) {
+                    G.liFiltered.remove(item.sKey);
+                    tvName.setTextColor(Color.parseColor(theme.LeftEnable));
+                }
+                else {
+                    if(nPrevSize <= 1 ){
+                        Toast.makeText(view.getContext(), R.string.at_least_one_community, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    G.liFiltered.add(item.sKey);
+                    tvName.setTextColor(Color.parseColor(theme.LeftDisable));
+                    if( (nPrevSize-1) <= pager.getCurrentItem() ){
+                        pager.setCurrentItem(pager.getCurrentItem()-1);
+                    }
+                }
+
+                G.setStringArrayPref(getApplicationContext(), G.KEY_FILTERED_COMM, new ArrayList<String>(G.liFiltered));
+                G.RefreshFilteredInfo();
+
+                try{
+                    ResetArticleList();
+                    adapter.notifyDataSetChanged();
+                    tabs.notifyDataSetChanged();
+                }
+                catch(NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        ImageButton ibtn = (ImageButton)toolbar.findViewById(R.id.btn_leftmenu);
+        ibtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                dl.openDrawer(dlv);
+
+            }
+        });
+        Button btnSettings = (Button)dlv.findViewById(R.id.btn_settings);
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            }
+        });
     }
 }
