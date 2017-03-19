@@ -11,13 +11,10 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.sononpos.communityviwerex.FirstSettings.FirstSetting_ThemeActivity;
+import com.sononpos.communityviwerex.Funtional.KBONetworkInfo;
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -28,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Iterator;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -111,36 +107,41 @@ public class LoadingActivity extends AppCompatActivity {
                 LoadCommunityList();
             }
             else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(LoadingActivity.this);
+                if( KBONetworkInfo.IsWifiAvailable(getApplicationContext()) ) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LoadingActivity.this);
 
-                builder.setTitle("업데이트 확인");
-                builder.setMessage("마켓에 새 버전이 있습니다. 업데이트 하시겠습니까?");
+                    builder.setTitle("업데이트 확인");
+                    builder.setMessage("마켓에 새 버전이 있습니다. 업데이트 하시겠습니까?");
 
 
-                builder.setPositiveButton("네", new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton("네", new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent marketLaunch = new Intent(Intent.ACTION_VIEW);
-                        marketLaunch.setData(Uri.parse("market://details?id=com.sononpos.communityviwerex"));
-                        startActivity(marketLaunch);
-                        finish();
-                        dialog.dismiss();
-                    }
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent marketLaunch = new Intent(Intent.ACTION_VIEW);
+                            marketLaunch.setData(Uri.parse("market://details?id=com.sononpos.communityviwerex"));
+                            startActivity(marketLaunch);
+                            finish();
+                            dialog.dismiss();
+                        }
 
-                });
+                    });
 
-                builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        LoadCommunityList();
-                        dialog.dismiss();
-                    }
-                });
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            LoadCommunityList();
+                            dialog.dismiss();
+                        }
+                    });
 
-                AlertDialog alert = builder.create();
-                alert.show();
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+                else {
+                    LoadCommunityList();
+                }
             }
         }
     }
