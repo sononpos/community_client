@@ -250,7 +250,7 @@ public class SettingsActivity extends AppCompatActivity {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
             // 여기서 아이템 추가 해주시면 됩니다.
             // 만약 서버로 영수증 체크후에 아이템 추가한다면, 서버로 purchase.getOriginalJson() , purchase.getSignature() 2개 보내시면 됩니다.
-            Toast.makeText(getApplicationContext(), "도움 감사합니다", Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), "도움 감사합니다", Toast.LENGTH_SHORT).show();
         }
     };
 

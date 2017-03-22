@@ -31,6 +31,7 @@ public class FirstSetting_ThemeActivity extends AppCompatActivity {
     Button btTheme1;
     Button btTheme2;
     Button btTheme3;
+    Button btTheme4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +108,15 @@ public class FirstSetting_ThemeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SetTheme(3);
+            }
+        });
+        btTheme4 = (Button)findViewById(R.id.btn_theme4);
+        btTheme4.setBackgroundColor(Color.parseColor(ThemeManager.GetTheme(4).BgList));
+        btTheme4.setTextColor(Color.parseColor(ThemeManager.GetTheme(4).BasicFont));
+        btTheme4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SetTheme(4);
             }
         });
     }

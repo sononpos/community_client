@@ -37,6 +37,13 @@ public class ThemeManager {
     private static final String ThemeYellow_LeftItemEnableColor = "#111111";
     private static final String ThemeYellow_LeftItemDisableColor = "#cfa7a7";
 
+    private static final String ThemeClien_BasicFontColor = "#374273";
+    private static final String ThemeClien_SubFontColor = "#999ab4";
+    private static final String ThemeClien_BgListColor = "#f0f3f5";
+    private static final String ThemeClien_BgTitleColor = "#f0f3f5";
+    private static final String ThemeClien_LeftItemEnableColor = "#374273";
+    private static final String ThemeClien_LeftItemDisableColor = "#999ab4";
+
     private static ArrayList<ThemeColorObject> aThemes = new ArrayList<ThemeColorObject>();
 
     static public class ThemeColorObject {
@@ -89,6 +96,15 @@ public class ThemeManager {
         temp.LeftEnable = ThemeYellow_LeftItemEnableColor;
         temp.LeftDisable = ThemeYellow_LeftItemDisableColor;
         aThemes.add(temp);
+
+        temp = new ThemeColorObject();
+        temp.BasicFont = ThemeClien_BasicFontColor;
+        temp.SubFont = ThemeClien_SubFontColor;
+        temp.BgList = ThemeClien_BgListColor;
+        temp.BgTitle = ThemeClien_BgTitleColor;
+        temp.LeftEnable = ThemeClien_LeftItemEnableColor;
+        temp.LeftDisable = ThemeClien_LeftItemDisableColor;
+        aThemes.add(temp);
     }
 
     private static ThemeColorObject themeColor = new ThemeColorObject();
@@ -102,6 +118,7 @@ public class ThemeManager {
             case 1: return "흰색 테마";
             case 2: return "사쿠라 테마";
             case 3: return "병아리 테마";
+            case 4: return "Clien 테마";
             default: return "검정색 테마";
         }
     }

@@ -5,11 +5,13 @@
         <item>화이트</item>
         <item>사쿠라</item>
         <item>병아리</item>
+        <item>Clien</item>
     </string-array>
     <string-array name="theme_type_val">
         <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
+        <item>4</item>
     </string-array>
 </resources>

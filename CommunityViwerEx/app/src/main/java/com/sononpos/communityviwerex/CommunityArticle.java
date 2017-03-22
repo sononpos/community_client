@@ -88,7 +88,7 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
                     msg.addCategory(Intent.CATEGORY_DEFAULT);
                     msg.putExtra(Intent.EXTRA_SUBJECT, title);
                     msg.putExtra(Intent.EXTRA_TEXT, url);
-                    msg.putExtra(Intent.EXTRA_TITLE, title);
+                    msg.putExtra(Intent.EXTRA_TITLE, "핫 커뮤니티 - " + title);
                     msg.setType("text/plain");
                     startActivity(Intent.createChooser(msg, "공유하기"));
                 }
