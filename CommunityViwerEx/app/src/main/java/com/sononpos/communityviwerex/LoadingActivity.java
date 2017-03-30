@@ -12,6 +12,8 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.sononpos.communityviwerex.FirstSettings.FirstSetting_ThemeActivity;
 import com.sononpos.communityviwerex.Funtional.KBONetworkInfo;
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
@@ -154,6 +156,8 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
 
         ThemeManager.Init();
+
+        FirebaseInstanceId.getInstance().getToken();
 
         CheckUpdate();
     }
