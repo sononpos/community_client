@@ -44,7 +44,20 @@ public class ThemeManager {
     private static final String ThemeClien_LeftItemEnableColor = "#374273";
     private static final String ThemeClien_LeftItemDisableColor = "#999ab4";
 
+    private static final int TabFont_Normal = 16;
+    private static final int TabFont_Small = 12;
+    private static final int TabFont_Large = 20;
+
+    private static final int TitleFont_Normal = 16;
+    private static final int TitleFont_Small = 12;
+    private static final int TitleFont_Large = 20;
+
+    private static final int SubFont_Normal = 12;
+    private static final int SubFont_Small = 10;
+    private static final int SubFont_Large = 16;
+
     private static ArrayList<ThemeColorObject> aThemes = new ArrayList<ThemeColorObject>();
+    private static ArrayList<ThemeFontObject> aThemeFonts = new ArrayList<ThemeFontObject>();
 
     static public class ThemeColorObject {
 
@@ -58,6 +71,16 @@ public class ThemeManager {
         public String BgTitle = ThemeManager.ThemeBlack_BgTitleColor;
         public String LeftEnable = ThemeManager.ThemeBlack_LeftItemEnableColor;
         public String LeftDisable = ThemeManager.ThemeBlack_LeftItemDisableColor;
+    }
+
+    static public class ThemeFontObject {
+        public ThemeFontObject() {
+
+        }
+
+        public int TabFont = ThemeManager.TabFont_Normal;
+        public int TitleFont = ThemeManager.TitleFont_Normal;
+        public int SubFont = ThemeManager.SubFont_Normal;
     }
 
     public static void Init() {
@@ -105,12 +128,34 @@ public class ThemeManager {
         temp.LeftEnable = ThemeClien_LeftItemEnableColor;
         temp.LeftDisable = ThemeClien_LeftItemDisableColor;
         aThemes.add(temp);
+
+        ThemeFontObject tempFont = new ThemeFontObject();
+        tempFont.TitleFont = TitleFont_Small;
+        tempFont.SubFont = SubFont_Small;
+        tempFont.TabFont = TabFont_Small;
+        aThemeFonts.add(tempFont);
+
+        tempFont = new ThemeFontObject();
+        tempFont.TitleFont = TitleFont_Normal;
+        tempFont.SubFont = SubFont_Normal;
+        tempFont.TabFont = TabFont_Normal;
+        aThemeFonts.add(tempFont);
+
+        tempFont = new ThemeFontObject();
+        tempFont.TitleFont = TitleFont_Large;
+        tempFont.SubFont = SubFont_Large;
+        tempFont.TabFont = TabFont_Large;
+        aThemeFonts.add(tempFont);
     }
 
     private static ThemeColorObject themeColor = new ThemeColorObject();
+    private static ThemeFontObject themeFont = new ThemeFontObject();
 
     public static ThemeColorObject GetTheme() { return themeColor; }
     public static ThemeColorObject GetTheme(int themeNum ) { return aThemes.get(themeNum); }
+
+    public static ThemeFontObject GetFont() { return themeFont; }
+    public static ThemeFontObject GetFont(int themeNum) { return aThemeFonts.get(themeNum); }
 
     public static String GetName(int themeNum) {
         switch(themeNum) {
@@ -123,11 +168,28 @@ public class ThemeManager {
         }
     }
 
+    public static String GetFontName(int themeNum) {
+        switch(themeNum) {
+            case 0: return "작게";
+            case 1: return "보통";
+            case 2: return "크게";
+            default: return "보통";
+        }
+    }
+
     public static void SetTheme(int themeNum ) {
         if(aThemes.size() <= themeNum) {
             return;
         }
 
         themeColor = aThemes.get(themeNum);
+    }
+
+    public static void SetThemeFont(int themeNum ) {
+        if(aThemeFonts.size() <= themeNum) {
+            return;
+        }
+
+        themeFont = aThemeFonts.get(themeNum);
     }
 }

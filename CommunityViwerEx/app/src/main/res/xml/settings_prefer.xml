@@ -10,6 +10,16 @@
         android:positiveButtonText="@null"
         android:summary="테스트"
         android:title="테마 변경"/>
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/theme_font_type"
+            android:entryValues="@array/theme_font_type_val"
+            android:key="theme_font_type"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:summary="테스트"
+            android:title="폰트 크기 변경"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="리스트 표시">

@@ -53,6 +53,7 @@ public class ListViewAdapter extends BaseAdapter {
         final Context context = parent.getContext();
 
         ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
+        ThemeManager.ThemeFontObject themeFont = ThemeManager.GetFont();
 
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -95,6 +96,7 @@ public class ListViewAdapter extends BaseAdapter {
 
         Rect bounds = new Rect();
         Rect boundsComment = new Rect();
+        titleTextView.setTextSize(themeFont.TitleFont);
         Paint textPaint = titleTextView.getPaint();
 
         int rootViewWidth = parent.getRootView().getWidth();
@@ -120,9 +122,9 @@ public class ListViewAdapter extends BaseAdapter {
         else{
             titleTextView.setText(Html.fromHtml(sTitleRet));
         }
-        nameTextView.setText(item.m_sName);
-        regDateTextView.setText(item.m_sRegDate);
-        countTextView.setText("조회수 : " + item.m_sViewCnt);
+        nameTextView.setText(item.m_sName); nameTextView.setTextSize(themeFont.SubFont);
+        regDateTextView.setText(item.m_sRegDate); regDateTextView.setTextSize(themeFont.SubFont);
+        countTextView.setText("조회수 : " + item.m_sViewCnt); countTextView.setTextSize(themeFont.SubFont);
 
         return convertView;
     }

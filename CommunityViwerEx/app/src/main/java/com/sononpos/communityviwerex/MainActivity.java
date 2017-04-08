@@ -72,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
                 .getDefaultSharedPreferences(this);
         int themeType = Integer.parseInt(setRefer.getString("theme_type", "0"));
         ThemeManager.SetTheme(themeType);
+        int themeFontType = Integer.parseInt(setRefer.getString("theme_font_type", "1"));
+        ThemeManager.SetThemeFont(themeFontType);
 
         RefreshTheme();
 
@@ -256,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void RefreshTheme() {
         ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
+        ThemeManager.ThemeFontObject themeFont = ThemeManager.GetFont();
         //toolbar.setBackgroundColor(Color.parseColor(theme.BgTitle));
         dl.setBackgroundColor(Color.parseColor(theme.BgList));
         toolbar.getRootView().setBackgroundColor(Color.parseColor(theme.BgList));
@@ -265,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
         tabs.setBackgroundColor(Color.parseColor(theme.BgList));
         tabs.setIndicatorColor(Color.parseColor(theme.BasicFont));
         tabs.setIndicatorHeight(8);
-        int fontSize = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,16,getApplicationContext().getResources().getDisplayMetrics());
+        int fontSize = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,themeFont.TabFont,getApplicationContext().getResources().getDisplayMetrics());
         tabs.setTextSize(fontSize);
         tabs.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
 

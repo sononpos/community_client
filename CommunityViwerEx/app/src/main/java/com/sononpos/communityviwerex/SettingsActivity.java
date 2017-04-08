@@ -158,6 +158,25 @@ public class SettingsActivity extends AppCompatActivity {
                 });
             }
 
+            ListPreference themeFontTypePref = (ListPreference)findPreference("theme_font_type");
+            if( themeFontTypePref != null ) {
+                int nTheme = Integer.parseInt(themeFontTypePref.getValue());
+                themeFontTypePref.setSummary(ThemeManager.GetFontName(nTheme));
+                themeFontTypePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        int nTheme = Integer.parseInt((String) newValue);
+                        preference.setSummary(ThemeManager.GetFontName(nTheme));
+
+                        ThemeManager.ThemeFontObject theme = ThemeManager.GetFont();
+
+                        // return false; 로 리턴하면 변경을 취소합니다.
+                        return true;
+                    }
+                });
+            }
+
             Preference pfRecommand = (Preference)findPreference("app_recommand");
             if(pfRecommand != null ) {
                 pfRecommand.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

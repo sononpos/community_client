@@ -130,6 +130,8 @@ public class FirstSetting_ThemeActivity extends AppCompatActivity {
                 .getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = setRefer.edit();
         editor.putString("theme_type", String.valueOf(themeNum));
+        editor.putString("theme_font_type", String.valueOf(1));
         editor.apply();
+
     }
 }

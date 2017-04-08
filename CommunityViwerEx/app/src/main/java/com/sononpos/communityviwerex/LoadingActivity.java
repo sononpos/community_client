@@ -83,7 +83,9 @@ public class LoadingActivity extends AppCompatActivity {
                 SharedPreferences setRefer = PreferenceManager
                         .getDefaultSharedPreferences(getApplicationContext());
                 int themeType = Integer.parseInt(setRefer.getString("theme_type", "0"));
+                int themeFontType = Integer.parseInt(setRefer.getString("theme_font_type", "1"));
                 ThemeManager.SetTheme(themeType);
+                ThemeManager.SetThemeFont(themeFontType);
                 SharedPreferences.Editor editor = setRefer.edit();
                 editor.putString("list_backup", response);
                 editor.apply();
