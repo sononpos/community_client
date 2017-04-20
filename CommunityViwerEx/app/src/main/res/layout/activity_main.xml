@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff">
 
 <RelativeLayout
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -41,20 +41,53 @@
         </android.support.v7.widget.Toolbar>
     </RelativeLayout>
 
-    <com.astuetz.PagerSlidingTabStrip
-        android:id="@+id/tabs"
+    <LinearLayout
+        android:id="@+id/tabs_outer"
         android:layout_width="match_parent"
         android:layout_height="48dip"
         android:layout_below="@id/rl_toolbar"
-        />
+        android:orientation="horizontal">
+        <com.astuetz.PagerSlidingTabStrip
+            android:id="@+id/tabs"
+            android:layout_width="0dp"
+            android:layout_weight="95"
+            android:layout_height="match_parent"
+            />
+        <Button
+            android:id="@+id/btn_list_comm"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:text="M"/>
+    </LinearLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tabs"
-        android:layout_above="@+id/adViewMain"
-         />
+        android:layout_below="@+id/tabs_outer"
+        android:layout_above="@+id/adViewMain">
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/pager"
+            />
+        <ScrollView
+            android:id="@+id/grid_scr_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <LinearLayout
+                android:id="@+id/grid_list_comm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:layout_margin="3dp"
+                android:orientation="vertical"
+                >
+                <!--여기는 커뮤니티를 쭉 나열해놓은 버튼-->
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
 
     <!-- view for AdMob Banner Ad -->
     <com.google.android.gms.ads.AdView

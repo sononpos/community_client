@@ -19,6 +19,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -26,8 +27,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +43,7 @@ import com.sononpos.communityviwerex.Funtional.ThemeManager;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.jar.Attributes;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -119,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         ResetArticleList();
         pager.setAdapter(adapter);
         tabs.setViewPager(pager);
+
         tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -151,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
         InitLeftMenu();
         RefreshTheme();
+        ResetDropDownList();
 
         mAdView = (AdView) findViewById(R.id.adViewMain);
         AdRequest adRequest = new AdRequest.Builder()
@@ -337,6 +345,7 @@ public class MainActivity extends AppCompatActivity {
 
                 try{
                     ResetArticleList();
+                    ResetDropDownList();
                     adapter.notifyDataSetChanged();
                     tabs.notifyDataSetChanged();
                 }
@@ -363,5 +372,62 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
+    }
+
+    private void ResetDropDownList() {
+        final LinearLayout gl_list_comm = (LinearLayout)findViewById(R.id.grid_list_comm);
+        ScrollView sv = (ScrollView)findViewById(R.id.grid_scr_view);
+        if(gl_list_comm != null) {
+            //gl_list_comm.removeAllViewsInLayout();
+            gl_list_comm.setVisibility(View.GONE);
+            gl_list_comm.setClickable(false);
+
+            int listCnt = adapter.liData.size();
+            LinearLayout newLinear = null;
+            for(int i = 0 ; i < listCnt ; ++i) {
+                if(i % 4 == 0) {
+                    newLinear = new LinearLayout(getApplicationContext());
+                    gl_list_comm.addView(newLinear);
+                }
+
+                final CommunityTypeInfo info = adapter.liData.get(i);
+
+                Button btn = new Button(getApplicationContext());
+                final int btn_height = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
+                LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(0, btn_height, 1.0f);
+                btn.setText(info.sName);
+                btn.setLayoutParams(p);
+                btn.setTag(i);
+                int fontSize = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,3,getApplicationContext().getResources().getDisplayMetrics());
+                btn.setTextSize(fontSize);
+                btn.setSingleLine(true);
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int idx = (int)(((Button)v).getTag());
+                        pager.setCurrentItem(idx);
+                        gl_list_comm.setVisibility(View.GONE);
+                        gl_list_comm.setClickable(false);
+                    }
+                });
+
+                newLinear.addView(btn);
+            }
+
+            Button btnListComm = (Button)findViewById(R.id.btn_list_comm);
+            btnListComm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(gl_list_comm.isShown()) {
+                        gl_list_comm.setVisibility(View.GONE);
+                        gl_list_comm.setClickable(false);
+                    }
+                    else {
+                        gl_list_comm.setVisibility(View.VISIBLE);
+                        gl_list_comm.setClickable(true);
+                    }
+                }
+            });
+        }
     }
 }
