@@ -11,6 +11,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -270,6 +271,11 @@ public class SettingsActivity extends AppCompatActivity {
             // 여기서 아이템 추가 해주시면 됩니다.
             // 만약 서버로 영수증 체크후에 아이템 추가한다면, 서버로 purchase.getOriginalJson() , purchase.getSignature() 2개 보내시면 됩니다.
             Toast.makeText(getApplicationContext(), "도움 감사합니다", Toast.LENGTH_SHORT).show();
+            try {
+                mService.consumePurchase(3, getPackageName(), purchase.getToken());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
     };
 
