@@ -226,7 +226,12 @@ public class CommunityListFragment extends Fragment {
                     return;
                 }
 
+                ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
+                TextView titleTextView = (TextView) view.findViewById(R.id.tvTitle) ;
+                titleTextView.setTextColor(Color.parseColor(theme.SubFont));
+
                 ListViewItem item = (ListViewItem)parent.getItemAtPosition(position);
+                G.readArticle(getContext(), item.m_sTitle.hashCode());
                 Intent intent = new Intent(getActivity(), CommunityArticle.class);
                 intent.putExtra("URL", item.m_sLink);
                 intent.putExtra("TITLE", item.m_sTitle);
@@ -328,7 +333,6 @@ public class CommunityListFragment extends Fragment {
                         byteData = baos.toByteArray();
                         response = new String(byteData);
 
-                        Log.d("VLog",response);
                         Message msg = handler.obtainMessage();
                         msg.arg1 = 0;
                         msg.obj = (Object)response;

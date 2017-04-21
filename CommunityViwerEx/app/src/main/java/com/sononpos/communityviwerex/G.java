@@ -27,7 +27,10 @@ public class G {
     public static final String KEY_RECENT_ARTICLES = "RecentArticles";
     public static final String KEY_SHOW_RECENT= "list_show_recent";
     public static final String KEY_TUTORIAL_COMPLETE = "tutorial_complete";
+    public static final String KEY_READED_ARTICLES = "ReadedArticles";
     public static final String FIRST_USE = "FirstUse";
+
+    public static HashSet<Integer> liReadArticleCheck = new HashSet<>();
 
     public static boolean IsShowRecent(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -75,6 +78,25 @@ public class G {
                 JSONArray ja = new JSONArray(json);
                 for(int i = 0 ; i < ja.length() ; ++i) {
                     String sData = ja.optString(i);
+                    a.add(sData);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return a;
+    }
+
+    public static ArrayList<Integer> getIntArrayPref(Context context, String key) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = prefs.getString(key, null);
+        ArrayList<Integer> a = new ArrayList<>();
+        if( json != null) {
+            try {
+                JSONArray ja = new JSONArray(json);
+                for(int i = 0 ; i < ja.length() ; ++i) {
+                    Integer sData = ja.optInt(i);
                     a.add(sData);
                 }
             } catch (JSONException e) {
@@ -158,5 +180,23 @@ public class G {
     public static void ClearRecentArticle(Context context) {
         liRecentArticle.clear();
         setStringArrayPref(context, KEY_RECENT_ARTICLES, liRecentArticle);
+    }
+
+    public static void readArticle(Context context, int hash) {
+
+        if(liReadArticleCheck.size() >= 200) {
+            liReadArticleCheck.remove(liReadArticleCheck.size()-1);
+        }
+        liReadArticleCheck.add(hash);
+        ArrayList li = new ArrayList(liReadArticleCheck);
+        setStringArrayPref(context, KEY_READED_ARTICLES, li);
+    }
+
+    public static void LoadReadedArticle(Context context) {
+        liReadArticleCheck = new HashSet<>(getIntArrayPref(context, KEY_READED_ARTICLES));
+    }
+
+    public static boolean isReaded(int hash) {
+        return liReadArticleCheck.contains(hash);
     }
 }

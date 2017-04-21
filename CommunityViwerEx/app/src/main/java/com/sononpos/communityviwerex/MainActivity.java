@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout dl;
     private View dlv;
     private AdView mAdView;
+    ImageButton btnListComm;
+    LinearLayout dropdownListLayout;
 
     @Override
     protected void onStart() {
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         ThemeManager.SetThemeFont(themeFontType);
 
         RefreshTheme();
+        ResetDropDownList();
 
         if(mAdView != null) {
             mAdView.resume();
@@ -119,6 +123,8 @@ public class MainActivity extends AppCompatActivity {
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setTextSize(40);
         pager = (ViewPager) findViewById(R.id.pager);
+        btnListComm = (ImageButton)findViewById(R.id.btn_list_comm);
+        dropdownListLayout = (LinearLayout)findViewById(R.id.grid_list_comm);
         adapter = new CommunityTypePagerAdapter(getSupportFragmentManager());
         recent = new CommunityTypeInfo("recent", "최근 본 글", -1);
 
@@ -345,7 +351,6 @@ public class MainActivity extends AppCompatActivity {
 
                 try{
                     ResetArticleList();
-                    ResetDropDownList();
                     adapter.notifyDataSetChanged();
                     tabs.notifyDataSetChanged();
                 }
@@ -362,6 +367,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 dl.openDrawer(dlv);
+                closeDropdownList();
 
             }
         });
@@ -372,22 +378,42 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
+
+        dl.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                ResetDropDownList();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
     private void ResetDropDownList() {
-        final LinearLayout gl_list_comm = (LinearLayout)findViewById(R.id.grid_list_comm);
-        ScrollView sv = (ScrollView)findViewById(R.id.grid_scr_view);
-        if(gl_list_comm != null) {
-            //gl_list_comm.removeAllViewsInLayout();
-            gl_list_comm.setVisibility(View.GONE);
-            gl_list_comm.setClickable(false);
+        dropdownListLayout.setBackgroundColor(Color.parseColor(ThemeManager.GetTheme().BgList));
+        if(dropdownListLayout != null) {
+            dropdownListLayout.removeAllViewsInLayout();
+            closeDropdownList();
 
             int listCnt = adapter.liData.size();
             LinearLayout newLinear = null;
             for(int i = 0 ; i < listCnt ; ++i) {
                 if(i % 4 == 0) {
                     newLinear = new LinearLayout(getApplicationContext());
-                    gl_list_comm.addView(newLinear);
+                    dropdownListLayout.addView(newLinear);
                 }
 
                 final CommunityTypeInfo info = adapter.liData.get(i);
@@ -395,10 +421,13 @@ public class MainActivity extends AppCompatActivity {
                 Button btn = new Button(getApplicationContext());
                 final int btn_height = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
                 LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(0, btn_height, 1.0f);
+                p.setMargins(2,2,2,2);
                 btn.setText(info.sName);
                 btn.setLayoutParams(p);
                 btn.setTag(i);
-                int fontSize = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,3,getApplicationContext().getResources().getDisplayMetrics());
+                btn.setBackgroundColor(Color.parseColor(ThemeManager.GetTheme().BgList));
+                btn.setTextColor(Color.parseColor(ThemeManager.GetTheme().BasicFont));
+                int fontSize = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,4,getApplicationContext().getResources().getDisplayMetrics());
                 btn.setTextSize(fontSize);
                 btn.setSingleLine(true);
                 btn.setOnClickListener(new View.OnClickListener() {
@@ -406,28 +435,38 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         int idx = (int)(((Button)v).getTag());
                         pager.setCurrentItem(idx);
-                        gl_list_comm.setVisibility(View.GONE);
-                        gl_list_comm.setClickable(false);
+                        closeDropdownList();
                     }
                 });
 
                 newLinear.addView(btn);
             }
 
-            Button btnListComm = (Button)findViewById(R.id.btn_list_comm);
+            btnListComm.setImageResource(R.drawable.arrow_down);
             btnListComm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(gl_list_comm.isShown()) {
-                        gl_list_comm.setVisibility(View.GONE);
-                        gl_list_comm.setClickable(false);
+                    if(dropdownListLayout.isShown()) {
+                        closeDropdownList();
                     }
                     else {
-                        gl_list_comm.setVisibility(View.VISIBLE);
-                        gl_list_comm.setClickable(true);
+                        openDropdownList();
                     }
                 }
             });
         }
     }
+
+    private void openDropdownList() {
+        dropdownListLayout.setVisibility(View.VISIBLE);
+        dropdownListLayout.setClickable(true);
+        btnListComm.setImageResource(R.drawable.arrow_up);
+    }
+
+    private void closeDropdownList() {
+        dropdownListLayout.setVisibility(View.GONE);
+        dropdownListLayout.setClickable(false);
+        btnListComm.setImageResource(R.drawable.arrow_down);
+    }
+
 }

@@ -53,12 +53,17 @@
             android:layout_weight="95"
             android:layout_height="match_parent"
             />
-        <Button
+        <ImageButton
             android:id="@+id/btn_list_comm"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_weight="5"
-            android:text="M"/>
+            android:src="@drawable/arrow_down"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:padding="10dp"
+            android:adjustViewBounds="true"
+            />
     </LinearLayout>
 
     <FrameLayout

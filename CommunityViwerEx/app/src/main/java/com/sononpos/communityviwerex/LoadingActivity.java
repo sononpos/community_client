@@ -49,6 +49,7 @@ public class LoadingActivity extends AppCompatActivity {
             String response = (String)msg.obj;
             G.LoadCommunityList(response);
             G.LoadRecentArticle(getApplicationContext());
+            G.LoadReadedArticle(getApplicationContext());
 
             Collections.sort(G.liCommTypeInfo, new Comparator<CommunityTypeInfo>() {
                 @Override
@@ -201,7 +202,7 @@ public class LoadingActivity extends AppCompatActivity {
             public void run() {
 
                 try {
-                    Thread.sleep(1500);
+                    Thread.sleep(750);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

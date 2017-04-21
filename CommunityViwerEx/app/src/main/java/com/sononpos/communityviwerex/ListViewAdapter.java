@@ -83,6 +83,10 @@ public class ListViewAdapter extends BaseAdapter {
         ListViewItem item = listViewItemList.get(position);
         String sTitleRet = item.m_sTitle;
 
+        if(G.isReaded(item.m_sTitle.hashCode())){
+            titleTextView.setTextColor(Color.parseColor(theme.SubFont));
+        }
+
         if(item.m_sCommentCnt.isEmpty()) {
             item.m_sCommentCnt = "0";
         }
