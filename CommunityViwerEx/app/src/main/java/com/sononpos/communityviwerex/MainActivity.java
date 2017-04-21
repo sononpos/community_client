@@ -34,6 +34,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -408,11 +409,13 @@ public class MainActivity extends AppCompatActivity {
             dropdownListLayout.removeAllViewsInLayout();
             closeDropdownList();
 
+            final int COLUMN_CNT_PER_ROW = 4;
             int listCnt = adapter.liData.size();
             LinearLayout newLinear = null;
             for(int i = 0 ; i < listCnt ; ++i) {
-                if(i % 4 == 0) {
+                if(i % COLUMN_CNT_PER_ROW == 0) {
                     newLinear = new LinearLayout(getApplicationContext());
+                    newLinear.setBaselineAligned(false);
                     dropdownListLayout.addView(newLinear);
                 }
 
@@ -424,12 +427,13 @@ public class MainActivity extends AppCompatActivity {
                 p.setMargins(2,2,2,2);
                 btn.setText(info.sName);
                 btn.setLayoutParams(p);
+                btn.setPadding(5,5,5,5);
                 btn.setTag(i);
-                btn.setBackgroundColor(Color.parseColor(ThemeManager.GetTheme().BgList));
-                btn.setTextColor(Color.parseColor(ThemeManager.GetTheme().BasicFont));
-                int fontSize = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,4,getApplicationContext().getResources().getDisplayMetrics());
+                btn.setBackgroundColor(Color.parseColor(ThemeManager.GetTheme().SubFont));
+                btn.setTextColor(Color.parseColor(ThemeManager.GetTheme().BgList));
+                int fontSize = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,3,getApplicationContext().getResources().getDisplayMetrics());
                 btn.setTextSize(fontSize);
-                btn.setSingleLine(true);
+                btn.setSingleLine(false);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -440,6 +444,15 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 newLinear.addView(btn);
+            }
+
+            int remainCnt = listCnt % COLUMN_CNT_PER_ROW == 0 ? 0 : COLUMN_CNT_PER_ROW - listCnt % COLUMN_CNT_PER_ROW;
+            for(int i = 0 ; i < remainCnt ; ++i) {
+                Space s = new Space(getApplicationContext());
+                LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1.0f);
+                s.setLayoutParams(p);
+                p.setMargins(2,2,2,2);
+                newLinear.addView(s);
             }
 
             btnListComm.setImageResource(R.drawable.arrow_down);
