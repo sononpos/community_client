@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -56,16 +57,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ViewController2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MHk-Rb-AEg">
-                                <rect key="frame" x="126" y="323" width="123" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Tgh-dS-Wb0">
+                                <rect key="frame" x="16" y="20" width="343" height="647"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="M8S-eO-jNj" firstAttribute="top" secondItem="Tgh-dS-Wb0" secondAttribute="bottom" id="0T7-7C-1Ma"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Tgh-dS-Wb0" secondAttribute="trailing" id="0Tf-Tv-SWd"/>
+                            <constraint firstItem="Tgh-dS-Wb0" firstAttribute="top" secondItem="9oy-Vt-JS4" secondAttribute="bottom" id="M8h-ZY-1nR"/>
+                            <constraint firstItem="Tgh-dS-Wb0" firstAttribute="leading" secondItem="cWX-lU-obG" secondAttribute="leadingMargin" id="iNd-jh-MLg"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="Tgh-dS-Wb0" id="ESK-pa-z2T"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0za-gH-BdY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

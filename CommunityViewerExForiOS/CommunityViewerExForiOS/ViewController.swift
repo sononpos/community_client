@@ -47,7 +47,7 @@ class ViewController: UIViewController, ACTabScrollViewDelegate, ACTabScrollView
                         
                         let storyboard = UIStoryboard(name: "Main", bundle: nil)
                         let viewController = storyboard.instantiateViewController(withIdentifier :"MainVC") as! MainVC
-                        //self.present(viewController, animated: true)
+                        self.present(viewController, animated: true)
                     }
                     else {
                         print("No Data")
