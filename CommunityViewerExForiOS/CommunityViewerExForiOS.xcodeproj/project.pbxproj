@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2546EDD41EC0AED400DD3819 /* ACTabScrollViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2546EDD21EC0AED400DD3819 /* ACTabScrollViewProtocol.swift */; };
+		2546EDD51EC0AED400DD3819 /* ACTabScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2546EDD31EC0AED400DD3819 /* ACTabScrollView.swift */; };
+		258FE71D1EC19EC5006472C2 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258FE71C1EC19EC5006472C2 /* MainVC.swift */; };
+		259D4A1F1EC15084003579CD /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 259D4A1E1EC15084003579CD /* Global.swift */; };
 		FD71FEF41EC06327008F7025 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD71FEF31EC06327008F7025 /* AppDelegate.swift */; };
 		FD71FEF61EC06327008F7025 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD71FEF51EC06327008F7025 /* ViewController.swift */; };
 		FD71FEF91EC06327008F7025 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD71FEF71EC06327008F7025 /* Main.storyboard */; };
@@ -106,6 +110,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2546EDD21EC0AED400DD3819 /* ACTabScrollViewProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ACTabScrollViewProtocol.swift; sourceTree = "<group>"; };
+		2546EDD31EC0AED400DD3819 /* ACTabScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ACTabScrollView.swift; sourceTree = "<group>"; };
+		258FE71C1EC19EC5006472C2 /* MainVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
+		259D4A1E1EC15084003579CD /* Global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
 		FD71FEF01EC06327008F7025 /* CommunityViewerExForiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommunityViewerExForiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD71FEF31EC06327008F7025 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FD71FEF51EC06327008F7025 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -148,6 +156,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		258FE7241EC1A163006472C2 /* VControllers */ = {
+			isa = PBXGroup;
+			children = (
+				FD71FEF51EC06327008F7025 /* ViewController.swift */,
+				258FE71C1EC19EC5006472C2 /* MainVC.swift */,
+			);
+			name = VControllers;
+			sourceTree = "<group>";
+		};
 		FD71FEE71EC06327008F7025 = {
 			isa = PBXGroup;
 			children = (
@@ -172,12 +189,15 @@
 		FD71FEF21EC06327008F7025 /* CommunityViewerExForiOS */ = {
 			isa = PBXGroup;
 			children = (
+				258FE7241EC1A163006472C2 /* VControllers */,
+				2546EDD21EC0AED400DD3819 /* ACTabScrollViewProtocol.swift */,
+				2546EDD31EC0AED400DD3819 /* ACTabScrollView.swift */,
 				FD71FEF31EC06327008F7025 /* AppDelegate.swift */,
-				FD71FEF51EC06327008F7025 /* ViewController.swift */,
 				FD71FEF71EC06327008F7025 /* Main.storyboard */,
 				FD71FEFA1EC06327008F7025 /* Assets.xcassets */,
 				FD71FEFC1EC06327008F7025 /* LaunchScreen.storyboard */,
 				FD71FEFF1EC06327008F7025 /* Info.plist */,
+				259D4A1E1EC15084003579CD /* Global.swift */,
 			);
 			path = CommunityViewerExForiOS;
 			sourceTree = "<group>";
@@ -412,7 +432,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD71FEF61EC06327008F7025 /* ViewController.swift in Sources */,
+				258FE71D1EC19EC5006472C2 /* MainVC.swift in Sources */,
+				2546EDD51EC0AED400DD3819 /* ACTabScrollView.swift in Sources */,
 				FD71FEF41EC06327008F7025 /* AppDelegate.swift in Sources */,
+				259D4A1F1EC15084003579CD /* Global.swift in Sources */,
+				2546EDD41EC0AED400DD3819 /* ACTabScrollViewProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
