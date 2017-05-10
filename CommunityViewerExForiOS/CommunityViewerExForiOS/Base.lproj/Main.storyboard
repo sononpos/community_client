@@ -22,61 +22,80 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lo5-B8-o8u">
-                                <rect key="frame" x="166" y="20" width="42" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lo5-B8-o8u">
+                                <rect key="frame" x="157" y="323" width="61" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FTU-iF-7FN" customClass="ACTabScrollView" customModule="CommunityViewerExForiOS" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="49" width="375" height="598"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="lo5-B8-o8u" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="fXC-pu-67e"/>
+                            <constraint firstItem="lo5-B8-o8u" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="lzi-Nt-lkF"/>
+                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="tabScrollView" destination="FTU-iF-7FN" id="T5r-v5-BKj"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="117.59999999999999" y="122.78860569715144"/>
         </scene>
         <!--MainVC-->
-        <scene sceneID="upC-C4-n0M">
+        <scene sceneID="C8H-JU-0zt">
             <objects>
-                <viewController storyboardIdentifier="MainVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="2Uw-vf-g9S" customClass="MainVC" customModule="CommunityViewerExForiOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TestVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="b8J-x4-fbf" customClass="MainVC" customModule="CommunityViewerExForiOS" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="9oy-Vt-JS4"/>
-                        <viewControllerLayoutGuide type="bottom" id="M8S-eO-jNj"/>
+                        <viewControllerLayoutGuide type="top" id="q1A-sl-lkO"/>
+                        <viewControllerLayoutGuide type="bottom" id="tcQ-Vq-al2"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="cWX-lU-obG">
+                    <view key="view" contentMode="scaleToFill" id="vNa-CY-vCS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Tgh-dS-Wb0">
-                                <rect key="frame" x="16" y="20" width="343" height="647"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="42Z-OS-xT1" userLabel="TopArea">
+                                <rect key="frame" x="0.0" y="20" width="375" height="60"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8iC-1m-BFk">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gyO-V9-WNo">
+                                        <rect key="frame" x="12" y="15" width="39" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Menu"/>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </tableView>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="Eq0-Gp-S1k"/>
+                                    <constraint firstAttribute="bottom" secondItem="8iC-1m-BFk" secondAttribute="bottom" id="NZZ-o8-o8e"/>
+                                    <constraint firstItem="8iC-1m-BFk" firstAttribute="leading" secondItem="42Z-OS-xT1" secondAttribute="leading" id="Oa0-e0-ccs"/>
+                                    <constraint firstAttribute="trailing" secondItem="8iC-1m-BFk" secondAttribute="trailing" id="eYn-Vu-Qwp"/>
+                                    <constraint firstItem="8iC-1m-BFk" firstAttribute="top" secondItem="42Z-OS-xT1" secondAttribute="top" id="wke-Pd-JnK"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UnU-al-ZPn" customClass="ACTabScrollView" customModule="CommunityViewerExForiOS" customModuleProvider="target">
+                                <rect key="frame" x="16" y="80" width="343" height="587"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="M8S-eO-jNj" firstAttribute="top" secondItem="Tgh-dS-Wb0" secondAttribute="bottom" id="0T7-7C-1Ma"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Tgh-dS-Wb0" secondAttribute="trailing" id="0Tf-Tv-SWd"/>
-                            <constraint firstItem="Tgh-dS-Wb0" firstAttribute="top" secondItem="9oy-Vt-JS4" secondAttribute="bottom" id="M8h-ZY-1nR"/>
-                            <constraint firstItem="Tgh-dS-Wb0" firstAttribute="leading" secondItem="cWX-lU-obG" secondAttribute="leadingMargin" id="iNd-jh-MLg"/>
+                            <constraint firstItem="tcQ-Vq-al2" firstAttribute="top" secondItem="UnU-al-ZPn" secondAttribute="bottom" id="ElF-gS-uAI"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="UnU-al-ZPn" secondAttribute="trailing" id="LsC-V4-HYG"/>
+                            <constraint firstAttribute="trailing" secondItem="42Z-OS-xT1" secondAttribute="trailing" id="Ptw-VN-V2C"/>
+                            <constraint firstItem="UnU-al-ZPn" firstAttribute="leading" secondItem="vNa-CY-vCS" secondAttribute="leadingMargin" id="aE1-Hu-Gbw"/>
+                            <constraint firstItem="42Z-OS-xT1" firstAttribute="leading" secondItem="vNa-CY-vCS" secondAttribute="leading" id="fAb-AW-Mv0"/>
+                            <constraint firstItem="UnU-al-ZPn" firstAttribute="top" secondItem="42Z-OS-xT1" secondAttribute="bottom" id="giD-x8-O69"/>
+                            <constraint firstItem="42Z-OS-xT1" firstAttribute="top" secondItem="q1A-sl-lkO" secondAttribute="bottom" id="lIb-XA-eva"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="tableView" destination="Tgh-dS-Wb0" id="ESK-pa-z2T"/>
+                        <outlet property="tabScrollView" destination="UnU-al-ZPn" id="LoI-fQ-jWk"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="0za-gH-BdY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pyF-3P-BgS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="876" y="123"/>
+            <point key="canvasLocation" x="852" y="122.78860569715144"/>
         </scene>
     </scenes>
 </document>

@@ -10,6 +10,7 @@
 		2546EDD41EC0AED400DD3819 /* ACTabScrollViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2546EDD21EC0AED400DD3819 /* ACTabScrollViewProtocol.swift */; };
 		2546EDD51EC0AED400DD3819 /* ACTabScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2546EDD31EC0AED400DD3819 /* ACTabScrollView.swift */; };
 		258FE71D1EC19EC5006472C2 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258FE71C1EC19EC5006472C2 /* MainVC.swift */; };
+		258FE7331EC3A29F006472C2 /* TestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258FE7321EC3A29F006472C2 /* TestVC.swift */; };
 		259D4A1F1EC15084003579CD /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 259D4A1E1EC15084003579CD /* Global.swift */; };
 		FD71FEF41EC06327008F7025 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD71FEF31EC06327008F7025 /* AppDelegate.swift */; };
 		FD71FEF61EC06327008F7025 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD71FEF51EC06327008F7025 /* ViewController.swift */; };
@@ -113,6 +114,7 @@
 		2546EDD21EC0AED400DD3819 /* ACTabScrollViewProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ACTabScrollViewProtocol.swift; sourceTree = "<group>"; };
 		2546EDD31EC0AED400DD3819 /* ACTabScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ACTabScrollView.swift; sourceTree = "<group>"; };
 		258FE71C1EC19EC5006472C2 /* MainVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
+		258FE7321EC3A29F006472C2 /* TestVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestVC.swift; sourceTree = "<group>"; };
 		259D4A1E1EC15084003579CD /* Global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
 		FD71FEF01EC06327008F7025 /* CommunityViewerExForiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommunityViewerExForiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD71FEF31EC06327008F7025 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 			children = (
 				FD71FEF51EC06327008F7025 /* ViewController.swift */,
 				258FE71C1EC19EC5006472C2 /* MainVC.swift */,
+				258FE7321EC3A29F006472C2 /* TestVC.swift */,
 			);
 			name = VControllers;
 			sourceTree = "<group>";
@@ -437,6 +440,7 @@
 				FD71FEF41EC06327008F7025 /* AppDelegate.swift in Sources */,
 				259D4A1F1EC15084003579CD /* Global.swift in Sources */,
 				2546EDD41EC0AED400DD3819 /* ACTabScrollViewProtocol.swift in Sources */,
+				258FE7331EC3A29F006472C2 /* TestVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
