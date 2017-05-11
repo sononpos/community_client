@@ -41,6 +41,7 @@ extension MainVC {
         for comm in GVal.GetCommInfoList() {
             let viewController = storyboard.instantiateViewController(withIdentifier :"ContentVC")
             let contentVC = viewController as! ContentVC
+            self.addChildViewController(contentVC)
             contentVC.commInfo = comm
             contentViews.append(viewController)
         }

@@ -44,7 +44,6 @@ class HttpHelper {
                     return
                 }
                 
-                print(response.description)
                 handler(true, response.data)
             }
         }

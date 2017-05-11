@@ -10,18 +10,18 @@ import UIKit
 
 class Content {
     var sURL : String = ""
-    var nViewCnt : Int = 0
+    var sViewCnt : String?
     var sUserName : String = ""
     var nCommentCnt : Int = 0
     var sTitle : String = ""
+    var sRegDate : String = ""
+    var sCommentCnt : String?
 }
 
 class ContentVC : UIViewController, UITableViewDelegate, UITableViewDataSource {
     var aContents : [Content]  = [Content]()
-    var nNextIndex = 0
+    var nNextIndex = 1
     var commInfo : CommInfo?
-    
-    var titles = ["Wang" , "Kim" , "Lee"]
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -33,7 +33,7 @@ class ContentVC : UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        super.viewDidAppear(animated)        
     }
 }
 
@@ -50,12 +50,34 @@ extension ContentVC {
      
      public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
      {
-        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: "Cell")
-        cell.textLabel?.text = aContents[indexPath.row].sTitle
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleCell", for: indexPath) as! ArticleCell
+        
+        if aContents.count <= indexPath.row { return cell }
+        
+        cell.lbTitle.text = aContents[indexPath.row].sTitle
+        if cell.lbTitle.text == "" {
+            cell.lbTitle.text = "noname"
+        }
+        cell.lbTitle.sizeToFit()
+        cell.lbUserName.text = aContents[indexPath.row].sUserName
+        cell.lbUserName.sizeToFit()
+        cell.lbRegDate.text = aContents[indexPath.row].sRegDate
+        cell.lbRegDate.sizeToFit()
+        cell.lbViewCnt.text = aContents[indexPath.row].sViewCnt
+        cell.lbViewCnt.sizeToFit()
         return cell
-     }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier :"WebVC") as! WebVC
+        viewController.sURL = aContents[indexPath.row].sURL
+        self.present(viewController, animated: true)
+    }
     
     public func Refresh() {
+        self.aContents.removeAll()        
+        nNextIndex = 1
         LoadArticle()
     }
     
@@ -77,6 +99,19 @@ extension ContentVC {
                             let data_inner = data as! [String:AnyObject]
                             let sTitle = data_inner["title"]
                             newArticle.sTitle = sTitle as! String
+                            newArticle.sUserName = data_inner["username"] as! String
+                            newArticle.sURL = data_inner["link"] as! String
+                            newArticle.sRegDate = data_inner["regdate"] as! String
+                            newArticle.sViewCnt = data_inner["viewcnt"] as? String
+                            if newArticle.sViewCnt == nil {
+                                newArticle.sViewCnt = "\(data_inner["viewcnt"] as! Int)"
+                            }
+                            
+                            newArticle.sCommentCnt = data_inner["commentcnt"] as? String
+                            if newArticle.sCommentCnt == nil {
+                                newArticle.sCommentCnt = "\(data_inner["commentcnt"] as! Int)"
+                            }
+                            
                             self.aContents.append(newArticle)
                         }
                     }
@@ -95,4 +130,12 @@ extension ContentVC {
             }
         } )
     }
+}
+
+class ArticleCell : UITableViewCell {
+    @IBOutlet weak var lbTitle: UILabel!
+    @IBOutlet weak var lbUserName: UILabel!
+    @IBOutlet weak var lbRegDate: UILabel!
+    @IBOutlet weak var lbViewCnt: UILabel!
+    
 }
