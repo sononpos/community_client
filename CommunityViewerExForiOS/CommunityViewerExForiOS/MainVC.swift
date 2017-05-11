@@ -38,8 +38,10 @@ extension MainVC {
     func initTabContentViews() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         
-        for _ in (0..<GVal.GetCommInfoList().count) {
+        for comm in GVal.GetCommInfoList() {
             let viewController = storyboard.instantiateViewController(withIdentifier :"ContentVC")
+            let contentVC = viewController as! ContentVC
+            contentVC.commInfo = comm
             contentViews.append(viewController)
         }
     }
@@ -80,6 +82,10 @@ extension MainVC {
     }
     
     func tabScrollView(_ tabScrollView: ACTabScrollView, contentViewForPageAtIndex index: Int) -> UIView {
+        
+        print("contentViewForPageAtIndex index: \(index)")
+        let contentVC = contentViews[index] as! ContentVC
+        contentVC.Refresh()
         
         return contentViews[index].view
     }

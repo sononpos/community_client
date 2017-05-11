@@ -19,6 +19,7 @@ class Content {
 class ContentVC : UIViewController, UITableViewDelegate, UITableViewDataSource {
     var aContents : [Content]  = [Content]()
     var nNextIndex = 0
+    var commInfo : CommInfo?
     
     var titles = ["Wang" , "Kim" , "Lee"]
     
@@ -40,7 +41,7 @@ extension ContentVC {
     
      public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
      {
-        return titles.count
+        return aContents.count
      }
      
      
@@ -50,7 +51,48 @@ extension ContentVC {
      public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
      {
         let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: "Cell")
-        cell.textLabel?.text = titles[indexPath.row]
+        cell.textLabel?.text = aContents[indexPath.row].sTitle
         return cell
      }
+    
+    public func Refresh() {
+        LoadArticle()
+    }
+    
+    func LoadArticle() {
+        HttpHelper.GetArticleList(sKey: commInfo!.sKey, nIndex: nNextIndex, handler: {
+            (bSuccess: Bool, data: Data) in
+            do {
+                
+                if let json = try JSONSerialization.jsonObject(with: data, options:[]) as? [AnyObject] {
+                    //  json parsing
+                    if let j2 = json[0] as? [String:AnyObject] {
+                        var nNextIndex = j2["next_url"] as? String
+                        if nNextIndex == nil {
+                            nNextIndex = "\((j2["next_url"] as! Int))"
+                        }
+                        let articles = j2["list"] as! [AnyObject]
+                        for data in articles {
+                            let newArticle = Content()
+                            let data_inner = data as! [String:AnyObject]
+                            let sTitle = data_inner["title"]
+                            newArticle.sTitle = sTitle as! String
+                            self.aContents.append(newArticle)
+                        }
+                    }
+                    DispatchQueue.main.sync {
+                        self.tableView.reloadData()
+                    }
+                    
+                    
+                }
+                else {
+                    print("No Data")
+                }
+            }
+            catch {
+                print("Could not parse the JSON request")
+            }
+        } )
+    }
 }

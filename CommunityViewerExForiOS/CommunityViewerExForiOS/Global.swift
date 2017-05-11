@@ -17,6 +17,7 @@ class CommInfo {
 
 class GVal {
     
+    static var ARTICLE_URL_BASE : String = "http://4seasonpension.com:3000/";
     static var URL_COMM_LIST : String = "http://4seasonpension.com:3000/list"
     
     // 커뮤니티 리스트

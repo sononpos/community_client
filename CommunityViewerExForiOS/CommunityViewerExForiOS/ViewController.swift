@@ -15,7 +15,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view, typically from a nib.
-        HttpHelper.GetList(handler: {
+        HttpHelper.GetCommList(handler: {
             ( bSuccess: Bool , data: Data ) in
             if(bSuccess) {
                 do {
@@ -23,6 +23,8 @@ class ViewController: UIViewController {
                         //  json parsing
                         for (sign, data) in json {
                             GVal.SetCommInfo(_sKey: sign, _sName: data["name"]!! as! String, _nIdx: data["index"]!! as! Int)
+                            let sorted = GVal.GetCommInfoList().sorted { $0.nIndex < $1.nIndex }
+                            GVal.aComms = sorted
                         }
                         
                         DispatchQueue.main.sync {
