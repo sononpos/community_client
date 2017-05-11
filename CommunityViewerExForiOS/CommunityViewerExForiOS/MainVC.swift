@@ -14,33 +14,14 @@ class MainVC : UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSou
     
     @IBOutlet weak var tabScrollView: ACTabScrollView!
     
-    let titles = ["hello" , "world", "good"]
+    var contentViews = [UIViewController]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initTabView()
+        initTabContentViews()
     }
 
-}
-
-extension MainVC {
-    /*
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
-    {
-        return titles.count
-    }
-    
-    
-    // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
-    // Cell gets various attributes set automatically based on table (separators) and data source (accessory views, editing controls)
-    
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
-    {
-        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: "Cell")
-        cell.textLabel?.text = titles[indexPath.row]
-        return cell
-    }
- */
 }
 
 extension MainVC {
@@ -54,6 +35,15 @@ extension MainVC {
         tabScrollView.dataSource = self
     }
     
+    func initTabContentViews() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        for _ in (0..<GVal.GetCommInfoList().count) {
+            let viewController = storyboard.instantiateViewController(withIdentifier :"ContentVC")
+            contentViews.append(viewController)
+        }
+    }
+    
     // MARK: ACTabScrollViewDelegate
     func tabScrollView(_ tabScrollView: ACTabScrollView, didChangePageTo index: Int) {
         print(index)
@@ -64,12 +54,16 @@ extension MainVC {
     
     // MARK: ACTabScrollViewDataSource
     func numberOfPagesInTabScrollView(_ tabScrollView: ACTabScrollView) -> Int {
-        return 8
+        return GVal.GetCommInfoList().count
     }
     
     func tabScrollView(_ tabScrollView: ACTabScrollView, tabViewForPageAtIndex index: Int) -> UIView {
         let tabView = UIView()
-        tabView.frame.size = CGSize(width: (index + 1) * 10, height: (index + 1) * 5)
+        tabView.frame.size = CGSize(width: 100, height: 60)
+        
+        let lbTitle = UILabel(frame: CGRect(x: 0, y: 0, width: 90, height: 50))
+        lbTitle.text = GVal.GetCommInfoList()[index].sName
+        tabView.addSubview(lbTitle)
         
         switch (index % 3) {
         case 0:
@@ -86,20 +80,8 @@ extension MainVC {
     }
     
     func tabScrollView(_ tabScrollView: ACTabScrollView, contentViewForPageAtIndex index: Int) -> UIView {
-        let contentView = UIView()
         
-        switch (index % 3) {
-        case 0:
-            contentView.backgroundColor = UIColor.red
-        case 1:
-            contentView.backgroundColor = UIColor.green
-        case 2:
-            contentView.backgroundColor = UIColor.blue
-        default:
-            break
-        }
-        
-        return contentView
+        return contentViews[index].view
     }
     
 }

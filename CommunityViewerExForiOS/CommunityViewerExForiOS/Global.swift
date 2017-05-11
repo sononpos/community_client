@@ -12,6 +12,7 @@ import Foundation
 class CommInfo {
     var sName : String = ""
     var nIndex : Int = 0
+    var sKey : String = ""
 }
 
 class GVal {
@@ -20,11 +21,18 @@ class GVal {
     
     // 커뮤니티 리스트
     static var mComms = [String:CommInfo]()
+    static var aComms = [CommInfo]()
     
     static func SetCommInfo(_sKey : String, _sName : String, _nIdx : Int) {
         let newInfo = CommInfo()
         newInfo.sName = _sName
         newInfo.nIndex = _nIdx
+        newInfo.sKey = _sKey
         mComms[_sKey] = newInfo
+        aComms.append(newInfo)
+    }
+    
+    static func GetCommInfoList() -> [CommInfo] {
+        return aComms
     }
 }
