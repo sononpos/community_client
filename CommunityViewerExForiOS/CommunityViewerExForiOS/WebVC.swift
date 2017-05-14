@@ -31,6 +31,10 @@ class WebVC : UIViewController, UIWebViewDelegate {
         super.viewDidAppear(animated)
     }
     
+    @IBAction func onBtnBack(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     func screenEdgeSwiped(_ recognizer: UIScreenEdgePanGestureRecognizer ) {
         if recognizer.state == .recognized {
             self.dismiss(animated: true, completion: nil)

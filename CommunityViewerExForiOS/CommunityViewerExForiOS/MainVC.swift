@@ -27,10 +27,10 @@ class MainVC : UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSou
 extension MainVC {
     
     func initTabView() {
-        tabScrollView.defaultPage = 1
-        tabScrollView.tabSectionHeight = 60
+        tabScrollView.defaultPage = 0
+        tabScrollView.tabSectionHeight = 45
         tabScrollView.pagingEnabled = true
-        tabScrollView.cachedPageLimit = 3
+        tabScrollView.cachedPageLimit = 2
         tabScrollView.delegate = self
         tabScrollView.dataSource = self
     }
@@ -62,29 +62,16 @@ extension MainVC {
     
     func tabScrollView(_ tabScrollView: ACTabScrollView, tabViewForPageAtIndex index: Int) -> UIView {
         let tabView = UIView()
-        tabView.frame.size = CGSize(width: 100, height: 60)
+        tabView.frame.size = CGSize(width: 100, height: 45)
         
-        let lbTitle = UILabel(frame: CGRect(x: 0, y: 0, width: 90, height: 50))
+        let lbTitle = UILabel(frame: tabView.frame)
         lbTitle.text = GVal.GetCommInfoList()[index].sName
         tabView.addSubview(lbTitle)
-        
-        switch (index % 3) {
-        case 0:
-            tabView.backgroundColor = UIColor.red
-        case 1:
-            tabView.backgroundColor = UIColor.green
-        case 2:
-            tabView.backgroundColor = UIColor.blue
-        default:
-            break
-        }
         
         return tabView
     }
     
     func tabScrollView(_ tabScrollView: ACTabScrollView, contentViewForPageAtIndex index: Int) -> UIView {
-        
-        print("contentViewForPageAtIndex index: \(index)")
         let contentVC = contentViews[index] as! ContentVC
         contentVC.Refresh()
         

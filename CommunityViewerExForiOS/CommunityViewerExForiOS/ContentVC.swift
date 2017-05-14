@@ -21,23 +21,49 @@ class Content {
 class ContentVC : UIViewController, UITableViewDelegate, UITableViewDataSource {
     var aContents : [Content]  = [Content]()
     var nNextIndex = 1
+    var bLoadingData = false
     var commInfo : CommInfo?
     
+    var alertController : UIAlertController?
+    
     @IBOutlet weak var tableView: UITableView!
+    let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.delegate = self
-        tableView.dataSource = self
+        setupTableView()
+        
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)        
+        super.viewDidAppear(animated)
+
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
     }
 }
 
 extension ContentVC {
+    
+    func setupTableView() {
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = self.refreshControl
+        }
+        else {
+            tableView.addSubview(refreshControl)
+        }
+        
+        refreshControl.addTarget(self, action: #selector(Refresh), for: .valueChanged)
+        refreshControl.attributedTitle = NSAttributedString(string: "Refresh List...")
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
     
      public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
      {
@@ -55,7 +81,7 @@ extension ContentVC {
         if aContents.count <= indexPath.row { return cell }
         
         cell.lbTitle.text = aContents[indexPath.row].sTitle
-        if cell.lbTitle.text == "" {
+        if cell.lbTitle.text == nil || cell.lbTitle.text!.isEmpty {
             cell.lbTitle.text = "noname"
         }
         cell.lbTitle.sizeToFit()
@@ -74,6 +100,11 @@ extension ContentVC {
         viewController.sURL = aContents[indexPath.row].sURL
         self.present(viewController, animated: true)
     }
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if !bLoadingData && indexPath.row == aContents.count - 1 && nNextIndex > 1 {
+            LoadArticle()
+        }
+    }
     
     public func Refresh() {
         self.aContents.removeAll()        
@@ -85,48 +116,67 @@ extension ContentVC {
         HttpHelper.GetArticleList(sKey: commInfo!.sKey, nIndex: nNextIndex, handler: {
             (bSuccess: Bool, data: Data) in
             do {
-                
-                if let json = try JSONSerialization.jsonObject(with: data, options:[]) as? [AnyObject] {
-                    //  json parsing
-                    if let j2 = json[0] as? [String:AnyObject] {
-                        var nNextIndex = j2["next_url"] as? String
-                        if nNextIndex == nil {
-                            nNextIndex = "\((j2["next_url"] as! Int))"
+                if( bSuccess ) {
+                    if let json = try JSONSerialization.jsonObject(with: data, options:[]) as? [AnyObject] {
+                        //  json parsing
+                        if let j2 = json[0] as? [String:AnyObject] {
+                            var nNext = j2["next_url"] as? String
+                            if nNext == nil {
+                                nNext = "\((j2["next_url"] as! Int))"
+                            }
+                            self.nNextIndex = Int(nNext!)!
+                            let articles = j2["list"] as! [AnyObject]
+                            for data in articles {
+                                let newArticle = Content()
+                                let data_inner = data as! [String:AnyObject]
+                                let sTitle = data_inner["title"]
+                                newArticle.sTitle = sTitle as! String
+                                newArticle.sUserName = data_inner["username"] as! String
+                                newArticle.sURL = data_inner["link"] as! String
+                                newArticle.sRegDate = data_inner["regdate"] as! String
+                                newArticle.sViewCnt = data_inner["viewcnt"] as? String
+                                if newArticle.sViewCnt == nil {
+                                    newArticle.sViewCnt = "0"
+                                }
+                                
+                                newArticle.sCommentCnt = data_inner["commentcnt"] as? String
+                                if newArticle.sCommentCnt == nil {
+                                    newArticle.sCommentCnt = "\(data_inner["commentcnt"] as! Int)"
+                                }
+                                
+                                self.aContents.append(newArticle)
+                            }
                         }
-                        let articles = j2["list"] as! [AnyObject]
-                        for data in articles {
-                            let newArticle = Content()
-                            let data_inner = data as! [String:AnyObject]
-                            let sTitle = data_inner["title"]
-                            newArticle.sTitle = sTitle as! String
-                            newArticle.sUserName = data_inner["username"] as! String
-                            newArticle.sURL = data_inner["link"] as! String
-                            newArticle.sRegDate = data_inner["regdate"] as! String
-                            newArticle.sViewCnt = data_inner["viewcnt"] as? String
-                            if newArticle.sViewCnt == nil {
-                                newArticle.sViewCnt = "\(data_inner["viewcnt"] as! Int)"
-                            }
-                            
-                            newArticle.sCommentCnt = data_inner["commentcnt"] as? String
-                            if newArticle.sCommentCnt == nil {
-                                newArticle.sCommentCnt = "\(data_inner["commentcnt"] as! Int)"
-                            }
-                            
-                            self.aContents.append(newArticle)
+                        DispatchQueue.main.sync {
+                            self.bLoadingData = false
+                            self.tableView.reloadData()
+                            self.refreshControl.endRefreshing()
+                        }
+                        
+                        
+                    }
+                    else {
+                        print("No Data")
+                        DispatchQueue.main.sync {
+                            self.bLoadingData = false
+                            self.refreshControl.endRefreshing()
                         }
                     }
-                    DispatchQueue.main.sync {
-                        self.tableView.reloadData()
-                    }
-                    
-                    
                 }
                 else {
-                    print("No Data")
+                    DispatchQueue.main.sync {
+                        self.bLoadingData = false
+                        self.refreshControl.endRefreshing()
+                    }
                 }
+                
             }
             catch {
                 print("Could not parse the JSON request")
+                DispatchQueue.main.sync {
+                    self.bLoadingData = false
+                    self.refreshControl.endRefreshing()
+                }
             }
         } )
     }
