@@ -12,7 +12,6 @@ class Content {
     var sURL : String = ""
     var sViewCnt : String?
     var sUserName : String = ""
-    var nCommentCnt : Int = 0
     var sTitle : String = ""
     var sRegDate : String = ""
     var sCommentCnt : String?
@@ -80,16 +79,40 @@ extension ContentVC {
         
         if aContents.count <= indexPath.row { return cell }
         
-        cell.lbTitle.text = aContents[indexPath.row].sTitle
+        let htmlTitle = "\(aContents[indexPath.row].sTitle) <font color=red>[\(aContents[indexPath.row].sCommentCnt!)]</font>"
+        do {
+            cell.lbTitle.attributedText = try NSAttributedString(data: htmlTitle.data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType], documentAttributes: nil)
+            cell.lbTitle.font = UIFont(name: "System", size: 17)
+        }
+        catch let error {
+            print(error)
+        }
+        
+        
         if cell.lbTitle.text == nil || cell.lbTitle.text!.isEmpty {
-            cell.lbTitle.text = "noname"
+            cell.lbTitle.text = "NoTitle"
         }
         cell.lbTitle.sizeToFit()
+        
+        
         cell.lbUserName.text = aContents[indexPath.row].sUserName
+        if cell.lbUserName.text == nil || cell.lbUserName.text!.isEmpty {
+            cell.lbUserName.text = "NoName"
+        }
         cell.lbUserName.sizeToFit()
+        
+        
         cell.lbRegDate.text = aContents[indexPath.row].sRegDate
+        if cell.lbRegDate.text == nil || cell.lbRegDate.text!.isEmpty {
+            cell.lbRegDate.text = "No Date"
+        }
         cell.lbRegDate.sizeToFit()
+        
+        
         cell.lbViewCnt.text = aContents[indexPath.row].sViewCnt
+        if cell.lbViewCnt.text == nil || cell.lbViewCnt.text!.isEmpty {
+            cell.lbViewCnt.text = "-"
+        }
         cell.lbViewCnt.sizeToFit()
         return cell
     }
@@ -140,8 +163,8 @@ extension ContentVC {
                                 }
                                 
                                 newArticle.sCommentCnt = data_inner["commentcnt"] as? String
-                                if newArticle.sCommentCnt == nil {
-                                    newArticle.sCommentCnt = "\(data_inner["commentcnt"] as! Int)"
+                                if newArticle.sCommentCnt == nil || newArticle.sCommentCnt!.isEmpty {
+                                    newArticle.sCommentCnt = "0"
                                 }
                                 
                                 self.aContents.append(newArticle)
