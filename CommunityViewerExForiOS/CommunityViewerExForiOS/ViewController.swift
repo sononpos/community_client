@@ -8,11 +8,14 @@
 
 import UIKit
 import SwiftHTTP
+import FirebaseCore
 
 class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if FIRApp.defaultApp() == nil { FIRApp.configure() }
         
         // Do any additional setup after loading the view, typically from a nib.
         HttpHelper.GetCommList(handler: {

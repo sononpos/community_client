@@ -33,6 +33,7 @@
 		FDAD1B721ECADC13002751B4 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FDAD1B711ECADC13002751B4 /* libc++.tbd */; };
 		FDAD1B741ECADC1A002751B4 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDAD1B731ECADC1A002751B4 /* AddressBook.framework */; };
 		FDAD1B761ECADC2C002751B4 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FDAD1B751ECADC2C002751B4 /* libz.tbd */; };
+		FDAD1B801ECAE982002751B4 /* SlideMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAD1B7F1ECAE982002751B4 /* SlideMenuController.swift */; };
 		FDBFFE4C1EC06BA4009DC330 /* SwiftHTTP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDBFFE391EC06B3D009DC330 /* SwiftHTTP.framework */; };
 		FDBFFE4D1EC06BA4009DC330 /* SwiftHTTP.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FDBFFE391EC06B3D009DC330 /* SwiftHTTP.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -157,6 +158,7 @@
 		FDAD1B711ECADC13002751B4 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		FDAD1B731ECADC1A002751B4 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		FDAD1B751ECADC2C002751B4 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		FDAD1B7F1ECAE982002751B4 /* SlideMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideMenuController.swift; sourceTree = "<group>"; };
 		FDBFFE2E1EC06B3D009DC330 /* SwiftHTTP.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftHTTP.xcodeproj; path = SwiftHTTP/SwiftHTTP.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -219,6 +221,7 @@
 		FD71FEE71EC06327008F7025 = {
 			isa = PBXGroup;
 			children = (
+				FDAD1B7F1ECAE982002751B4 /* SlideMenuController.swift */,
 				FDAD1B6A1ECAD3F5002751B4 /* GoogleMobileAds.framework */,
 				FDAD1B571ECAD2A0002751B4 /* FirebaseAnalytics.framework */,
 				FDAD1B581ECAD2A0002751B4 /* FirebaseCore.framework */,
@@ -377,6 +380,7 @@
 					FD71FEEF1EC06327008F7025 = {
 						CreatedOnToolsVersion = 8.3;
 						DevelopmentTeam = 7YMNG5BZBJ;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
 					FD71FF031EC06327008F7025 = {
@@ -510,6 +514,7 @@
 				2546EDD51EC0AED400DD3819 /* ACTabScrollView.swift in Sources */,
 				FD1C4FA31EC41C6800EC661B /* HttpHelper.swift in Sources */,
 				FD71FEF41EC06327008F7025 /* AppDelegate.swift in Sources */,
+				FDAD1B801ECAE982002751B4 /* SlideMenuController.swift in Sources */,
 				FD1C4F9A1EC4109900EC661B /* ContentVC.swift in Sources */,
 				259D4A1F1EC15084003579CD /* Global.swift in Sources */,
 				2546EDD41EC0AED400DD3819 /* ACTabScrollViewProtocol.swift in Sources */,
@@ -670,6 +675,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 7YMNG5BZBJ;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -683,6 +689,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.sononpos.communityviewerex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -692,6 +700,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 7YMNG5BZBJ;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -705,6 +714,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.sononpos.communityviewerex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

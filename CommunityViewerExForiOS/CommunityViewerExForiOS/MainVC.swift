@@ -21,15 +21,30 @@ class MainVC : UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSou
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let app = UIApplication.shared
+        let appDelegate = app.delegate as! AppDelegate
+        let window = appDelegate.window
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let MainVC = self
+        let LeftMenuVC = storyboard.instantiateViewController(withIdentifier :"LeftMenu")
+        let slideMenuController = SlideMenuController(mainViewController: MainVC, leftMenuViewController: LeftMenuVC)
+        
+        window?.rootViewController = slideMenuController
+        window?.makeKeyAndVisible()
+        
         initTabView()
-        initTabContentViews()
-        FIRApp.configure()        
+        initTabContentViews()        
         bannerView.adUnitID = "ca-app-pub-3598320494828213/8173255886"
         bannerView.delegate = self
         bannerView.rootViewController = self
         bannerView.load(GADRequest())
     }
 
+    @IBAction func onBtnOpenMenu(_ sender: Any) {
+        self.slideMenuController()?.openLeft()
+    }
 }
 
 extension MainVC {
