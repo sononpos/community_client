@@ -9,10 +9,13 @@
 import Foundation
 import UIKit
 import SwiftHTTP
+import FirebaseCore
+import GoogleMobileAds
 
-class MainVC : UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSource {
+class MainVC : UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSource, GADBannerViewDelegate {
     
     @IBOutlet weak var tabScrollView: ACTabScrollView!
+    @IBOutlet weak var bannerView: GADBannerView!
     
     var contentViews = [UIViewController]()
     
@@ -20,8 +23,23 @@ class MainVC : UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSou
         super.viewDidLoad()
         initTabView()
         initTabContentViews()
+        FIRApp.configure()        
+        bannerView.adUnitID = "ca-app-pub-3598320494828213/8173255886"
+        bannerView.delegate = self
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
     }
 
+}
+
+extension MainVC {
+    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
+        print("Banner View Load Failed : \(error)")
+    }
+    
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        print("Banner View Load Succeed")
+    }
 }
 
 extension MainVC {

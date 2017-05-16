@@ -74,22 +74,33 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UnU-al-ZPn" customClass="ACTabScrollView" customModule="CommunityViewerExForiOS" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="80" width="375" height="587"/>
+                                <rect key="frame" x="0.0" y="80" width="375" height="537"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6rJ-F9-PeR" customClass="GADBannerView">
+                                <rect key="frame" x="27.5" y="617" width="320" height="50"/>
+                                <color key="backgroundColor" red="1" green="0.71322514449999996" blue="0.3429848613" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="320" id="imY-g0-fOF"/>
+                                    <constraint firstAttribute="height" constant="50" id="moJ-i4-6mt"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="UnU-al-ZPn" firstAttribute="leading" secondItem="vNa-CY-vCS" secondAttribute="leading" id="61P-mo-tRD"/>
-                            <constraint firstItem="tcQ-Vq-al2" firstAttribute="top" secondItem="UnU-al-ZPn" secondAttribute="bottom" id="ElF-gS-uAI"/>
+                            <constraint firstItem="tcQ-Vq-al2" firstAttribute="top" secondItem="UnU-al-ZPn" secondAttribute="bottom" constant="50" id="ElF-gS-uAI"/>
                             <constraint firstAttribute="trailing" secondItem="42Z-OS-xT1" secondAttribute="trailing" id="Ptw-VN-V2C"/>
                             <constraint firstItem="42Z-OS-xT1" firstAttribute="leading" secondItem="vNa-CY-vCS" secondAttribute="leading" id="fAb-AW-Mv0"/>
                             <constraint firstItem="UnU-al-ZPn" firstAttribute="top" secondItem="42Z-OS-xT1" secondAttribute="bottom" id="giD-x8-O69"/>
                             <constraint firstItem="42Z-OS-xT1" firstAttribute="top" secondItem="q1A-sl-lkO" secondAttribute="bottom" id="lIb-XA-eva"/>
+                            <constraint firstItem="tcQ-Vq-al2" firstAttribute="top" secondItem="6rJ-F9-PeR" secondAttribute="bottom" id="mxK-aV-FAf"/>
                             <constraint firstAttribute="trailing" secondItem="UnU-al-ZPn" secondAttribute="trailing" id="nk3-Q6-TAf"/>
+                            <constraint firstItem="6rJ-F9-PeR" firstAttribute="centerX" secondItem="vNa-CY-vCS" secondAttribute="centerX" id="so3-vP-Zhc"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="bannerView" destination="6rJ-F9-PeR" id="7cS-eZ-j2h"/>
                         <outlet property="tabScrollView" destination="UnU-al-ZPn" id="LoI-fQ-jWk"/>
                     </connections>
                 </viewController>
@@ -257,6 +268,14 @@
                                     <constraint firstItem="9so-7g-aQE" firstAttribute="top" secondItem="bvn-S2-dzJ" secondAttribute="top" id="WpZ-g5-9hl"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vMd-Z7-UIF" customClass="GADBannerView">
+                                <rect key="frame" x="27" y="617" width="320" height="50"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="320" id="IDS-Dv-c7S"/>
+                                    <constraint firstAttribute="height" constant="50" id="c7e-iC-VoM"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -264,12 +283,15 @@
                             <constraint firstItem="Qk0-xm-aWy" firstAttribute="top" secondItem="yn6-pl-LVG" secondAttribute="bottom" id="DVg-x0-EJM"/>
                             <constraint firstItem="bvn-S2-dzJ" firstAttribute="top" secondItem="47E-wF-SJO" secondAttribute="bottom" id="Gml-rC-zFc"/>
                             <constraint firstAttribute="trailing" secondItem="yn6-pl-LVG" secondAttribute="trailing" id="XgA-yN-qM4"/>
+                            <constraint firstItem="Qk0-xm-aWy" firstAttribute="top" secondItem="vMd-Z7-UIF" secondAttribute="bottom" id="kAo-Jd-XOw"/>
                             <constraint firstItem="bvn-S2-dzJ" firstAttribute="leading" secondItem="WZL-Fl-ugl" secondAttribute="leading" id="llj-Rm-nJr"/>
                             <constraint firstAttribute="trailing" secondItem="bvn-S2-dzJ" secondAttribute="trailing" id="pQR-Tb-8Yg"/>
                             <constraint firstItem="yn6-pl-LVG" firstAttribute="leading" secondItem="WZL-Fl-ugl" secondAttribute="leading" id="qot-Hg-hSU"/>
+                            <constraint firstItem="vMd-Z7-UIF" firstAttribute="centerX" secondItem="WZL-Fl-ugl" secondAttribute="centerX" id="xVl-xk-EJ1"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="bannerView" destination="vMd-Z7-UIF" id="D0e-5L-v8Z"/>
                         <outlet property="webView" destination="yn6-pl-LVG" id="HQU-TE-WfV"/>
                     </connections>
                 </viewController>

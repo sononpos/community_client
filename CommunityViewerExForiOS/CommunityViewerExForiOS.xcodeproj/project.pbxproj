@@ -21,6 +21,18 @@
 		FD71FEFE1EC06327008F7025 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD71FEFC1EC06327008F7025 /* LaunchScreen.storyboard */; };
 		FD71FF091EC06327008F7025 /* CommunityViewerExForiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD71FF081EC06327008F7025 /* CommunityViewerExForiOSTests.swift */; };
 		FD71FF141EC06327008F7025 /* CommunityViewerExForiOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD71FF131EC06327008F7025 /* CommunityViewerExForiOSUITests.swift */; };
+		FDAD1B5D1ECAD2A0002751B4 /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDAD1B571ECAD2A0002751B4 /* FirebaseAnalytics.framework */; };
+		FDAD1B5E1ECAD2A0002751B4 /* FirebaseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDAD1B581ECAD2A0002751B4 /* FirebaseCore.framework */; };
+		FDAD1B5F1ECAD2A0002751B4 /* FirebaseInstanceID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDAD1B591ECAD2A0002751B4 /* FirebaseInstanceID.framework */; };
+		FDAD1B601ECAD2A0002751B4 /* GoogleInterchangeUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDAD1B5A1ECAD2A0002751B4 /* GoogleInterchangeUtilities.framework */; };
+		FDAD1B611ECAD2A0002751B4 /* GoogleSymbolUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDAD1B5B1ECAD2A0002751B4 /* GoogleSymbolUtilities.framework */; };
+		FDAD1B621ECAD2A0002751B4 /* GoogleToolboxForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDAD1B5C1ECAD2A0002751B4 /* GoogleToolboxForMac.framework */; };
+		FDAD1B6B1ECAD3F5002751B4 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDAD1B6A1ECAD3F5002751B4 /* GoogleMobileAds.framework */; };
+		FDAD1B6D1ECAD81C002751B4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FDAD1B6C1ECAD81C002751B4 /* GoogleService-Info.plist */; };
+		FDAD1B701ECADC0B002751B4 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FDAD1B6F1ECADC0B002751B4 /* libsqlite3.tbd */; };
+		FDAD1B721ECADC13002751B4 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FDAD1B711ECADC13002751B4 /* libc++.tbd */; };
+		FDAD1B741ECADC1A002751B4 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDAD1B731ECADC1A002751B4 /* AddressBook.framework */; };
+		FDAD1B761ECADC2C002751B4 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FDAD1B751ECADC2C002751B4 /* libz.tbd */; };
 		FDBFFE4C1EC06BA4009DC330 /* SwiftHTTP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDBFFE391EC06B3D009DC330 /* SwiftHTTP.framework */; };
 		FDBFFE4D1EC06BA4009DC330 /* SwiftHTTP.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FDBFFE391EC06B3D009DC330 /* SwiftHTTP.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -133,6 +145,18 @@
 		FD71FF0F1EC06327008F7025 /* CommunityViewerExForiOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CommunityViewerExForiOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD71FF131EC06327008F7025 /* CommunityViewerExForiOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewerExForiOSUITests.swift; sourceTree = "<group>"; };
 		FD71FF151EC06327008F7025 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FDAD1B571ECAD2A0002751B4 /* FirebaseAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FirebaseAnalytics.framework; sourceTree = "<group>"; };
+		FDAD1B581ECAD2A0002751B4 /* FirebaseCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FirebaseCore.framework; sourceTree = "<group>"; };
+		FDAD1B591ECAD2A0002751B4 /* FirebaseInstanceID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FirebaseInstanceID.framework; sourceTree = "<group>"; };
+		FDAD1B5A1ECAD2A0002751B4 /* GoogleInterchangeUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleInterchangeUtilities.framework; sourceTree = "<group>"; };
+		FDAD1B5B1ECAD2A0002751B4 /* GoogleSymbolUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleSymbolUtilities.framework; sourceTree = "<group>"; };
+		FDAD1B5C1ECAD2A0002751B4 /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleToolboxForMac.framework; sourceTree = "<group>"; };
+		FDAD1B6A1ECAD3F5002751B4 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
+		FDAD1B6C1ECAD81C002751B4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FDAD1B6F1ECADC0B002751B4 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		FDAD1B711ECADC13002751B4 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		FDAD1B731ECADC1A002751B4 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		FDAD1B751ECADC2C002751B4 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		FDBFFE2E1EC06B3D009DC330 /* SwiftHTTP.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftHTTP.xcodeproj; path = SwiftHTTP/SwiftHTTP.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -141,7 +165,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDAD1B761ECADC2C002751B4 /* libz.tbd in Frameworks */,
+				FDAD1B741ECADC1A002751B4 /* AddressBook.framework in Frameworks */,
+				FDAD1B721ECADC13002751B4 /* libc++.tbd in Frameworks */,
+				FDAD1B701ECADC0B002751B4 /* libsqlite3.tbd in Frameworks */,
+				FDAD1B621ECAD2A0002751B4 /* GoogleToolboxForMac.framework in Frameworks */,
+				FDAD1B611ECAD2A0002751B4 /* GoogleSymbolUtilities.framework in Frameworks */,
+				FDAD1B6B1ECAD3F5002751B4 /* GoogleMobileAds.framework in Frameworks */,
+				FDAD1B5D1ECAD2A0002751B4 /* FirebaseAnalytics.framework in Frameworks */,
 				FDBFFE4C1EC06BA4009DC330 /* SwiftHTTP.framework in Frameworks */,
+				FDAD1B5E1ECAD2A0002751B4 /* FirebaseCore.framework in Frameworks */,
+				FDAD1B5F1ECAD2A0002751B4 /* FirebaseInstanceID.framework in Frameworks */,
+				FDAD1B601ECAD2A0002751B4 /* GoogleInterchangeUtilities.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,11 +219,19 @@
 		FD71FEE71EC06327008F7025 = {
 			isa = PBXGroup;
 			children = (
+				FDAD1B6A1ECAD3F5002751B4 /* GoogleMobileAds.framework */,
+				FDAD1B571ECAD2A0002751B4 /* FirebaseAnalytics.framework */,
+				FDAD1B581ECAD2A0002751B4 /* FirebaseCore.framework */,
+				FDAD1B591ECAD2A0002751B4 /* FirebaseInstanceID.framework */,
+				FDAD1B5A1ECAD2A0002751B4 /* GoogleInterchangeUtilities.framework */,
+				FDAD1B5B1ECAD2A0002751B4 /* GoogleSymbolUtilities.framework */,
+				FDAD1B5C1ECAD2A0002751B4 /* GoogleToolboxForMac.framework */,
 				FDBFFE2E1EC06B3D009DC330 /* SwiftHTTP.xcodeproj */,
 				FD71FEF21EC06327008F7025 /* CommunityViewerExForiOS */,
 				FD71FF071EC06327008F7025 /* CommunityViewerExForiOSTests */,
 				FD71FF121EC06327008F7025 /* CommunityViewerExForiOSUITests */,
 				FD71FEF11EC06327008F7025 /* Products */,
+				FDAD1B6E1ECADC0A002751B4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -205,6 +248,7 @@
 		FD71FEF21EC06327008F7025 /* CommunityViewerExForiOS */ = {
 			isa = PBXGroup;
 			children = (
+				FDAD1B6C1ECAD81C002751B4 /* GoogleService-Info.plist */,
 				FD1C4FA11EC41C4900EC661B /* HttpHelper */,
 				258FE7241EC1A163006472C2 /* VControllers */,
 				2546EDD21EC0AED400DD3819 /* ACTabScrollViewProtocol.swift */,
@@ -235,6 +279,17 @@
 				FD71FF151EC06327008F7025 /* Info.plist */,
 			);
 			path = CommunityViewerExForiOSUITests;
+			sourceTree = "<group>";
+		};
+		FDAD1B6E1ECADC0A002751B4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FDAD1B751ECADC2C002751B4 /* libz.tbd */,
+				FDAD1B731ECADC1A002751B4 /* AddressBook.framework */,
+				FDAD1B711ECADC13002751B4 /* libc++.tbd */,
+				FDAD1B6F1ECADC0B002751B4 /* libsqlite3.tbd */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		FDBFFE2F1EC06B3D009DC330 /* Products */ = {
@@ -422,6 +477,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD71FEFE1EC06327008F7025 /* LaunchScreen.storyboard in Resources */,
+				FDAD1B6D1ECAD81C002751B4 /* GoogleService-Info.plist in Resources */,
 				FD71FEFB1EC06327008F7025 /* Assets.xcassets in Resources */,
 				FD71FEF91EC06327008F7025 /* Main.storyboard in Resources */,
 			);
@@ -615,9 +671,17 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 7YMNG5BZBJ;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = CommunityViewerExForiOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sononpos.hotcommunity;
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sononpos.communityviewerex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -629,9 +693,17 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 7YMNG5BZBJ;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = CommunityViewerExForiOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sononpos.hotcommunity;
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sononpos.communityviewerex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
