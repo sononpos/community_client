@@ -327,6 +327,14 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
+    // nnnyyy custom
+    open func removeLeftPanGestureOnly() {
+        if leftPanGesture != nil {
+            view.removeGestureRecognizer(leftPanGesture!)
+            leftPanGesture = nil
+        }
+    }
+    
     open func removeRightGestures() {
         
         if rightPanGesture != nil {

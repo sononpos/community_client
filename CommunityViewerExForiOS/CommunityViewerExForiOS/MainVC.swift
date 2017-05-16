@@ -30,6 +30,7 @@ class MainVC : UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSou
         let MainVC = self
         let LeftMenuVC = storyboard.instantiateViewController(withIdentifier :"LeftMenu")
         let slideMenuController = SlideMenuController(mainViewController: MainVC, leftMenuViewController: LeftMenuVC)
+        slideMenuController.removeLeftPanGestureOnly()
         
         window?.rootViewController = slideMenuController
         window?.makeKeyAndVisible()

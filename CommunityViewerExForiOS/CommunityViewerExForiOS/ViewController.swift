@@ -12,8 +12,13 @@ import FirebaseCore
 
 class ViewController: UIViewController {
     
+    var timer:Timer?
+    var cnt = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         if FIRApp.defaultApp() == nil { FIRApp.configure() }
         
@@ -31,13 +36,23 @@ class ViewController: UIViewController {
                         }
                         
                         DispatchQueue.main.sync {
-                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                            let viewController = storyboard.instantiateViewController(withIdentifier :"MainVC")
-                            
-                            self.present(viewController, animated: true)
+                            self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: {(timer) in
+                                if self.cnt == 0 {
+                                    self.cnt = self.cnt + 1
+                                    return
+                                }
+                                
+                                self.timer!.invalidate()
+                                self.timer = nil
+                                
+                                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                                let viewController = storyboard.instantiateViewController(withIdentifier :"MainVC")
+                                
+                                self.present(viewController, animated: true)
+                                
+                                
+                            })
                         }
-                        
-                        
                     }
                     else {
                         print("No Data")

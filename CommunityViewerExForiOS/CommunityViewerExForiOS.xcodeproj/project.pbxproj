@@ -12,6 +12,7 @@
 		258FE71D1EC19EC5006472C2 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258FE71C1EC19EC5006472C2 /* MainVC.swift */; };
 		259D4A1F1EC15084003579CD /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 259D4A1E1EC15084003579CD /* Global.swift */; };
 		25B74AD01EC4ADC0005A21B5 /* WebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B74ACF1EC4ADC0005A21B5 /* WebVC.swift */; };
+		25C48E731ECB4D4900741312 /* LeftMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25C48E721ECB4D4800741312 /* LeftMenuVC.swift */; };
 		FD1C4F9A1EC4109900EC661B /* ContentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1C4F991EC4109900EC661B /* ContentVC.swift */; };
 		FD1C4FA31EC41C6800EC661B /* HttpHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1C4FA21EC41C6800EC661B /* HttpHelper.swift */; };
 		FD71FEF41EC06327008F7025 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD71FEF31EC06327008F7025 /* AppDelegate.swift */; };
@@ -131,6 +132,7 @@
 		258FE71C1EC19EC5006472C2 /* MainVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 		259D4A1E1EC15084003579CD /* Global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
 		25B74ACF1EC4ADC0005A21B5 /* WebVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebVC.swift; sourceTree = "<group>"; };
+		25C48E721ECB4D4800741312 /* LeftMenuVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftMenuVC.swift; sourceTree = "<group>"; };
 		FD1C4F991EC4109900EC661B /* ContentVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentVC.swift; sourceTree = "<group>"; };
 		FD1C4FA21EC41C6800EC661B /* HttpHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpHelper.swift; sourceTree = "<group>"; };
 		FD71FEF01EC06327008F7025 /* CommunityViewerExForiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommunityViewerExForiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -206,6 +208,7 @@
 				258FE71C1EC19EC5006472C2 /* MainVC.swift */,
 				FD1C4F991EC4109900EC661B /* ContentVC.swift */,
 				25B74ACF1EC4ADC0005A21B5 /* WebVC.swift */,
+				25C48E721ECB4D4800741312 /* LeftMenuVC.swift */,
 			);
 			name = VControllers;
 			sourceTree = "<group>";
@@ -516,6 +519,7 @@
 				FD71FEF41EC06327008F7025 /* AppDelegate.swift in Sources */,
 				FDAD1B801ECAE982002751B4 /* SlideMenuController.swift in Sources */,
 				FD1C4F9A1EC4109900EC661B /* ContentVC.swift in Sources */,
+				25C48E731ECB4D4900741312 /* LeftMenuVC.swift in Sources */,
 				259D4A1F1EC15084003579CD /* Global.swift in Sources */,
 				2546EDD41EC0AED400DD3819 /* ACTabScrollViewProtocol.swift in Sources */,
 			);

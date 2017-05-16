@@ -78,8 +78,22 @@ extension ContentVC {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleCell", for: indexPath) as! ArticleCell
         
         if aContents.count <= indexPath.row { return cell }
+        let sTitle = "\(aContents[indexPath.row].sTitle) [100]" as NSString
+        var sFinalTitle = aContents[indexPath.row].sTitle
         
-        let htmlTitle = "\(aContents[indexPath.row].sTitle) <font color=red>[\(aContents[indexPath.row].sCommentCnt!)]</font>"
+        let size = sTitle.size(attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 17.0)])
+        print(size.width)
+        if cell.lbTitle.frame.width < size.width {
+            let maxlen = size.width / 17.0 - 3
+            let diff = sFinalTitle.characters.count - Int(maxlen)
+            let idx = sFinalTitle.index(sFinalTitle.startIndex, offsetBy: sFinalTitle.characters.count - diff )
+            sFinalTitle = "\(sFinalTitle.substring(to: idx))..."
+            
+            print(sFinalTitle)
+        }
+        
+        
+        let htmlTitle = "\(sFinalTitle) <font color=red>[\(aContents[indexPath.row].sCommentCnt!)]</font>"
         do {
             cell.lbTitle.attributedText = try NSAttributedString(data: htmlTitle.data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType], documentAttributes: nil)
             cell.lbTitle.font = UIFont(name: "System", size: 17)
