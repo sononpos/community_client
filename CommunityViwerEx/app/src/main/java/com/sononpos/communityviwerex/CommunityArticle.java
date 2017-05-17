@@ -19,6 +19,7 @@ import android.webkit.JsResult;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -41,10 +42,20 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_article);
 
-        //  Setup ActionBar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBarArticle);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ImageButton ibtn = (ImageButton)findViewById(R.id.btn_share);
+        ibtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent msg = new Intent(Intent.ACTION_SEND);
+                msg.addCategory(Intent.CATEGORY_DEFAULT);
+                msg.putExtra(Intent.EXTRA_SUBJECT, title);
+                msg.putExtra(Intent.EXTRA_TEXT, url);
+                msg.putExtra(Intent.EXTRA_TITLE, "핫 커뮤니티 - " + title);
+                msg.setType("text/plain");
+                startActivity(Intent.createChooser(msg, "공유하기"));
+            }
+        });
 
         mWebView = (SwipeWebView)findViewById(R.id.webview);
         mWebView.getRootView().setBackgroundColor(Color.parseColor(ThemeManager.GetTheme().BgList));
@@ -84,7 +95,7 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
         if(!bTutorial) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.tutorial_desc);
-            builder.setMessage("-> 슬라이드 : 닫기\r\n<- 슬라이드 : 공유하기");
+            builder.setMessage("좌에서 우 슬라이드 : 닫기");
             builder.setCancelable(false);
             builder.setPositiveButton("다신 안 봄", new DialogInterface.OnClickListener() {
 
@@ -113,19 +124,7 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
 
                 @Override
                 public void OnLeftToRight() {
-                    View rootView = mWebView.getRootView();
-                    ClipboardManager clipboardManager = (ClipboardManager)rootView.getContext().getSystemService(rootView.getContext().CLIPBOARD_SERVICE);
-                    ClipData clipData = ClipData.newPlainText("label", url);
-                    clipboardManager.setPrimaryClip(clipData);
-                    Toast.makeText(rootView.getContext(), "클립보드에 복사 되었습니다", Toast.LENGTH_SHORT).show();
-
-                    Intent msg = new Intent(Intent.ACTION_SEND);
-                    msg.addCategory(Intent.CATEGORY_DEFAULT);
-                    msg.putExtra(Intent.EXTRA_SUBJECT, title);
-                    msg.putExtra(Intent.EXTRA_TEXT, url);
-                    msg.putExtra(Intent.EXTRA_TITLE, "핫 커뮤니티 - " + title);
-                    msg.setType("text/plain");
-                    startActivity(Intent.createChooser(msg, "공유하기"));
+                    //
                 }
 
                 @Override
