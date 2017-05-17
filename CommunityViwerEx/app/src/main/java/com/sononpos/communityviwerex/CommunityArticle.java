@@ -15,6 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.webkit.JsResult;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -30,6 +34,8 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
     private String title;
     private AdView adView;
 
+    AlertDialog.Builder builder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +49,35 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
         mWebView = (SwipeWebView)findViewById(R.id.webview);
         mWebView.getRootView().setBackgroundColor(Color.parseColor(ThemeManager.GetTheme().BgList));
         mWebView.setListener(this, this);
+        mWebView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                if(builder != null) {
+                    result.cancel();
+                    return true;
+                }
+
+                builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle(R.string.tutorial_desc);
+                builder.setMessage("삭제 되거나 잘못 된 글");
+                builder.setCancelable(false);
+                builder.setPositiveButton("뒤로가기", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+                result.cancel();
+                return true;
+            }
+        });
+
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean bTutorial = pref.getBoolean(G.KEY_TUTORIAL_COMPLETE , false);
 
@@ -92,6 +127,11 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
                     msg.setType("text/plain");
                     startActivity(Intent.createChooser(msg, "공유하기"));
                 }
+
+                @Override
+                public void closeCallback() {
+                    finish();
+                }
             });
         }
         Intent intent = getIntent();
@@ -105,12 +145,6 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
                 .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
                 .build();
         adView.loadAd(adRequest);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if(!mWebView.onBackPressed()) { return; }
-        super.onBackPressed();
     }
 
     @Override
@@ -142,17 +176,17 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
 
     @Override
     public void onPageStarted(String url, Bitmap favicon) {
-
+        Log.e("WEB_ERROR", "onPageStarted : " + url);
     }
 
     @Override
     public void onPageFinished(String url) {
-
+        Log.e("WEB_ERROR", "onPageFinished : " + url);
     }
 
     @Override
     public void onPageError(int errorCode, String description, String failingUrl) {
-
+        Log.e("WEB_ERROR", "onPageError");
     }
 
     @Override
@@ -162,6 +196,6 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
 
     @Override
     public void onExternalPageRequest(String url) {
-
+        Log.e("WEB_ERROR", "onExternalPageRequest");
     }
 }

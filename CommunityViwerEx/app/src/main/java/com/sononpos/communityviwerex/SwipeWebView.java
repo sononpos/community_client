@@ -1,10 +1,29 @@
 package com.sononpos.communityviwerex;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
+import android.webkit.ConsoleMessage;
+import android.webkit.DownloadListener;
+import android.webkit.GeolocationPermissions;
+import android.webkit.JsPromptResult;
+import android.webkit.JsResult;
+import android.webkit.PermissionRequest;
+import android.webkit.URLUtil;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
+import android.webkit.WebStorage;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 import im.delight.android.webview.AdvancedWebView;
@@ -20,6 +39,7 @@ public class SwipeWebView extends AdvancedWebView {
     public interface SwipeCallback {
         public void OnRightToLeft();
         public void OnLeftToRight();
+        public void closeCallback();
     }
 
     private SwipeCallback _callback;
@@ -56,13 +76,25 @@ public class SwipeWebView extends AdvancedWebView {
 
     public SwipeWebView(Context context) {
         super(context);
-
         gestureDetector = new GestureDetector(getContext(), new CustomGestureDetector());
     }
 
-    public SwipeWebView(Context context, AttributeSet attrs) {
+    public SwipeWebView(final Context context, AttributeSet attrs) {
         super(context, attrs);
         this.gestureDetector = new GestureDetector(getContext(), new CustomGestureDetector());
+
+        setDownloadListener(new DownloadListener() {
+
+            @Override
+            public void onDownloadStart(final String url, final String userAgent, final String contentDisposition, final String mimeType, final long contentLength) {
+                final String suggestedFilename = URLUtil.guessFileName(url, contentDisposition, mimeType);
+
+                if (mListener != null) {
+                    mListener.onDownloadRequested(url, suggestedFilename, mimeType, contentLength, contentDisposition, userAgent);
+                }
+            }
+
+        });
     }
 
     @Override
