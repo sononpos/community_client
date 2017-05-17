@@ -35,6 +35,8 @@ class ViewController: UIViewController {
                             GVal.aComms = sorted
                         }
                         
+                        GVal.LoadFiltered()
+                        
                         DispatchQueue.main.sync {
                             self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: {(timer) in
                                 if self.cnt == 0 {

@@ -78,22 +78,21 @@ extension ContentVC {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleCell", for: indexPath) as! ArticleCell
         
         if aContents.count <= indexPath.row { return cell }
-        let sTitle = "\(aContents[indexPath.row].sTitle) [100]" as NSString
-        var sFinalTitle = aContents[indexPath.row].sTitle
+        let content = aContents[indexPath.row]
+        
+        let sTitle2 = "\(content.sTitle)..[100]"
+        let sTitle = sTitle2 as NSString
+        var sFinalTitle = content.sTitle
         
         let size = sTitle.size(attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 17.0)])
-        print(size.width)
         if cell.lbTitle.frame.width < size.width {
-            let maxlen = size.width / 17.0 - 3
-            let diff = sFinalTitle.characters.count - Int(maxlen)
-            let idx = sFinalTitle.index(sFinalTitle.startIndex, offsetBy: sFinalTitle.characters.count - diff )
-            sFinalTitle = "\(sFinalTitle.substring(to: idx))..."
-            
-            print(sFinalTitle)
+            let gap = Int((size.width - cell.lbTitle.frame.width + 150) / 17.0)
+            let idx = sFinalTitle.index(sFinalTitle.startIndex, offsetBy: sFinalTitle.characters.count - gap )
+            sFinalTitle = "\(sFinalTitle.substring(to: idx)).."
         }
         
         
-        let htmlTitle = "\(sFinalTitle) <font color=red>[\(aContents[indexPath.row].sCommentCnt!)]</font>"
+        let htmlTitle = "\(sFinalTitle) <font color=red>[\(content.sCommentCnt!)]</font>"
         do {
             cell.lbTitle.attributedText = try NSAttributedString(data: htmlTitle.data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType], documentAttributes: nil)
             cell.lbTitle.font = UIFont(name: "System", size: 17)
@@ -109,21 +108,21 @@ extension ContentVC {
         cell.lbTitle.sizeToFit()
         
         
-        cell.lbUserName.text = aContents[indexPath.row].sUserName
+        cell.lbUserName.text = content.sUserName
         if cell.lbUserName.text == nil || cell.lbUserName.text!.isEmpty {
             cell.lbUserName.text = "NoName"
         }
         cell.lbUserName.sizeToFit()
         
         
-        cell.lbRegDate.text = aContents[indexPath.row].sRegDate
+        cell.lbRegDate.text = content.sRegDate
         if cell.lbRegDate.text == nil || cell.lbRegDate.text!.isEmpty {
             cell.lbRegDate.text = "No Date"
         }
         cell.lbRegDate.sizeToFit()
         
         
-        cell.lbViewCnt.text = aContents[indexPath.row].sViewCnt
+        cell.lbViewCnt.text = content.sViewCnt
         if cell.lbViewCnt.text == nil || cell.lbViewCnt.text!.isEmpty {
             cell.lbViewCnt.text = "-"
         }
@@ -134,7 +133,9 @@ extension ContentVC {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier :"WebVC") as! WebVC
-        viewController.sURL = aContents[indexPath.row].sURL
+        if aContents.count <= indexPath.row { return }
+        let content = aContents[indexPath.row]
+        viewController.sURL = content.sURL
         self.present(viewController, animated: true)
     }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

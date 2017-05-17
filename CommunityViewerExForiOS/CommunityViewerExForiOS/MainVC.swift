@@ -12,12 +12,13 @@ import SwiftHTTP
 import FirebaseCore
 import GoogleMobileAds
 
-class MainVC : UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSource, GADBannerViewDelegate {
+class MainVC : UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSource, GADBannerViewDelegate, SlideMenuControllerDelegate {
     
     @IBOutlet weak var tabScrollView: ACTabScrollView!
     @IBOutlet weak var bannerView: GADBannerView!
     
     var contentViews = [UIViewController]()
+    var bChanged = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,15 +29,21 @@ class MainVC : UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSou
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let MainVC = self
-        let LeftMenuVC = storyboard.instantiateViewController(withIdentifier :"LeftMenu")
+        let LeftMenuVC = storyboard.instantiateViewController(withIdentifier :"LeftMenu") as! LeftMenuVC
         let slideMenuController = SlideMenuController(mainViewController: MainVC, leftMenuViewController: LeftMenuVC)
         slideMenuController.removeLeftPanGestureOnly()
+        slideMenuController.delegate = self
         
         window?.rootViewController = slideMenuController
         window?.makeKeyAndVisible()
         
         initTabView()
-        initTabContentViews()        
+        initTabContentViews()
+        
+        LeftMenuVC.setFilteredListener {
+            self.bChanged = true
+        }
+        
         bannerView.adUnitID = "ca-app-pub-3598320494828213/8173255886"
         bannerView.delegate = self
         bannerView.rootViewController = self
@@ -45,6 +52,14 @@ class MainVC : UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSou
 
     @IBAction func onBtnOpenMenu(_ sender: Any) {
         self.slideMenuController()?.openLeft()
+    }
+    
+    func leftDidClose() {
+        if bChanged {
+            initTabContentViews()
+            self.tabScrollView.reloadData()
+            bChanged = false
+        }
     }
 }
 
@@ -71,6 +86,8 @@ extension MainVC {
     
     func initTabContentViews() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        contentViews.removeAll()
         
         for comm in GVal.GetCommInfoList() {
             let viewController = storyboard.instantiateViewController(withIdentifier :"ContentVC")
