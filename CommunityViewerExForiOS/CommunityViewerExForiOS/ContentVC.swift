@@ -91,8 +91,8 @@ extension ContentVC {
             sFinalTitle = "\(sFinalTitle.substring(to: idx)).."
         }
         
-        
-        let htmlTitle = "\(sFinalTitle) <font color=red>[\(content.sCommentCnt!)]</font>"
+        let titleColor = GVal.IsRead(s: content.sTitle.hash) ? "#bfbfbf" : "#000000"
+        let htmlTitle = "<font color='\(titleColor)'>\(sFinalTitle)</font> <font color=red>[\(content.sCommentCnt!)]</font>"
         do {
             cell.lbTitle.attributedText = try NSAttributedString(data: htmlTitle.data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType], documentAttributes: nil)
             cell.lbTitle.font = UIFont(name: "System", size: 17)
@@ -135,7 +135,9 @@ extension ContentVC {
         let viewController = storyboard.instantiateViewController(withIdentifier :"WebVC") as! WebVC
         if aContents.count <= indexPath.row { return }
         let content = aContents[indexPath.row]
+        GVal.SetRead(s: content.sTitle.hash)
         viewController.sURL = content.sURL
+        tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
         self.present(viewController, animated: true)
     }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

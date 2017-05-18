@@ -20,6 +20,7 @@ class GVal {
     static var ARTICLE_URL_BASE : String = "http://4seasonpension.com:3000/";
     static var URL_COMM_LIST : String = "http://4seasonpension.com:3000/list"
     static var KEY_FILTERED_LIST = "FILTERED_LIST"
+    static var KEY_READ_LIST = "READ_LIST"
     
     static var filtered : NSMutableSet = NSMutableSet()
     
@@ -27,6 +28,9 @@ class GVal {
     static var mComms = [String:CommInfo]()
     static var aComms = [CommInfo]()
     static var aCommsFiltered = [CommInfo]()
+    
+    // 읽었던 글
+    static var readArticle : NSMutableSet = NSMutableSet()
     
     static func SetCommInfo(_sKey : String, _sName : String, _nIdx : Int) {
         let newInfo = CommInfo()
@@ -93,5 +97,38 @@ class GVal {
     
     static func IsFiltered(s:String) -> Bool {
         return filtered.contains(s)
+    }
+    
+    static func LoadRead() {
+        let arr = UserDefaults.standard.array(forKey: KEY_READ_LIST) as? [Int]
+        if(arr != nil) {
+            readArticle.removeAllObjects()
+            for s in arr! {
+                readArticle.add(s)
+            }
+        }
+    }
+    
+    static func SetRead(s:Int) {
+        if readArticle.contains(s) {return}
+        if readArticle.count > 300 {
+            for d in readArticle {
+                readArticle.remove(d)
+                break
+            }
+        }
+        readArticle.add(s)
+        
+        UserDefaults.standard.set(readArticle.allObjects, forKey: KEY_READ_LIST)
+    }
+    
+    static func RemoveRead(s:Int) {
+        if !readArticle.contains(s) {return}
+        readArticle.remove(s)
+        UserDefaults.standard.set(readArticle.allObjects, forKey: KEY_READ_LIST)
+    }
+    
+    static func IsRead(s:Int) -> Bool {
+        return readArticle.contains(s)
     }
 }
