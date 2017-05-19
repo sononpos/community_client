@@ -129,6 +129,7 @@
 /* Begin PBXFileReference section */
 		2546EDD21EC0AED400DD3819 /* ACTabScrollViewProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ACTabScrollViewProtocol.swift; sourceTree = "<group>"; };
 		2546EDD31EC0AED400DD3819 /* ACTabScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ACTabScrollView.swift; sourceTree = "<group>"; };
+		258366371ECDB31B00396B5A /* CommunityViewerExForiOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CommunityViewerExForiOS.entitlements; sourceTree = "<group>"; };
 		258FE71C1EC19EC5006472C2 /* MainVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 		259D4A1E1EC15084003579CD /* Global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
 		25B74ACF1EC4ADC0005A21B5 /* WebVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebVC.swift; sourceTree = "<group>"; };
@@ -254,6 +255,7 @@
 		FD71FEF21EC06327008F7025 /* CommunityViewerExForiOS */ = {
 			isa = PBXGroup;
 			children = (
+				258366371ECDB31B00396B5A /* CommunityViewerExForiOS.entitlements */,
 				FDAD1B6C1ECAD81C002751B4 /* GoogleService-Info.plist */,
 				FD1C4FA11EC41C4900EC661B /* HttpHelper */,
 				258FE7241EC1A163006472C2 /* VControllers */,
@@ -385,6 +387,11 @@
 						DevelopmentTeam = 7YMNG5BZBJ;
 						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					FD71FF031EC06327008F7025 = {
 						CreatedOnToolsVersion = 8.3;
@@ -680,6 +687,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = CommunityViewerExForiOS/CommunityViewerExForiOS.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 7YMNG5BZBJ;
@@ -708,6 +716,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = CommunityViewerExForiOS/CommunityViewerExForiOS.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 7YMNG5BZBJ;

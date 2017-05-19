@@ -20,6 +20,11 @@ class LeftMenuVC : UIViewController, UITableViewDelegate, UITableViewDataSource 
         
     }
     
+    @IBAction func onBtnSettings(_ sender: Any) {
+        //let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        //let viewController = storyboard.instantiateViewController(withIdentifier :"SettingsVC")
+    }
+    
     func setFilteredListener(handler: @escaping ()->Void) {
         filteredLisner = handler
     }
