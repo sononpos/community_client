@@ -15,6 +15,7 @@ class Content {
     var sTitle : String = ""
     var sRegDate : String = ""
     var sCommentCnt : String?
+    var sLinkEncoding : String?
 }
 
 class ContentVC : UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -136,7 +137,13 @@ extension ContentVC {
         if aContents.count <= indexPath.row { return }
         let content = aContents[indexPath.row]
         GVal.SetRead(s: content.sTitle.hash)
-        viewController.sURL = content.sURL
+        if commInfo!.sType == "app" {
+            viewController.sURL = content.sLinkEncoding
+            viewController.bAppTypeLoad = true
+        }
+        else {
+            viewController.sURL = content.sURL
+        }
         tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
         self.present(viewController, animated: true)
     }
@@ -173,6 +180,7 @@ extension ContentVC {
                                 newArticle.sTitle = sTitle as! String
                                 newArticle.sUserName = data_inner["username"] as! String
                                 newArticle.sURL = data_inner["link"] as! String
+                                newArticle.sLinkEncoding = data_inner["linkencoding"] as? String
                                 newArticle.sRegDate = data_inner["regdate"] as! String
                                 newArticle.sViewCnt = data_inner["viewcnt"] as? String
                                 if newArticle.sViewCnt == nil {

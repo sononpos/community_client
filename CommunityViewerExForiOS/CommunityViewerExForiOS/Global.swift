@@ -13,12 +13,13 @@ class CommInfo {
     var sName : String = ""
     var nIndex : Int = 0
     var sKey : String = ""
+    var sType : String = "web"
 }
 
 class GVal {
     
     static var ARTICLE_URL_BASE : String = "http://4seasonpension.com:3000/";
-    static var URL_COMM_LIST : String = "http://4seasonpension.com:3000/list"
+    static var URL_COMM_LIST : String = "http://4seasonpension.com:3000/list_iphone"
     static var KEY_FILTERED_LIST = "FILTERED_LIST"
     static var KEY_READ_LIST = "READ_LIST"
     
@@ -32,11 +33,12 @@ class GVal {
     // 읽었던 글
     static var readArticle : NSMutableSet = NSMutableSet()
     
-    static func SetCommInfo(_sKey : String, _sName : String, _nIdx : Int) {
+    static func SetCommInfo(_sKey : String, _sName : String, _nIdx : Int, _sType : String) {
         let newInfo = CommInfo()
         newInfo.sName = _sName
         newInfo.nIndex = _nIdx
         newInfo.sKey = _sKey
+        newInfo.sType = _sType
         mComms[_sKey] = newInfo
         aComms.append(newInfo)
     }

@@ -16,12 +16,19 @@ class WebVC : UIViewController, UIWebViewDelegate, GADBannerViewDelegate {
     @IBOutlet weak var bannerView: GADBannerView!
     
     var sURL : String?
+    var bAppTypeLoad : Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         webView.delegate = self
-        webView.loadRequest(URLRequest(url: URL(string: sURL!)!))
+        if bAppTypeLoad {
+//            HttpHelper.GetAppTypeText(sURL, (bSuccess) in {
+//            })
+        }
+        else {
+            webView.loadRequest(URLRequest(url: URL(string: sURL!)!))
+        }
         
         let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwiped))
         edgePan.edges = .left

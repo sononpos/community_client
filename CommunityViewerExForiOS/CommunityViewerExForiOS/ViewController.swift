@@ -30,7 +30,7 @@ class ViewController: UIViewController {
                     if let json = try JSONSerialization.jsonObject(with: data, options:[]) as? [String: AnyObject] {
                         //  json parsing
                         for (sign, data) in json {
-                            GVal.SetCommInfo(_sKey: sign, _sName: data["name"]!! as! String, _nIdx: data["index"]!! as! Int)
+                            GVal.SetCommInfo(_sKey: sign, _sName: data["name"]!! as! String, _nIdx: data["index"]!! as! Int, _sType: data["viewtype"]!! as! String)
                             let sorted = GVal.GetCommInfoList().sorted { $0.nIndex < $1.nIndex }
                             GVal.aComms = sorted
                         }
