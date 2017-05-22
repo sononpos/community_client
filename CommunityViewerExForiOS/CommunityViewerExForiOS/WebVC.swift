@@ -15,6 +15,7 @@ class WebVC : UIViewController, UIWebViewDelegate, GADBannerViewDelegate {
     @IBOutlet weak var webView: UIWebView!
     @IBOutlet weak var bannerView: GADBannerView!
     
+    var sKey : String?
     var sURL : String?
     var bAppTypeLoad : Bool = false
     
@@ -23,8 +24,51 @@ class WebVC : UIViewController, UIWebViewDelegate, GADBannerViewDelegate {
         
         webView.delegate = self
         if bAppTypeLoad {
-//            HttpHelper.GetAppTypeText(sURL, (bSuccess) in {
-//            })
+            HttpHelper.GetAppTypeText(sKey: sKey!, sURL: sURL!, handler: { (bSuccess, data)->Void in
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options:[]) as? [AnyObject] {
+                        //  json parsings
+                        let data = json[0] as? [String : AnyObject]
+                        if data != nil {
+                            let content = data!["contents"] as! String
+                            let title = data!["title"] as! String
+                            let finalHtml = "<!DOCTYPE html><html lang=\"ja\"><head><meta charset=\"UTF-8\"><style type=\"text/css\">html{margin:0;padding:0;}body {" +
+                            "margin: 0;" +
+                            "padding: 0;" +
+                            "color: #363636;" +
+                            "font-size: 90%;" +
+                            "line-height: 1.6;" +
+                            "background: #516b82;" +
+                            "}" +
+                            "img{" +
+                            
+                            "margin: auto;" +
+                            "max-width: 100%;" +
+                            
+                            "}" +
+                            "a{max-width: 100%;}" +
+                            "div#title_area{" +
+                            "max-width: 100%; padding: 8px; background: #0d065b; color: #fafafa}" +
+                            "div#content_area{" +
+                            "max-width: 100%; padding: 10px; background: #fafafa; color: #0d065b}" +
+                            "</style>" +
+                            "</head>" +
+                            "<body>" +
+                            "<div id='title_area'><font size=5px>\(title)</font></div>" +
+                            "<div id='content_area'>\(content)</div></body>"
+                            self.webView.loadHTMLString(finalHtml, baseURL: nil)
+                            
+                        }
+                        
+                    }
+                    else {
+                        print("No Data")
+                    }
+                }
+                catch {
+                    print("Could not parse the JSON request")
+                }
+            })
         }
         else {
             webView.loadRequest(URLRequest(url: URL(string: sURL!)!))
@@ -53,6 +97,10 @@ class WebVC : UIViewController, UIWebViewDelegate, GADBannerViewDelegate {
         if recognizer.state == .recognized {
             self.dismiss(animated: true, completion: nil)
         }
+    }
+    
+    func webViewDidFinishLoad(_ webView: UIWebView) {
+        
     }
 }
 

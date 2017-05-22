@@ -53,4 +53,24 @@ class HttpHelper {
         }
     }
     
+    static func GetAppTypeText( sKey: String, sURL: String, handler: @escaping (Bool,Data)->Void )
+    {
+        do {
+            let opt = try HTTP.GET(GVal.IPHONE_APP_URL_BASE + "\(sKey)/\(sURL)" )
+            opt.start {
+                response in
+                if let err = response.error {
+                    print("error : \(err.localizedDescription)")
+                    handler(false, Data())
+                    return
+                }
+                
+                handler(true, response.data)
+            }
+        }
+        catch let error {
+            print("got an error creating the request \(error)")
+            handler(false, Data())
+        }
+    }
 }

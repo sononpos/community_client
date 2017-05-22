@@ -131,6 +131,7 @@ extension ContentVC {
         return cell
     }
     
+    // 글 선택
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier :"WebVC") as! WebVC
@@ -139,6 +140,7 @@ extension ContentVC {
         GVal.SetRead(s: content.sTitle.hash)
         if commInfo!.sType == "app" {
             viewController.sURL = content.sLinkEncoding
+            viewController.sKey = commInfo!.sKey
             viewController.bAppTypeLoad = true
         }
         else {

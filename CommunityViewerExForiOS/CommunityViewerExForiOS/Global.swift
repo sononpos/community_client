@@ -19,6 +19,7 @@ class CommInfo {
 class GVal {
     
     static var ARTICLE_URL_BASE : String = "http://4seasonpension.com:3000/";
+    static var IPHONE_APP_URL_BASE : String = "http://4seasonpension.com:3000/iphone/";
     static var URL_COMM_LIST : String = "http://4seasonpension.com:3000/list_iphone"
     static var KEY_FILTERED_LIST = "FILTERED_LIST"
     static var KEY_READ_LIST = "READ_LIST"
