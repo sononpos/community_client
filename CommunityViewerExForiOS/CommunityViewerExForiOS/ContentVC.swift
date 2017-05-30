@@ -106,7 +106,6 @@ extension ContentVC {
         if cell.lbRegDate.text == nil || cell.lbRegDate.text!.isEmpty {
             cell.lbRegDate.text = "No Date"
         }
-        cell.lbRegDate.sizeToFit()
         
         
         cell.lbViewCnt.text = content.sViewCnt!
