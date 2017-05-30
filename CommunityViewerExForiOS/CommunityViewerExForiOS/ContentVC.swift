@@ -81,15 +81,11 @@ extension ContentVC {
         if aContents.count <= indexPath.row { return cell }
         let content = aContents[indexPath.row]
         
-        let titleColor = GVal.IsRead(s: content.sTitle.hash) ? "#bfbfbf" : "#000000"
-        let htmlTitle = "<font color='\(titleColor)'>\(content.sTitle)</font>"
-        do {
-            cell.lbTitle.attributedText = try NSAttributedString(data: htmlTitle.data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType], documentAttributes: nil)
-            cell.lbTitle.font = UIFont(name: "System", size: 17)
-        }
-        catch let error {
-            print(error)
-        }
+
+        cell.lbTitle.text = content.sTitle
+        cell.lbTitle.textColor = GVal.IsRead(s: content.sTitle.hash) ?
+            UIColor(red: 191.0 / 255, green: 191.0 / 255, blue: 191.0 / 255, alpha: 1.0) :
+            UIColor.black
         
         cell.lbCommentCnt.text = content.sCommentCnt!
         
