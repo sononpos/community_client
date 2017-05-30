@@ -14,7 +14,7 @@ class HttpHelper {
     static func GetCommList( handler: @escaping (Bool,Data)->Void )
     {
         do {
-            let opt = try HTTP.GET(GVal.URL_COMM_LIST)
+            let opt = try HTTP.GET(GVal.URL_COMM_LIST + "?ver=\(GVal.BUNDLE_VERSION_KEY)")
             opt.start {
                 response in
                 if let err = response.error {

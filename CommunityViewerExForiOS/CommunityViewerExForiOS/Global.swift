@@ -24,6 +24,8 @@ class GVal {
     static var KEY_FILTERED_LIST = "FILTERED_LIST"
     static var KEY_READ_LIST = "READ_LIST"
     
+    static var BUNDLE_VERSION_KEY = "0"
+    
     static var filtered : NSMutableSet = NSMutableSet()
     
     // 커뮤니티 리스트

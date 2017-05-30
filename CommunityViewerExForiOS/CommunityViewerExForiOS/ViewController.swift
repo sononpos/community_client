@@ -18,7 +18,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        let versionKey = Bundle.main.infoDictionary![kCFBundleVersionKey as String] as! String
+        GVal.BUNDLE_VERSION_KEY = versionKey
         
         if FIRApp.defaultApp() == nil { FIRApp.configure() }
         
