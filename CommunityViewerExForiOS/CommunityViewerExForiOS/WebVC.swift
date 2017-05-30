@@ -12,6 +12,7 @@ import GoogleMobileAds
 class WebVC : UIViewController, UIWebViewDelegate, GADBannerViewDelegate {
     
     
+    @IBOutlet weak var floaty: Floaty!
     @IBOutlet weak var webView: UIWebView!
     @IBOutlet weak var bannerView: GADBannerView!
     
@@ -21,6 +22,17 @@ class WebVC : UIViewController, UIWebViewDelegate, GADBannerViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        floaty.addItem("Share", icon: UIImage(named: "icon_share"), handler: {
+            item in
+            UIPasteboard.general.string = self.sURL!
+            let alertController = UIAlertController(title: "안내", message: "클립보드에 복사되었습니다", preferredStyle: UIAlertControllerStyle.alert)
+            self.present(alertController, animated: true, completion: nil)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6, execute: {
+                alertController.dismiss(animated: true, completion: nil)
+            })
+        })
+        self.view.addSubview(floaty)
         
         webView.delegate = self
         if bAppTypeLoad {
