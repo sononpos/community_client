@@ -91,7 +91,7 @@ extension ContentVC {
             print(error)
         }
         
-        cell.lbCommentCnt.text = "[\(content.sCommentCnt!)]"
+        cell.lbCommentCnt.text = content.sCommentCnt!
         
         if content.sTitle.isEmpty {
             cell.lbTitle.text = "NoTitle"

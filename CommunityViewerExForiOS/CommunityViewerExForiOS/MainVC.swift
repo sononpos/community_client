@@ -19,6 +19,8 @@ class MainVC : UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSou
     
     var contentViews = [UIViewController]()
     var bChanged = false
+    var bLoadingReserv = false
+    var nReservedPage = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,6 +106,7 @@ extension MainVC {
     }
     
     func tabScrollView(_ tabScrollView: ACTabScrollView, didScrollPageTo index: Int) {
+        print("didScrollPageTo : \(index)");
     }
     
     // MARK: ACTabScrollViewDataSource
@@ -123,6 +126,7 @@ extension MainVC {
     }
     
     func tabScrollView(_ tabScrollView: ACTabScrollView, contentViewForPageAtIndex index: Int) -> UIView {
+        print("contentViewForPageAtIndex: \(index)")
         let contentVC = contentViews[index] as! ContentVC
         contentVC.Refresh()
         

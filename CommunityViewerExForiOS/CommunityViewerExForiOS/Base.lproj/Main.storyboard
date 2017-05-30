@@ -271,20 +271,19 @@ ssdsd 
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="noname" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="izC-Wh-Eub" userLabel="lbUserName">
-                                                    <rect key="frame" x="16" y="38" width="82" height="21"/>
-                                                    <color key="backgroundColor" red="0.92156862745098034" green="0.92156862745098034" blue="0.92156862745098034" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <rect key="frame" x="16" y="38" width="102" height="21"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="82" id="VE7-c6-9J6"/>
+                                                        <constraint firstAttribute="width" constant="102" id="VE7-c6-9J6"/>
                                                         <constraint firstAttribute="height" constant="21" id="uV1-x9-jgi"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.46834520725388606" green="0.46834520725388606" blue="0.46834520725388606" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2017-04-11 10:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6if-vc-awj">
-                                                    <rect key="frame" x="106" y="38" width="150" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2017-04-11 10:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6if-vc-awj">
+                                                    <rect key="frame" x="126" y="38" width="159" height="21"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="150" id="LJ5-EB-57V"/>
+                                                        <constraint firstAttribute="width" constant="159" id="LJ5-EB-57V"/>
                                                         <constraint firstAttribute="height" constant="21" id="zxl-wd-Cvr"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -303,20 +302,21 @@ ssdsd 
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="[125]" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JUQ-wo-dTY" userLabel="lbCommentCnt">
-                                                    <rect key="frame" x="310" y="14" width="57" height="15"/>
+                                                    <rect key="frame" x="302" y="12" width="57" height="19"/>
+                                                    <color key="backgroundColor" red="0.95214513607166995" green="0.0047355385849926299" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="15" id="bln-a5-kFH"/>
+                                                        <constraint firstAttribute="height" constant="19" id="bln-a5-kFH"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.96862745100000003" green="0.014451497149999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" red="0.98431372549019602" green="0.97647058823529409" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="JUQ-wo-dTY" secondAttribute="trailing" constant="8" id="8fg-i7-xMG"/>
-                                                <constraint firstItem="JUQ-wo-dTY" firstAttribute="top" secondItem="Zp0-BV-dWi" secondAttribute="top" constant="14" id="8hb-f8-t09"/>
+                                                <constraint firstAttribute="trailing" secondItem="JUQ-wo-dTY" secondAttribute="trailing" constant="16" id="8fg-i7-xMG"/>
+                                                <constraint firstItem="JUQ-wo-dTY" firstAttribute="top" secondItem="Zp0-BV-dWi" secondAttribute="top" constant="12" id="8hb-f8-t09"/>
                                                 <constraint firstItem="6if-vc-awj" firstAttribute="leading" secondItem="izC-Wh-Eub" secondAttribute="trailing" constant="8" id="KsN-z2-xIl"/>
-                                                <constraint firstItem="JUQ-wo-dTY" firstAttribute="leading" secondItem="FVR-ad-afN" secondAttribute="trailing" constant="10" id="OZz-sB-x71"/>
+                                                <constraint firstItem="JUQ-wo-dTY" firstAttribute="leading" secondItem="FVR-ad-afN" secondAttribute="trailing" constant="2" id="OZz-sB-x71"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="wpg-hf-6T6" secondAttribute="trailing" constant="8" id="Sb0-zT-nRk"/>
                                                 <constraint firstItem="6if-vc-awj" firstAttribute="top" secondItem="FVR-ad-afN" secondAttribute="bottom" constant="5" id="XRA-tm-GSD"/>
                                                 <constraint firstItem="FVR-ad-afN" firstAttribute="leading" secondItem="Zp0-BV-dWi" secondAttribute="leading" constant="16" id="Xz4-EA-cvf"/>
@@ -376,13 +376,13 @@ ssdsd 
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="TopImage" translatesAutoresizingMaskIntoConstraints="NO" id="9so-7g-aQE">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                                     </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cB2-Jr-f5h">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cB2-Jr-f5h">
                                         <rect key="frame" x="0.0" y="0.0" width="53" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="AaY-A9-9xs"/>
                                             <constraint firstAttribute="width" constant="53" id="V9Y-cd-n8S"/>
                                         </constraints>
-                                        <state key="normal" title="Back"/>
+                                        <state key="normal" image="backbtn"/>
                                         <connections>
                                             <action selector="onBtnBack:" destination="dRp-86-jVj" eventType="touchUpInside" id="t3P-jG-435"/>
                                         </connections>
@@ -452,6 +452,7 @@ ssdsd 
     <resources>
         <image name="LeftMenuTop" width="408" height="165"/>
         <image name="TopImage" width="720" height="113"/>
+        <image name="backbtn" width="22" height="22"/>
         <image name="communitymoa_loading" width="540" height="960"/>
         <image name="icon_menu" width="37" height="37"/>
     </resources>
