@@ -81,19 +81,8 @@ extension ContentVC {
         if aContents.count <= indexPath.row { return cell }
         let content = aContents[indexPath.row]
         
-        let sTitle2 = "\(content.sTitle)..[100]"
-        let sTitle = sTitle2 as NSString
-        var sFinalTitle = content.sTitle
-        
-        let size = sTitle.size(attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 17.0)])
-        if cell.lbTitle.frame.width < size.width {
-            let gap = Int((size.width - cell.lbTitle.frame.width + 150) / 17.0)
-            let idx = sFinalTitle.index(sFinalTitle.startIndex, offsetBy: sFinalTitle.characters.count - gap )
-            sFinalTitle = "\(sFinalTitle.substring(to: idx)).."
-        }
-        
         let titleColor = GVal.IsRead(s: content.sTitle.hash) ? "#bfbfbf" : "#000000"
-        let htmlTitle = "<font color='\(titleColor)'>\(sFinalTitle)</font> <font color=red>[\(content.sCommentCnt!)]</font>"
+        let htmlTitle = "<font color='\(titleColor)'>\(content.sTitle)</font>"
         do {
             cell.lbTitle.attributedText = try NSAttributedString(data: htmlTitle.data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType], documentAttributes: nil)
             cell.lbTitle.font = UIFont(name: "System", size: 17)
@@ -102,8 +91,9 @@ extension ContentVC {
             print(error)
         }
         
+        cell.lbCommentCnt.text = "[\(content.sCommentCnt!)]"
         
-        if cell.lbTitle.text == nil || cell.lbTitle.text!.isEmpty {
+        if content.sTitle.isEmpty {
             cell.lbTitle.text = "NoTitle"
         }
         cell.lbTitle.sizeToFit()
@@ -123,8 +113,8 @@ extension ContentVC {
         cell.lbRegDate.sizeToFit()
         
         
-        cell.lbViewCnt.text = content.sViewCnt
-        if cell.lbViewCnt.text == nil || cell.lbViewCnt.text!.isEmpty {
+        cell.lbViewCnt.text = content.sViewCnt!
+        if content.sViewCnt!.isEmpty {
             cell.lbViewCnt.text = "-"
         }
         cell.lbViewCnt.sizeToFit()
@@ -237,5 +227,6 @@ class ArticleCell : UITableViewCell {
     @IBOutlet weak var lbUserName: UILabel!
     @IBOutlet weak var lbRegDate: UILabel!
     @IBOutlet weak var lbViewCnt: UILabel!
+    @IBOutlet weak var lbCommentCnt: UILabel!
     
 }
