@@ -252,6 +252,7 @@
 		FD71FEE71EC06327008F7025 = {
 			isa = PBXGroup;
 			children = (
+				FDBFFE2E1EC06B3D009DC330 /* SwiftHTTP.xcodeproj */,
 				FDAD1B7F1ECAE982002751B4 /* SlideMenuController.swift */,
 				FDAD1B6A1ECAD3F5002751B4 /* GoogleMobileAds.framework */,
 				FDAD1B571ECAD2A0002751B4 /* FirebaseAnalytics.framework */,
@@ -260,7 +261,6 @@
 				FDAD1B5A1ECAD2A0002751B4 /* GoogleInterchangeUtilities.framework */,
 				FDAD1B5B1ECAD2A0002751B4 /* GoogleSymbolUtilities.framework */,
 				FDAD1B5C1ECAD2A0002751B4 /* GoogleToolboxForMac.framework */,
-				FDBFFE2E1EC06B3D009DC330 /* SwiftHTTP.xcodeproj */,
 				FD71FEF21EC06327008F7025 /* CommunityViewerExForiOS */,
 				FD71FF071EC06327008F7025 /* CommunityViewerExForiOSTests */,
 				FD71FF121EC06327008F7025 /* CommunityViewerExForiOSUITests */,
@@ -730,7 +730,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = CommunityViewerExForiOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(OTHER_LDFLAGS)",
@@ -761,7 +761,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = CommunityViewerExForiOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(OTHER_LDFLAGS)",

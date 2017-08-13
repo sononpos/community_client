@@ -40,7 +40,8 @@ class ViewController: UIViewController {
                         GVal.LoadRead()
                         
                         DispatchQueue.main.sync {
-                            self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: {(timer) in
+                            self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.updateTime), userInfo: nil, repeats: true)
+                            /*self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: {(timer) in
                                 if self.cnt == 0 {
                                     self.cnt = self.cnt + 1
                                     return
@@ -55,7 +56,7 @@ class ViewController: UIViewController {
                                 self.present(viewController, animated: true)
                                 
                                 
-                            })
+                            })*/
                         }
                     }
                     else {
@@ -80,6 +81,22 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func updateTime() {
+        if self.cnt == 0 {
+            self.cnt = self.cnt + 1
+            return
+        }
+        
+        self.timer!.invalidate()
+        self.timer = nil
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier :"MainVC")
+        
+        self.present(viewController, animated: true)
+
     }
 }
 
