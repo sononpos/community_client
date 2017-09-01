@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="일반">
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/theme_type"
+        android:entryValues="@array/theme_type_val"
+        android:key="theme_type"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:summary="테스트"
+        android:title="테마 변경"/>
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/theme_font_type"
+            android:entryValues="@array/theme_font_type_val"
+            android:key="theme_font_type"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:summary="테스트"
+            android:title="폰트 크기 변경"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="리스트 표시">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="list_show_recent"
+            android:summaryOn="표시합니다"
+            android:summaryOff="표시하지 않습니다"
+            android:title="최근 읽은 글 표시" />
+        <Preference
+            android:key="clear_recent"
+            android:title="최근 읽은 글 목록 삭제"
+            />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="list_short"
+            android:summaryOn="사용합니다"
+            android:summaryOff="사용하지 않습니다"
+            android:title="제목 줄여서 표시하기" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="컨텐츠 액션">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="webview_slide_action"
+            android:summaryOn="슬라이드 액션을 사용합니다"
+            android:summaryOff="슬라이드 액션을 사용하지 않습니다"
+            android:title="슬라이드 액션 사용" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="앱 정보">
+        <Preference
+            android:key="app_recommand"
+            android:title="앱 평가하기"
+            />
+
+        <Preference
+            android:key="ver"
+            android:title="버전 정보"
+            android:summary="1.0"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="개발자 도와주기">
+        <Preference
+            android:key="donate_coffee"
+            android:title="커피 한잔"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>

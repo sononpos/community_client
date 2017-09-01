@@ -228,7 +228,7 @@ public class CommunityListFragment extends Fragment {
 
                 ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
                 TextView titleTextView = (TextView) view.findViewById(R.id.tvTitle) ;
-                titleTextView.setTextColor(Color.parseColor(theme.SubFont));
+                titleTextView.setTextColor(Color.parseColor("#aaaaaa"));
 
                 ListViewItem item = (ListViewItem)parent.getItemAtPosition(position);
                 G.readArticle(getContext(), item.m_sTitle.hashCode());

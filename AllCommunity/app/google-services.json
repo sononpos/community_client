@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "108520827711",
+    "firebase_url": "https://allcommunity-3422c.firebaseio.com",
+    "project_id": "allcommunity-3422c",
+    "storage_bucket": "allcommunity-3422c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:108520827711:android:93b2ab904f6675b5",
+        "android_client_info": {
+          "package_name": "com.sononpos.allcommunity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "108520827711-9t6o9ff8ejgg5o5m30q4pt2php3fceq6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwIKUwXdPln0Va5oKG79Ik9A2Ui3ov6Wk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
