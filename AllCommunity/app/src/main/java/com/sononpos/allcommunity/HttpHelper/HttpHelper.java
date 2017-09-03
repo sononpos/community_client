@@ -1,11 +1,10 @@
-package com.madfactory.madyoutubefilter.HttpHelper;
+package com.sononpos.allcommunity.HttpHelper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Message;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

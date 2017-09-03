@@ -16,43 +16,16 @@
 
 package com.sononpos.allcommunity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.FrameLayout.LayoutParams;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.sononpos.allcommunity.Funtional.ThemeManager;
 import com.sononpos.allcommunity.databinding.FragmentCommlistBinding;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-
-public class CommunityListFragment extends Fragment {
+public class ArticlesListFragment extends Fragment {
     FragmentCommlistBinding mBind;
     private static final String ARG_POSITION = "position";
 

@@ -1,4 +1,4 @@
-package com.madfactory.madyoutubefilter.HttpHelper;
+package com.sononpos.allcommunity.HttpHelper;
 
 /**
  * Created by nnnyyy on 2017-05-24.

@@ -1,52 +1,35 @@
 package com.sononpos.allcommunity;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.Space;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.astuetz.PagerSlidingTabStrip;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.sononpos.allcommunity.Funtional.ThemeManager;
 import com.sononpos.allcommunity.databinding.ActivityMainBinding;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding mBind;
-    private LeftMenuItemAdapter adapterLeftMenu;
-    private CommunityTypeInfo recent;
     private AdView mAdView;
+    private boolean exit = false;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBind = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        setupAd();      // 광고
+        setupTabs();    // 상단 탭
+    }
 
     @Override
     protected void onStart() {
@@ -92,22 +75,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mBind = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
-        //  실제 서비스가 시작되면 주석 제거
-        MobileAds.initialize(getApplicationContext(), "ca-app-pub-3598320494828213~8676238288");
-
-        mAdView = (AdView) findViewById(R.id.adViewMain);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
-                .build();  // An example device ID
-        mAdView.loadAd(adRequest);
-    }
-
-    private boolean exit = false;
-    @Override
     public void onBackPressed() {
         if (exit) {
             finish(); // finish activity
@@ -123,5 +90,48 @@ public class MainActivity extends AppCompatActivity {
             }, 3 * 1000);
 
         }
+    }
+
+    protected void setupAd() {
+        //  실제 서비스가 시작되면 주석 제거
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-3598320494828213~8676238288");
+
+        mAdView = (AdView) findViewById(R.id.adViewMain);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
+                .build();  // An example device ID
+        mAdView.loadAd(adRequest);
+    }
+
+    protected void setupTabs() {
+        mBind.pager.setAdapter(new CommListPagerAdapter(getSupportFragmentManager()));
+        mBind.tabs.setViewPager(mBind.pager);
+    }
+}
+
+class CommListPagerAdapter extends FragmentPagerAdapter {
+    String[] aTitles = { "A", "B", "C" };
+    public CommListPagerAdapter(FragmentManager fm) {
+        super(fm);
+    }
+
+    @Override
+    public int getCount() {
+        return aTitles.length;
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        return new ArticlesListFragment();
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return aTitles[position];
+    }
+
+    @Override
+    public boolean isViewFromObject(View view, Object object) {
+        return false;
     }
 }
