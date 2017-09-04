@@ -33,7 +33,6 @@ import java.util.ArrayList;
 
 public class SettingsActivity extends AppCompatActivity {
     Toolbar toolbar;
-
     IInAppBillingService mService;
     IabHelper mHelper;
 

@@ -41,6 +41,9 @@
             </intent-filter>
         </activity>
         <activity android:name="com.sononpos.allcommunity.SettingsActivity" />
+        <activity android:name="com.sononpos.allcommunity.SettingsRenewActivity"
+            android:theme="@style/AppTheme_For_Settings"
+            />
         <activity
             android:name="com.sononpos.allcommunity.TutorialActivity"
             android:label="@string/title_activity_tutorial"

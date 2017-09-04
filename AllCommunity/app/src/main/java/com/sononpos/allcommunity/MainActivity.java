@@ -1,7 +1,9 @@
 package com.sononpos.allcommunity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -27,8 +29,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBind = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        getSupportActionBar().hide();
         setupAd();      // 광고
         setupTabs();    // 상단 탭
+        setupFAB();     // 플로팅 버튼 설정
     }
 
     @Override
@@ -106,6 +110,24 @@ public class MainActivity extends AppCompatActivity {
     protected void setupTabs() {
         mBind.pager.setAdapter(new CommListPagerAdapter(getSupportFragmentManager()));
         mBind.tabs.setViewPager(mBind.pager);
+        mBind.tabs.setUnderlineColor(Color.parseColor("#ff0000"));
+    }
+
+    protected  void setupFAB() {
+        mBind.fabItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settings = new Intent(MainActivity.this, SettingsRenewActivity.class);
+                startActivity(settings);
+            }
+        });
+
+        mBind.fabItem2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 }
 
