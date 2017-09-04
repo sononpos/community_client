@@ -110,11 +110,10 @@ public class MainActivity extends AppCompatActivity {
     protected void setupTabs() {
         mBind.pager.setAdapter(new CommListPagerAdapter(getSupportFragmentManager()));
         mBind.tabs.setViewPager(mBind.pager);
-        mBind.tabs.setUnderlineColor(Color.parseColor("#ff0000"));
     }
 
     protected  void setupFAB() {
-        mBind.fabItem.setOnClickListener(new View.OnClickListener() {
+        mBind.fabItemSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent settings = new Intent(MainActivity.this, SettingsRenewActivity.class);
@@ -122,10 +121,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mBind.fabItem2.setOnClickListener(new View.OnClickListener() {
+        mBind.fabItemHideAdmob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mAdView.destroy();
+                mAdView.setVisibility(View.GONE);
+                mBind.fabItemHideAdmob.hideButtonInMenu(true);
             }
         });
     }
@@ -139,17 +140,17 @@ class CommListPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return aTitles.length;
+        return G.GetCommunityList().size();
     }
 
     @Override
     public Fragment getItem(int position) {
-        return new ArticlesListFragment();
+        return new ArticlesListFragment(position);
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return aTitles[position];
+        return G.GetCommunityList().get(position).sName;
     }
 
     @Override

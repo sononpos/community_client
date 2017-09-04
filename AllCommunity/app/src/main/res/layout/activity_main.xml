@@ -36,14 +36,13 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="20dp"/>
-
         </android.support.v7.widget.Toolbar>
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/tabs_outer"
         android:layout_width="match_parent"
-        android:layout_height="48dip"
+        android:layout_height="36dip"
         android:layout_below="@id/rl_toolbar"
         android:orientation="horizontal">
         <com.astuetz.PagerSlidingTabStrip
@@ -85,20 +84,18 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="@dimen/fab_margin_bottom"
         android:layout_marginRight="@dimen/fab_margin"
-        fab:menu_colorNormal="#ff00ff"
         >
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab_item"
+            android:id="@+id/fab_item_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            ads:fab_label="Menu1"
-            fab:fab_colorNormal="#00ff00"
+            ads:fab_label="@string/fab_settings"
             />
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab_item2"
+            android:id="@+id/fab_item_hide_admob"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            ads:fab_label="Menu2"
+            ads:fab_label="@string/fab_hide_admob"
             />
     </com.github.clans.fab.FloatingActionMenu>
 </android.support.design.widget.CoordinatorLayout >

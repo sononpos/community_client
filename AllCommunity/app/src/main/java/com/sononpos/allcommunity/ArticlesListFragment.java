@@ -18,26 +18,37 @@ package com.sononpos.allcommunity;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.sononpos.allcommunity.databinding.FragmentCommlistBinding;
 
 public class ArticlesListFragment extends Fragment {
     FragmentCommlistBinding mBind;
-    private static final String ARG_POSITION = "position";
+    int m_nPosition;
+
+    public ArticlesListFragment(int _nPosition) {
+        m_nPosition = _nPosition;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //position = getArguments().getInt(ARG_POSITION);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBind = DataBindingUtil.inflate(inflater, R.layout.fragment_commlist, container, false);
         return mBind.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Toast.makeText(getActivity(),String.format("%d", m_nPosition),Toast.LENGTH_SHORT).show();
     }
 }
