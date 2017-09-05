@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     >
 <android.support.design.widget.CoordinatorLayout
     android:layout_width="match_parent"
@@ -39,33 +40,22 @@
         </android.support.v7.widget.Toolbar>
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/tabs_outer"
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/tabs"
+        android:layout_below="@+id/rl_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="36dip"
-        android:layout_below="@id/rl_toolbar"
-        android:orientation="horizontal">
-        <com.astuetz.PagerSlidingTabStrip
-            android:id="@+id/tabs"
-            android:layout_width="0dp"
-            android:layout_weight="95"
-            android:layout_height="match_parent"
-            app:pstsShouldExpand="true"
-            />
-    </LinearLayout>
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/adViewMain"
-            android:layout_below="@+id/tabs_outer"
-            >
-            <android.support.v4.view.ViewPager
-                android:id="@+id/pager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </android.support.v4.view.ViewPager>
-        </FrameLayout>
+        android:layout_height="48dp"
+        app:pstsShouldExpand="true"
+        >
+    </com.astuetz.PagerSlidingTabStrip>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_below="@+id/tabs"
+        android:layout_above="@+id/adViewMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".MainActivity">
+    </android.support.v4.view.ViewPager>
 
     <!-- view for AdMob Banner Ad -->
     <com.google.android.gms.ads.AdView
@@ -75,7 +65,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id" />
+        ads:adUnitId="@string/banner_ad_unit_id"
+        />
     </RelativeLayout>
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/fa_menu"

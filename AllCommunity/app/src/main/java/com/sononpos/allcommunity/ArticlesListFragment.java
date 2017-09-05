@@ -17,27 +17,28 @@
 package com.sononpos.allcommunity;
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.sononpos.allcommunity.HttpHelper.HttpHelper;
+import com.sononpos.allcommunity.HttpHelper.HttpHelperListener;
 import com.sononpos.allcommunity.databinding.FragmentCommlistBinding;
 
-public class ArticlesListFragment extends Fragment {
+public class ArticlesListFragment extends Fragment implements HttpHelperListener {
     FragmentCommlistBinding mBind;
+    HttpHelper httpHelper;
     int m_nPosition;
 
     public ArticlesListFragment(int _nPosition) {
         m_nPosition = _nPosition;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -49,6 +50,17 @@ public class ArticlesListFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Toast.makeText(getActivity(),String.format("%d", m_nPosition),Toast.LENGTH_SHORT).show();
+        mBind.articlesList.setHasFixedSize(true);
+        mBind.articlesList.setLayoutManager(new LinearLayoutManager(mBind.getRoot().getContext()));
+        mBind.articlesList.setAdapter(new ArticlesListRecyclerAdapter());
+
+        httpHelper = new HttpHelper();
+        httpHelper.SetListener(this);
+        httpHelper.Request(0, "http://52.79.205.198:3000/dogdrip/1");
+    }
+
+    @Override
+    public void onResponse(int nType, int nErrorCode, String sResponse) {
+        Log.e("onResponse", "type :" + nType + ", nErrorCode : " + nErrorCode + ", res : " + sResponse);
     }
 }

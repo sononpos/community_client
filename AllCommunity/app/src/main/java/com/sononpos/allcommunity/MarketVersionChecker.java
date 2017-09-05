@@ -32,7 +32,7 @@ public class MarketVersionChecker {
     }
 
     public static int getVersionState(String sDeviceVer) {
-        String sMarketVer = getMarketVersion("com.sononpos.communityviwerex");
+        String sMarketVer = getMarketVersion("com.sononpos.allcommunity");
         if(sMarketVer == null ) return -1;
 
         ArrayList<String> aMarketVers = new ArrayList<>(Arrays.asList(sMarketVer.split("\\.")));

@@ -1,15 +1,15 @@
 package com.sononpos.allcommunity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.sononpos.allcommunity.Funtional.ThemeManager;
 import com.sononpos.allcommunity.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,14 +44,6 @@ public class MainActivity extends AppCompatActivity {
         if( G.GetCommunityList().size() <= 0 ) {
             G.ReloadCommunityListFromSharedPref(getApplicationContext());
         }
-
-        //  테스트
-        SharedPreferences setRefer = PreferenceManager
-                .getDefaultSharedPreferences(this);
-        int themeType = Integer.parseInt(setRefer.getString("theme_type", "0"));
-        ThemeManager.SetTheme(themeType);
-        int themeFontType = Integer.parseInt(setRefer.getString("theme_font_type", "1"));
-        ThemeManager.SetThemeFont(themeFontType);
 
         if(mAdView != null) {
             mAdView.resume();
@@ -99,12 +90,10 @@ public class MainActivity extends AppCompatActivity {
     protected void setupAd() {
         //  실제 서비스가 시작되면 주석 제거
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3598320494828213~8676238288");
-
-        mAdView = (AdView) findViewById(R.id.adViewMain);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
                 .build();  // An example device ID
-        mAdView.loadAd(adRequest);
+        mBind.adViewMain.loadAd(adRequest);
     }
 
     protected void setupTabs() {
@@ -116,8 +105,18 @@ public class MainActivity extends AppCompatActivity {
         mBind.fabItemSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        MainActivity.this,
+                        Pair.create((View)mBind.pager, "otherImage")
+                );
+
                 Intent settings = new Intent(MainActivity.this, SettingsRenewActivity.class);
-                startActivity(settings);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    startActivity(settings, options.toBundle());
+                }
+                else {
+                    startActivity(settings);
+                }
             }
         });
 
@@ -133,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
 }
 
 class CommListPagerAdapter extends FragmentPagerAdapter {
-    String[] aTitles = { "A", "B", "C" };
     public CommListPagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -151,10 +149,5 @@ class CommListPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return G.GetCommunityList().get(position).sName;
-    }
-
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return false;
     }
 }
