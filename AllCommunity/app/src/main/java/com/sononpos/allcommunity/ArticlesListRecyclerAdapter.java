@@ -8,11 +8,16 @@ import android.view.ViewGroup;
 
 import com.sononpos.allcommunity.databinding.ArticleItemBinding;
 
+import java.util.ArrayList;
+
 /**
  * Created by nnnyyy on 2017-09-05.
  */
 
 public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesListRecyclerAdapter.ArticleItemViewHolder> {
+
+    ArrayList<ArticleItem> aItemList = new ArrayList<>();
+
     @Override
     public ArticlesListRecyclerAdapter.ArticleItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ArticleItemBinding bind = ArticleItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
@@ -21,13 +26,16 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
 
     @Override
     public void onBindViewHolder(ArticlesListRecyclerAdapter.ArticleItemViewHolder holder, int position) {
-        ArticleItem item = new ArticleItem(0, "Test Name");
-        holder.mBind.setItem(item);
+        holder.mBind.setItem(aItemList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return aItemList.size();
+    }
+
+    public void AddList(ArrayList<ArticleItem> _list) {
+        aItemList.addAll(_list);
     }
 
     public class ArticleItemViewHolder extends RecyclerView.ViewHolder {

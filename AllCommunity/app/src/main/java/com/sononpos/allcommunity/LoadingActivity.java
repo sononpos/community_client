@@ -4,13 +4,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.sononpos.allcommunity.FirstSettings.FirstSetting_ThemeActivity;
@@ -47,7 +46,7 @@ public class LoadingActivity extends AppCompatActivity {
 
             String response = (String)msg.obj;
             G.LoadCommunityList(response);
-            G.LoadRecentArticle(getApplicationContext());
+            //.G.LoadRecentArticle(getApplicationContext());
             G.LoadReadedArticle(getApplicationContext());
 
             Collections.sort(G.liCommTypeInfo, new Comparator<CommunityTypeInfo>() {

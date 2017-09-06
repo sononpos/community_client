@@ -1,27 +1,9 @@
 package com.sononpos.allcommunity;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.os.Build;
-import android.preference.PreferenceManager;
-import android.text.Html;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
-
-import com.sononpos.allcommunity.Funtional.ThemeManager;
-
-import java.util.ArrayList;
-
 /**
  * Created by nnnyyy on 2017-03-03.
  */
-
+/*
 public class ListViewAdapter extends BaseAdapter {
 
     private ArrayList<ListViewItem> listViewItemList = new ArrayList<>();
@@ -67,15 +49,6 @@ public class ListViewAdapter extends BaseAdapter {
         nameTextView.setTextColor(Color.parseColor(theme.SubFont));
         regDateTextView.setTextColor(Color.parseColor(theme.SubFont));
         countTextView.setTextColor(Color.parseColor(theme.SubFont));
-
-        /*
-        GradientDrawable gd = new GradientDrawable(
-                GradientDrawable.Orientation.TOP_BOTTOM,
-                new int[] {0xFF616261,0xFF131313});
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            convertView.setBackground(gd);
-        }
-        */
 
         ListViewItem item = listViewItemList.get(position);
         String sTitleRet = item.m_sTitle;
@@ -146,3 +119,4 @@ public class ListViewAdapter extends BaseAdapter {
         listViewItemList.clear();
     }
 }
+*/

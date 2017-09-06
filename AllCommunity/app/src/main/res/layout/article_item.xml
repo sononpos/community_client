@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="item"
             type="com.sononpos.allcommunity.ArticleItem" />
@@ -22,15 +21,14 @@
         <ImageView
             android:id="@+id/sample_icon"
             style="@style/AppTheme.Icon.Small"
-            android:src="@drawable/arrow_down"
-            app:colorTint="@{item.color}" />
+            android:src="@drawable/arrow_down"/>
 
         <TextView
             android:id="@+id/sample_name"
             style="@style/Base.TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{item.name}"
+            android:text="@{item.m_sTitle}"
             tools:text="View animations sample" />
 
     </LinearLayout>

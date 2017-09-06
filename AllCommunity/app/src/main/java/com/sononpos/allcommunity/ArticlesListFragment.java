@@ -17,8 +17,9 @@
 package com.sononpos.allcommunity;
 
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,15 +27,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.sononpos.allcommunity.Funtional.ArticleParsingHelper;
 import com.sononpos.allcommunity.HttpHelper.HttpHelper;
 import com.sononpos.allcommunity.HttpHelper.HttpHelperListener;
 import com.sononpos.allcommunity.databinding.FragmentCommlistBinding;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+
 public class ArticlesListFragment extends Fragment implements HttpHelperListener {
     FragmentCommlistBinding mBind;
     HttpHelper httpHelper;
+    NotifyHandler notifyHandler;
     int m_nPosition;
 
     public ArticlesListFragment(int _nPosition) {
@@ -50,6 +55,9 @@ public class ArticlesListFragment extends Fragment implements HttpHelperListener
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        notifyHandler = new NotifyHandler(new WeakReference<>(this));
+
         mBind.articlesList.setHasFixedSize(true);
         mBind.articlesList.setLayoutManager(new LinearLayoutManager(mBind.getRoot().getContext()));
         mBind.articlesList.setAdapter(new ArticlesListRecyclerAdapter());
@@ -61,6 +69,31 @@ public class ArticlesListFragment extends Fragment implements HttpHelperListener
 
     @Override
     public void onResponse(int nType, int nErrorCode, String sResponse) {
-        Log.e("onResponse", "type :" + nType + ", nErrorCode : " + nErrorCode + ", res : " + sResponse);
+        ArrayList<ArticleItem> list = new ArrayList<>();
+        if(ArticleParsingHelper.parse(sResponse, list)) {
+            //  파싱 성공
+            AddListAndNotify(list);
+        }
+    }
+
+    protected void AddListAndNotify(ArrayList<ArticleItem> list) {
+        ArticlesListRecyclerAdapter adapter = (ArticlesListRecyclerAdapter)mBind.articlesList.getAdapter();
+        adapter.AddList(list);
+        Message msg = notifyHandler.obtainMessage(0);
+        notifyHandler.sendMessage(msg);
+    }
+
+    class NotifyHandler extends Handler {
+        WeakReference<ArticlesListFragment> root;
+
+        public NotifyHandler(WeakReference<ArticlesListFragment> _root) {
+            root = _root;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            mBind.articlesList.getAdapter().notifyDataSetChanged();
+        }
     }
 }

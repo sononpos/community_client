@@ -166,31 +166,9 @@ public class G {
         return liCommTypeInfo;
     }
 
-    public static void SaveRecentArticle(Context context, ListViewItem item) {
-        if(liRecentArticle.size() >= 30) {
-            liRecentArticle.remove(liRecentArticle.size()-1);
-        }
-        liRecentArticle.add(0,item.m_sJsonString);
-        setStringArrayPref(context, KEY_RECENT_ARTICLES, liRecentArticle);
-    }
-
-    public static void LoadRecentArticle(Context context) {
-        liRecentArticle = getStringArrayPref(context, KEY_RECENT_ARTICLES);
-    }
-
     public static void ClearRecentArticle(Context context) {
         liRecentArticle.clear();
         setStringArrayPref(context, KEY_RECENT_ARTICLES, liRecentArticle);
-    }
-
-    public static void readArticle(Context context, int hash) {
-
-        if(liReadArticleCheck.size() >= 200) {
-            liReadArticleCheck.remove(liReadArticleCheck.size()-1);
-        }
-        liReadArticleCheck.add(hash);
-        ArrayList li = new ArrayList(liReadArticleCheck);
-        setStringArrayPref(context, KEY_READED_ARTICLES, li);
     }
 
     public static void LoadReadedArticle(Context context) {
