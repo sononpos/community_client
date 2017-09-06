@@ -2,6 +2,7 @@ package com.sononpos.allcommunity;
 
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,14 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
 
     @Override
     public void onBindViewHolder(ArticlesListRecyclerAdapter.ArticleItemViewHolder holder, int position) {
+        final ArticleItemViewHolder holderInner = holder;
         holder.mBind.setItem(aItemList.get(position));
+        holder.mBind.getRoot().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("ClickedItem", holderInner.mBind.getItem().m_sJsonString);
+            }
+        });
     }
 
     @Override
@@ -36,6 +44,10 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
 
     public void AddList(ArrayList<ArticleItem> _list) {
         aItemList.addAll(_list);
+    }
+
+    public void ClearList() {
+        aItemList.clear();
     }
 
     public class ArticleItemViewHolder extends RecyclerView.ViewHolder {

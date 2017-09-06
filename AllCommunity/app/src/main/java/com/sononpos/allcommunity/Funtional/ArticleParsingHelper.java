@@ -1,6 +1,7 @@
 package com.sononpos.allcommunity.Funtional;
 
 import com.sononpos.allcommunity.ArticleItem;
+import com.sononpos.allcommunity.ArticlesListFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,12 +14,13 @@ import java.util.ArrayList;
  */
 
 public class ArticleParsingHelper {
-    public static boolean parse(String sResponse, ArrayList<ArticleItem> aList) {
+    public static boolean parse(String sResponse, ArticlesListFragment.ArticleLoadInfo info, ArrayList<ArticleItem> aList) {
         if(aList == null) return false;
         try {
             JSONArray arrRoot = new JSONArray(sResponse);
             JSONObject oRoot = arrRoot.getJSONObject(0);
             int nURL = oRoot.getInt("next_url");
+            info.sNext = String.valueOf(nURL);
             JSONArray arrList = oRoot.getJSONArray("list");
             int nListLen = arrList.length();
             for(int i = 0 ; i < nListLen ; ++i) {
