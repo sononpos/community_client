@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +17,6 @@ import android.widget.ImageButton;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.sononpos.allcommunity.Funtional.ThemeManager;
 
 import im.delight.android.webview.AdvancedWebView;
 
@@ -52,7 +50,6 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
         });
 
         mWebView = (SwipeWebView)findViewById(R.id.webview);
-        mWebView.getRootView().setBackgroundColor(Color.parseColor(ThemeManager.GetTheme().BgList));
         mWebView.setListener(this, this);
         mWebView.setWebChromeClient(new WebChromeClient(){
             @Override

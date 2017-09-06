@@ -10,13 +10,12 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +23,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
-import com.sononpos.allcommunity.Funtional.ThemeManager;
-import com.sononpos.allcommunity.util.*;
+import com.sononpos.allcommunity.util.IabHelper;
+import com.sononpos.allcommunity.util.IabResult;
+import com.sononpos.allcommunity.util.Purchase;
 
 import org.json.JSONObject;
 
@@ -134,44 +134,6 @@ public class SettingsActivity extends AppCompatActivity {
                         AlertDialog alert = builder.create();
                         alert.show();
                         return false;
-                    }
-                });
-            }
-
-            ListPreference themeTypePref = (ListPreference)findPreference("theme_type");
-            if( themeTypePref != null ) {
-                int nTheme = Integer.parseInt(themeTypePref.getValue());
-                themeTypePref.setSummary(ThemeManager.GetName(nTheme));
-                themeTypePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        int nTheme = Integer.parseInt((String) newValue);
-                        preference.setSummary(ThemeManager.GetName(nTheme));
-
-                        ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
-
-                        // return false; 로 리턴하면 변경을 취소합니다.
-                        return true;
-                    }
-                });
-            }
-
-            ListPreference themeFontTypePref = (ListPreference)findPreference("theme_font_type");
-            if( themeFontTypePref != null ) {
-                int nTheme = Integer.parseInt(themeFontTypePref.getValue());
-                themeFontTypePref.setSummary(ThemeManager.GetFontName(nTheme));
-                themeFontTypePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        int nTheme = Integer.parseInt((String) newValue);
-                        preference.setSummary(ThemeManager.GetFontName(nTheme));
-
-                        ThemeManager.ThemeFontObject theme = ThemeManager.GetFont();
-
-                        // return false; 로 리턴하면 변경을 취소합니다.
-                        return true;
                     }
                 });
             }

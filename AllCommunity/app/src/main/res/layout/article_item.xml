@@ -10,7 +10,7 @@
     </data>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:layout_height="70dp"
         android:gravity="center_vertical"
         android:clipToPadding="false"
         android:orientation="horizontal"
@@ -22,16 +22,50 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             >
-            <TextView
-                android:id="@+id/art_title"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:text="@{item.m_sTitle}"
-                tools:text="View animations sample"
                 android:layout_weight="72"
-                android:gravity="center_vertical"
-                style="@style/AppTheme.TextView"
-                />
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:id="@+id/art_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="7"
+                    android:text="@{item.m_sTitle}"
+                    tools:text="View animations sample"
+                    android:gravity="center_vertical"
+                    style="@style/AppTheme.TextView"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:id="@+id/art_name"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:text="@{item.m_sName}"
+                        tools:text="noname"
+                        android:gravity="center_vertical"
+                        style="@style/AppTheme.TextView2"
+                        />
+                    <TextView
+                        android:id="@+id/art_regdate"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:text="@{item.m_sRegDate}"
+                        tools:text="noname"
+                        android:gravity="center_vertical"
+                        style="@style/AppTheme.TextView2"
+                        />
+                </LinearLayout>
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

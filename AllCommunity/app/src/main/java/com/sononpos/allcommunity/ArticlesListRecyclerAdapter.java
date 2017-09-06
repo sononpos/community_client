@@ -2,6 +2,7 @@ package com.sononpos.allcommunity;
 
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,24 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
     @Override
     public void onBindViewHolder(ArticlesListRecyclerAdapter.ArticleItemViewHolder holder, int position) {
         final ArticleItemViewHolder holderInner = holder;
+        ArticleItem item =  aItemList.get(position);
+        if(TextUtils.isEmpty(item.m_sViewCnt)) {
+            item.m_sViewCnt = "-";
+        }
+        if(TextUtils.isEmpty(item.m_sCommentCnt)) {
+            item.m_sCommentCnt = "-";
+        }
+
+        if(TextUtils.isEmpty(item.m_sName)) {
+            item.m_sName = "noname";
+        }
+
+        if(TextUtils.isEmpty(item.m_sRegDate)) {
+            item.m_sRegDate = "nodate";
+        }
+
         holder.mBind.setItem(aItemList.get(position));
+
         holder.mBind.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

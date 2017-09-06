@@ -12,9 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.sononpos.allcommunity.FirstSettings.FirstSetting_ThemeActivity;
 import com.sononpos.allcommunity.Funtional.KBONetworkInfo;
-import com.sononpos.allcommunity.Funtional.ThemeManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -59,17 +57,6 @@ public class LoadingActivity extends AppCompatActivity {
             // 첫번째 실행이면 FirstSetting으로
             if(G.IsFirstUse(getApplicationContext())){
                 //G.SetFirstUse();    //  이후부터는 첫번째 실행이 아니게 된다
-                Intent intent = new Intent(mainActivity, FirstSetting_ThemeActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
-                SharedPreferences setRefer = PreferenceManager
-                        .getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor editor = setRefer.edit();
-                editor.putString("list_backup", response);
-                editor.apply();
-                startActivity(intent);
             }
             else {
                 G.RefreshFilteredInfo();
@@ -83,8 +70,6 @@ public class LoadingActivity extends AppCompatActivity {
                         .getDefaultSharedPreferences(getApplicationContext());
                 int themeType = Integer.parseInt(setRefer.getString("theme_type", "0"));
                 int themeFontType = Integer.parseInt(setRefer.getString("theme_font_type", "1"));
-                ThemeManager.SetTheme(themeType);
-                ThemeManager.SetThemeFont(themeFontType);
                 SharedPreferences.Editor editor = setRefer.edit();
                 editor.putString("list_backup", response);
                 editor.apply();
@@ -156,8 +141,6 @@ public class LoadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
         getSupportActionBar().hide();
-
-        ThemeManager.Init();
 
         FirebaseInstanceId.getInstance().getToken();
 
