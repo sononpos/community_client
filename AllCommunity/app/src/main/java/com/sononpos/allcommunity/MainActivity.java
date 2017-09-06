@@ -15,13 +15,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.sononpos.allcommunity.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding mBind;
-    private AdView mAdView;
+    private InterstitialAd mInterstitialAd;
     private boolean exit = false;
 
     @Override
@@ -45,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
             G.ReloadCommunityListFromSharedPref(getApplicationContext());
         }
 
-        if(mAdView != null) {
-            mAdView.resume();
-            mAdView.refreshDrawableState();
+        if(mBind.adViewMain != null) {
+            mBind.adViewMain.resume();
+            mBind.adViewMain.refreshDrawableState();
         }
 
         super.onResume();
@@ -55,16 +55,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        if(mAdView != null) {
-            mAdView.pause();
+        if(mBind.adViewMain != null) {
+            mBind.adViewMain.pause();
         }
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        if(mAdView != null) {
-            mAdView.destroy();
+        if(mBind.adViewMain != null) {
+            mBind.adViewMain.destroy();
         }
         super.onDestroy();
     }
@@ -94,6 +94,11 @@ public class MainActivity extends AppCompatActivity {
                 .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
                 .build();  // An example device ID
         mBind.adViewMain.loadAd(adRequest);
+
+        //  전면광고 초기화
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getResources().getString(R.string.full_ad_unit_id));
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
     }
 
     protected void setupTabs() {
@@ -123,8 +128,11 @@ public class MainActivity extends AppCompatActivity {
         mBind.fabItemHideAdmob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAdView.destroy();
-                mAdView.setVisibility(View.GONE);
+                if(mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                }
+                mBind.adViewMain.destroy();
+                mBind.adViewMain.setVisibility(View.GONE);
                 mBind.fabItemHideAdmob.hideButtonInMenu(true);
             }
         });
