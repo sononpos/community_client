@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBind = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        getSupportActionBar().hide();
+            getSupportActionBar().hide();
         setupAd();      // 광고
         setupTabs();    // 상단 탭
         setupFAB();     // 플로팅 버튼 설정

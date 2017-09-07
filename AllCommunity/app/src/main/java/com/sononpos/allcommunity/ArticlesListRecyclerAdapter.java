@@ -1,5 +1,6 @@
 package com.sononpos.allcommunity;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -51,6 +52,10 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
             @Override
             public void onClick(View v) {
                 Log.e("ClickedItem", holderInner.mBind.getItem().m_sJsonString);
+                Intent intent = new Intent(holderInner.mBind.getRoot().getContext(), CommunityArticle.class);
+                intent.putExtra("URL", holderInner.mBind.getItem().m_sLink);
+                intent.putExtra("TITLE", holderInner.mBind.getItem().m_sTitle);
+                holderInner.mBind.getRoot().getContext().startActivity(intent);
             }
         });
     }

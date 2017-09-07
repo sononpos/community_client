@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,30 +14,27 @@ import android.view.View;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.widget.ImageButton;
 
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+import com.sononpos.allcommunity.AlertManager.AlertManager;
+import com.sononpos.allcommunity.databinding.ActivityCommunityArticleBinding;
 
 import im.delight.android.webview.AdvancedWebView;
 
 public class CommunityArticle extends AppCompatActivity implements AdvancedWebView.Listener {
 
-    private SwipeWebView mWebView;
+    ActivityCommunityArticleBinding mBind;
     private String url;
     private String title;
-    private AdView adView;
-
     AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_community_article);
+        mBind = DataBindingUtil.setContentView(this, R.layout.activity_community_article);
+        getSupportActionBar().hide();
 
-        ImageButton ibtn = (ImageButton)findViewById(R.id.btn_share);
-        ibtn.setOnClickListener(new View.OnClickListener() {
-
+        mBind.btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent msg = new Intent(Intent.ACTION_SEND);
@@ -49,9 +47,8 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
             }
         });
 
-        mWebView = (SwipeWebView)findViewById(R.id.webview);
-        mWebView.setListener(this, this);
-        mWebView.setWebChromeClient(new WebChromeClient(){
+        mBind.webview.setListener(this, this);
+        mBind.webview.setWebChromeClient(new WebChromeClient(){
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
                 if(builder != null) {
@@ -84,12 +81,7 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
         boolean bTutorial = pref.getBoolean(G.KEY_TUTORIAL_COMPLETE , false);
 
         if(!bTutorial) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.tutorial_desc);
-            builder.setMessage("좌에서 우 슬라이드 : 닫기");
-            builder.setCancelable(false);
-            builder.setPositiveButton("다신 안 봄", new DialogInterface.OnClickListener() {
-
+            AlertManager.ShowOk(getApplicationContext(), "튜토리얼 설명", "좌에서 우 슬라이드 : 닫기", "닫기", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     SharedPreferences pref_inner = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -98,16 +90,12 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
                     editor.apply();
                     dialog.dismiss();
                 }
-
             });
-
-            AlertDialog alert = builder.create();
-            alert.show();
         }
 
         boolean bAction = pref.getBoolean("webview_slide_action" , true);
         if( bAction ) {
-            mWebView.setCallback(new SwipeWebView.SwipeCallback() {
+            mBind.webview.setCallback(new SwipeWebView.SwipeCallback() {
                 @Override
                 public void OnRightToLeft() {
                     finish();
@@ -127,40 +115,39 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
         Intent intent = getIntent();
         url = intent.getStringExtra("URL");
         title = intent.getStringExtra("TITLE");
-        mWebView.loadUrl(url);
+        mBind.webview.loadUrl(url);
 
         // Load an ad into the AdMob banner view.
-        adView = (AdView) findViewById(R.id.adViewWeb);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
                 .build();
-        adView.loadAd(adRequest);
+        mBind.adViewWeb.loadAd(adRequest);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mWebView.onResume();
-        if(adView != null) {
-            adView.resume();
+        mBind.webview.onResume();
+        if(mBind.adViewWeb != null) {
+            mBind.adViewWeb.resume();
         }
     }
 
     @Override
     protected void onPause() {
-        mWebView.onPause();
+        mBind.webview.onPause();
         super.onPause();
-        if(adView != null) {
-            adView.pause();
+        if(mBind.adViewWeb != null) {
+            mBind.adViewWeb.pause();
         }
     }
 
     @Override
     protected void onDestroy() {
-        mWebView.onDestroy();
+        mBind.webview.onDestroy();
         super.onDestroy();
-        if(adView != null) {
-            adView.destroy();
+        if(mBind.adViewWeb != null) {
+            mBind.adViewWeb.destroy();
         }
     }
 
