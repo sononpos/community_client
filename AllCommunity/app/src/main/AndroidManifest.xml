@@ -44,14 +44,6 @@
         <activity android:name="com.sononpos.allcommunity.SettingsRenewActivity"
             android:theme="@style/AppTheme_For_Settings"
             />
-        <activity
-            android:name="com.sononpos.allcommunity.TutorialActivity"
-            android:label="@string/title_activity_tutorial"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name="com.sononpos.allcommunity.FirstSettings.FirstSetting_ThemeActivity"
-            android:label="@string/title_activity_first_setting__theme"
-            android:theme="@style/AppTheme"></activity>
 
         <!-- [START firebase_service] -->
         <service
