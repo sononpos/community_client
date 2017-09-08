@@ -4,7 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import org.json.JSONArray;
+import com.sononpos.allcommunity.Funtional.StorageHelper;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,14 +31,7 @@ public class G {
 
     public static HashSet<Integer> liReadArticleCheck = new HashSet<>();
 
-    public static boolean IsShowRecent(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean bFirstUse = prefs.getBoolean(KEY_SHOW_RECENT, false);
-        return bFirstUse;
-    }
-
-    public static boolean IsFirstUse(Context context) {
-        /*
+    public static boolean IsFirstUse(Context context) {        /*
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean bFirstUse = prefs.getBoolean(FIRST_USE, true);
         return bFirstUse;
@@ -52,61 +46,7 @@ public class G {
         editor.apply();
     }
 
-    public static void setStringArrayPref(Context context , String sKey, ArrayList<String> values){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        JSONArray a = new JSONArray();
-        for(int i =  0 ; i < values.size() ; ++i) {
-            a.put(values.get(i));
-        }
 
-        if(!values.isEmpty()) {
-            editor.putString(sKey, a.toString());
-        }
-        else {
-            editor.putString(sKey, null);
-        }
-
-        editor.apply();
-    }
-
-    public static ArrayList<String> getStringArrayPref(Context context, String key) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String json = prefs.getString(key, null);
-        ArrayList<String> a = new ArrayList<>();
-        if( json != null) {
-            try {
-                JSONArray ja = new JSONArray(json);
-                for(int i = 0 ; i < ja.length() ; ++i) {
-                    String sData = ja.optString(i);
-                    a.add(sData);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return a;
-    }
-
-    public static ArrayList<Integer> getIntArrayPref(Context context, String key) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String json = prefs.getString(key, null);
-        ArrayList<Integer> a = new ArrayList<>();
-        if( json != null) {
-            try {
-                JSONArray ja = new JSONArray(json);
-                for(int i = 0 ; i < ja.length() ; ++i) {
-                    Integer sData = ja.optInt(i);
-                    a.add(sData);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return a;
-    }
 
     public static void LoadCommunityList(String response) {
         JSONObject jobj = null;
@@ -130,7 +70,7 @@ public class G {
         String list_backup = prefs.getString("list_backup", "");
         LoadCommunityList(list_backup);
 
-        ArrayList<String> aFiltered = G.getStringArrayPref(context, G.KEY_FILTERED_COMM);
+        ArrayList<String> aFiltered = StorageHelper.getStringArrayPref(context, G.KEY_FILTERED_COMM);
         if(aFiltered != null)
             G.liFiltered = new HashSet<String>(aFiltered);
         RefreshFilteredInfo();
@@ -157,22 +97,47 @@ public class G {
     public static boolean IsFiltered() {
         return (liFiltered.size() != 0);
     }
+    public static boolean IsFilteredKey(String sKey) {
+        return liFiltered.contains(sKey);
+    }
+    public static void ToggleFilter(String key) {
+        if(liFiltered.contains(key)){
+            liFiltered.remove(key);
+        }
+        else {
+            liFiltered.add(key);
+        }
+    }
 
-    public static ArrayList<CommunityTypeInfo> GetCommunityList() {
-        if(IsFiltered()) {
+    public static ArrayList<CommunityTypeInfo> GetCommunityList(boolean bForceAll) {
+        if(!bForceAll && IsFiltered()) {
             return liFilteredInfo;
         }
 
         return liCommTypeInfo;
     }
 
+    public static int GetFilteredIndex(int _nPosNotFiltered) {
+        CommunityTypeInfo info = liCommTypeInfo.get(_nPosNotFiltered);
+        Iterator<CommunityTypeInfo> iter = IsFiltered() ? liFilteredInfo.iterator() : liCommTypeInfo.iterator();
+        int idx = 0;
+        while(iter.hasNext()){
+            if(iter.next().sKey == info.sKey) {
+                return idx;
+            }
+            idx++;
+        }
+
+        return -1;
+    }
+
     public static void ClearRecentArticle(Context context) {
         liRecentArticle.clear();
-        setStringArrayPref(context, KEY_RECENT_ARTICLES, liRecentArticle);
+        StorageHelper.setStringArrayPref(context, KEY_RECENT_ARTICLES, liRecentArticle);
     }
 
     public static void LoadReadedArticle(Context context) {
-        liReadArticleCheck = new HashSet<>(getIntArrayPref(context, KEY_READED_ARTICLES));
+        liReadArticleCheck = new HashSet<>(StorageHelper.getIntArrayPref(context, KEY_READED_ARTICLES));
     }
 
     public static boolean isReaded(int hash) {

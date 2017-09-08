@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.sononpos.allcommunity.Funtional.KBONetworkInfo;
+import com.sononpos.allcommunity.Funtional.StorageHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -175,7 +176,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     private void LoadCommunityList() {
         G.liCommTypeInfo.clear();
-        ArrayList<String> aFiltered = G.getStringArrayPref(this, G.KEY_FILTERED_COMM);
+        ArrayList<String> aFiltered = StorageHelper.getStringArrayPref(this, G.KEY_FILTERED_COMM);
         if(aFiltered != null) {
             G.liFiltered = new HashSet<String>(aFiltered);
         }

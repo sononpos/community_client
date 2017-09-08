@@ -123,7 +123,7 @@ public class ArticlesListFragment extends Fragment implements HttpHelperListener
 
     protected void LoadContents() {
         if(loadInfo.isLoading()) return;
-        CommunityTypeInfo info = G.GetCommunityList().get(m_nPosition);
+        CommunityTypeInfo info = G.GetCommunityList(false).get(m_nPosition);
         if(info != null) {
             httpHelper.Request(0, G.SERV_ROOT + info.sKey + loadInfo.getPage());
         }

@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if( G.GetCommunityList().size() <= 0 ) {
+        if( G.GetCommunityList(false).size() <= 0 ) {
             G.ReloadCommunityListFromSharedPref(getApplicationContext());
         }
 
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
     protected void setupLeftMenu() {
         mBind.leftlistview.setHasFixedSize(true);
         mBind.leftlistview.setLayoutManager(new LinearLayoutManager(mBind.getRoot().getContext()));
-        mBind.leftlistview.setAdapter(new MainLeftMenuRecyclerAdapter());
+        mBind.leftlistview.setAdapter(new MainLeftMenuRecyclerAdapter(mBind));
     }
 
     public void onBtnLeftMenuOpen(View view) {
@@ -159,7 +159,7 @@ class CommListPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return G.GetCommunityList().size();
+        return G.GetCommunityList(false).size();
     }
 
     @Override
@@ -169,6 +169,6 @@ class CommListPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return G.GetCommunityList().get(position).sName;
+        return G.GetCommunityList(false).get(position).sName;
     }
 }

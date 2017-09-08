@@ -16,7 +16,8 @@
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
     <RelativeLayout
         android:id="@+id/rl_toolbar"
         android:layout_width="match_parent"
@@ -27,7 +28,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:src="@drawable/contop_new"
-            android:background="#297aff"
+            android:background="@color/mainColor"
             />
         <ImageButton android:src="@drawable/icon_menu"
             android:background="?attr/actionBarItemBackground"
@@ -83,6 +84,7 @@
         android:layout_centerHorizontal="true"
         ads:adSize="BANNER"
         ads:adUnitId="@string/banner_ad_unit_id"
+        android:background="@color/mainColor"
         />
     </RelativeLayout>
     <com.github.clans.fab.FloatingActionMenu
