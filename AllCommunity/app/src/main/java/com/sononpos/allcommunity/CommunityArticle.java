@@ -81,7 +81,7 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
         boolean bTutorial = pref.getBoolean(G.KEY_TUTORIAL_COMPLETE , false);
 
         if(!bTutorial) {
-            AlertManager.ShowOk(getApplicationContext(), "튜토리얼 설명", "좌에서 우 슬라이드 : 닫기", "닫기", new DialogInterface.OnClickListener() {
+            AlertManager.ShowOk(CommunityArticle.this, "튜토리얼 설명", "좌에서 우 슬라이드 : 닫기", "닫기", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     SharedPreferences pref_inner = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
