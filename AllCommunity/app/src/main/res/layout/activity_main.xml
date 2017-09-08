@@ -5,6 +5,11 @@
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     >
+    <data>
+        <variable
+            name="activity"
+            type="com.sononpos.allcommunity.MainActivity"></variable>
+    </data>
 <android.support.design.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -31,26 +36,44 @@
             android:scaleType="centerInside"
             android:id="@+id/btn_leftmenu"
             android:layout_margin="7dp"
+            android:onClick="@{activity.onBtnLeftMenuOpen}"
             />
     </RelativeLayout>
-
-    <com.astuetz.PagerSlidingTabStrip
-        android:id="@+id/tabs"
-        android:layout_below="@+id/rl_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        app:pstsShouldExpand="true"
-        >
-    </com.astuetz.PagerSlidingTabStrip>
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
+        <com.astuetz.PagerSlidingTabStrip
+            android:id="@+id/tabs"
+            android:layout_below="@+id/rl_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:pstsShouldExpand="true"
+            >
+        </com.astuetz.PagerSlidingTabStrip>
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer"
         android:layout_below="@+id/tabs"
         android:layout_above="@+id/adViewMain"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context=".MainActivity">
-    </android.support.v4.view.ViewPager>
-
+        android:layout_height="match_parent"
+        tools:openDrawer="start"
+        >
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".MainActivity">
+        </android.support.v4.view.ViewPager>
+        <android.support.design.widget.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            >
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/leftlistview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+        </android.support.design.widget.NavigationView>
+    </android.support.v4.widget.DrawerLayout>
     <!-- view for AdMob Banner Ad -->
     <com.google.android.gms.ads.AdView
         android:id="@+id/adViewMain"

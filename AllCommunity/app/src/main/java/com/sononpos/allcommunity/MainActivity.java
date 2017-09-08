@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Toast;
 
@@ -28,10 +29,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBind = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mBind.setActivity(this);
             getSupportActionBar().hide();
-        setupAd();      // 광고
-        setupTabs();    // 상단 탭
-        setupFAB();     // 플로팅 버튼 설정
+        setupAd();          // 광고
+        setupTabs();        // 상단 탭
+        setupFAB();         // 플로팅 버튼 설정
+        setupLeftMenu();    // 왼쪽 메뉴
     }
 
     @Override
@@ -136,6 +139,16 @@ public class MainActivity extends AppCompatActivity {
                 mBind.fabItemHideAdmob.hideButtonInMenu(true);
             }
         });
+    }
+
+    protected void setupLeftMenu() {
+        mBind.leftlistview.setHasFixedSize(true);
+        mBind.leftlistview.setLayoutManager(new LinearLayoutManager(mBind.getRoot().getContext()));
+        mBind.leftlistview.setAdapter(new MainLeftMenuRecyclerAdapter());
+    }
+
+    public void onBtnLeftMenuOpen(View view) {
+        mBind.drawer.openDrawer(mBind.navView);
     }
 }
 
