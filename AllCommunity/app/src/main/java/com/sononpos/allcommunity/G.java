@@ -108,6 +108,16 @@ public class G {
             liFiltered.add(key);
         }
     }
+    public static void SaveFiltered(Context context) {
+        StorageHelper.setStringArrayPref(context, G.KEY_FILTERED_COMM, new ArrayList<>(G.liFiltered));
+    }
+    public static void LoadFiltered(Context context) {
+        liFiltered.clear();
+        ArrayList<String> aFiltered = StorageHelper.getStringArrayPref(context, G.KEY_FILTERED_COMM);
+        if(aFiltered != null)
+            liFiltered = new HashSet<>(aFiltered);
+        RefreshFilteredInfo();
+    }
 
     public static ArrayList<CommunityTypeInfo> GetCommunityList(boolean bForceAll) {
         if(!bForceAll && IsFiltered()) {

@@ -2,6 +2,7 @@
     <string name="app_name">모두가 커뮤니티</string>
     <string name="fab_settings">설 정</string>
     <string name="fab_hide_admob">배너광고 안보기</string>
+    <string name="fab_share">공 유</string>
     <string name="action_settings">설 정</string>
     <string name="opt_setting">체크박스</string>
     <string name="at_least_one_community">하나 이상은 남겨두어야 합니다</string>

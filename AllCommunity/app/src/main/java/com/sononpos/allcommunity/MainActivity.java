@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.util.Pair;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -137,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
                 mBind.adViewMain.destroy();
                 mBind.adViewMain.setVisibility(View.GONE);
                 mBind.fabItemHideAdmob.hideButtonInMenu(true);
+                mBind.faMenu.close(false);
             }
         });
     }
@@ -145,6 +147,30 @@ public class MainActivity extends AppCompatActivity {
         mBind.leftlistview.setHasFixedSize(true);
         mBind.leftlistview.setLayoutManager(new LinearLayoutManager(mBind.getRoot().getContext()));
         mBind.leftlistview.setAdapter(new MainLeftMenuRecyclerAdapter(mBind));
+        mBind.drawer.addDrawerListener(new ActionBarDrawerToggle(this, mBind.drawer,R.string.app_name, R.string.app_name) {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                mBind.faMenu.close(false);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                G.SaveFiltered(getApplicationContext());
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                super.onDrawerStateChanged(newState);
+            }
+
+        });
     }
 
     public void onBtnLeftMenuOpen(View view) {
@@ -170,5 +196,10 @@ class CommListPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return G.GetCommunityList(false).get(position).sName;
+    }
+
+    @Override
+    public int getItemPosition(Object item) {
+        return POSITION_NONE;
     }
 }

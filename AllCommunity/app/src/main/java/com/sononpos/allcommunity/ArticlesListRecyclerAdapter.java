@@ -21,6 +21,10 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
 
     ArrayList<ArticleItem> aItemList = new ArrayList<>();
 
+    public ArticlesListRecyclerAdapter() {
+        setHasStableIds(true);
+    }
+
     @Override
     public ArticlesListRecyclerAdapter.ArticleItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ArticleItemBinding bind = ArticleItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
@@ -58,6 +62,11 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
                 holderInner.mBind.getRoot().getContext().startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return aItemList.get(position).m_sTitle.toString().hashCode();
     }
 
     @Override

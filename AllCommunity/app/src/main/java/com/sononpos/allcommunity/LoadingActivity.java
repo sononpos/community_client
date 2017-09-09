@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,20 +13,19 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.sononpos.allcommunity.AlertManager.AlertManager;
 import com.sononpos.allcommunity.Funtional.KBONetworkInfo;
-import com.sononpos.allcommunity.Funtional.StorageHelper;
+import com.sononpos.allcommunity.HttpHelper.HttpHelper;
+import com.sononpos.allcommunity.HttpHelper.HttpHelperListener;
+import com.sononpos.allcommunity.databinding.ActivityLoadingBinding;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 
 public class LoadingActivity extends AppCompatActivity {
+    ActivityLoadingBinding mBind;
+    HttpHelper httpHelper = new HttpHelper();
+    MyHandler handlerPager;
 
     class MyHandler extends Handler {
         private LoadingActivity mainActivity;
@@ -43,17 +43,11 @@ public class LoadingActivity extends AppCompatActivity {
                 return;
             }
 
-            String response = (String)msg.obj;
-            G.LoadCommunityList(response);
-            //.G.LoadRecentArticle(getApplicationContext());
-            G.LoadReadedArticle(getApplicationContext());
-
-            Collections.sort(G.liCommTypeInfo, new Comparator<CommunityTypeInfo>() {
-                @Override
-                public int compare(CommunityTypeInfo o1, CommunityTypeInfo o2) {
-                    return o1.index < o2.index ? -1 : 1;
-                }
-            });
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             // 첫번째 실행이면 FirstSetting으로
             if(G.IsFirstUse(getApplicationContext())){
@@ -66,19 +60,10 @@ public class LoadingActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
-                SharedPreferences setRefer = PreferenceManager
-                        .getDefaultSharedPreferences(getApplicationContext());
-                int themeType = Integer.parseInt(setRefer.getString("theme_type", "0"));
-                int themeFontType = Integer.parseInt(setRefer.getString("theme_font_type", "1"));
-                SharedPreferences.Editor editor = setRefer.edit();
-                editor.putString("list_backup", response);
-                editor.apply();
                 startActivity(intent);
             }
         }
     }
-    MyHandler handlerPager;
 
     class CheckUpdateHandler extends Handler {
         public CheckUpdateHandler(){}
@@ -140,11 +125,9 @@ public class LoadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading);
+        mBind = DataBindingUtil.setContentView(this, R.layout.activity_loading);
         getSupportActionBar().hide();
-
         FirebaseInstanceId.getInstance().getToken();
-
         CheckUpdate();
     }
 
@@ -176,92 +159,49 @@ public class LoadingActivity extends AppCompatActivity {
 
     private void LoadCommunityList() {
         G.liCommTypeInfo.clear();
-        ArrayList<String> aFiltered = StorageHelper.getStringArrayPref(this, G.KEY_FILTERED_COMM);
-        if(aFiltered != null) {
-            G.liFiltered = new HashSet<String>(aFiltered);
-        }
-        else {
-            G.liFiltered.clear();
-        }
         handlerPager = new MyHandler(this);
-
-        new Thread(new Runnable() {
+        httpHelper.SetListener(new HttpHelperListener() {
             @Override
-            public void run() {
-
-                try {
-                    Thread.sleep(750);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                try{
-                    URL url = new URL("http://52.79.205.198:3000/list");
-
-                    HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-                    conn.setRequestMethod("GET");
-                    conn.setConnectTimeout(3000);
-                    conn.setReadTimeout(3000);
-
-                    conn.connect();
-
-                    int responseCode = conn.getResponseCode();
-                    if( responseCode == HttpURLConnection.HTTP_OK){
-                        InputStream is   = null;
-                        ByteArrayOutputStream baos = null;
-                        String response;
-                        is = conn.getInputStream();
-                        baos = new ByteArrayOutputStream();
-                        byte[] byteBuffer = new byte[1024];
-                        byte[] byteData = null;
-                        int nLength = 0;
-
-                        while((nLength = is.read(byteBuffer, 0, byteBuffer.length)) != -1) {
-                            baos.write(byteBuffer, 0, nLength);
-                        }
-                        byteData = baos.toByteArray();
-                        response = new String(byteData);
-
-                        Message msg = handlerPager.obtainMessage();
-                        msg.arg1 = 0;
-                        msg.obj = response;
-                        handlerPager.sendMessage(msg);
-                    }
-                    else {
-                        Message msg = handlerPager.obtainMessage();
-                        msg.arg1 = -1;
-                        handlerPager.sendMessage(msg);
-                    }
-                }catch(IOException e){
-                    e.printStackTrace();
-                    Message msg = handlerPager.obtainMessage();
-                    msg.arg1 = -1;
+            public void onResponse(int nType, int nErrorCode, String sResponse) {
+                if(nErrorCode != 0) {
+                    Message msg = handlerPager.obtainMessage(-1);
                     handlerPager.sendMessage(msg);
-                }finally {
+                    return;
                 }
+                G.LoadCommunityList(sResponse);
+                G.LoadFiltered(getApplicationContext());
+                //.G.LoadRecentArticle(getApplicationContext());
+                G.LoadReadedArticle(getApplicationContext());
+
+                Collections.sort(G.liCommTypeInfo, new Comparator<CommunityTypeInfo>() {
+                    @Override
+                    public int compare(CommunityTypeInfo o1, CommunityTypeInfo o2) {
+                        return o1.index < o2.index ? -1 : 1;
+                    }
+                });
+
+                SharedPreferences setRefer = PreferenceManager
+                        .getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = setRefer.edit();
+                editor.putString("list_backup", sResponse);
+                editor.apply();
+
+                Message msg = handlerPager.obtainMessage(0);
+                handlerPager.sendMessage(msg);
             }
-        }).start();
+        });
+
+        httpHelper.Request(0, "http://52.79.205.198:3000/list");
     }
 
     public void finishApp() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("앱 종료");
-        builder.setMessage("네트워크 연결을 확인해 주십시오.");
-        builder.setCancelable(false);
-
-
-        builder.setPositiveButton("그..그럴게요", new DialogInterface.OnClickListener() {
-
+        AlertManager.ShowOk(LoadingActivity.this, "앱 종료", "네트워크를 확인 해 주세요", "네..", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
 
                 dialog.dismiss();
             }
-
         });
-
-        AlertDialog alert = builder.create();
-        alert.show();
     }
 }
