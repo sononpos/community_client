@@ -109,7 +109,7 @@ public class G {
         }
     }
     public static void SaveFiltered(Context context) {
-        StorageHelper.setStringArrayPref(context, G.KEY_FILTERED_COMM, new ArrayList<>(G.liFiltered));
+        StorageHelper.setArrayPref(context, G.KEY_FILTERED_COMM, new ArrayList<>(G.liFiltered));
     }
     public static void LoadFiltered(Context context) {
         liFiltered.clear();
@@ -143,14 +143,19 @@ public class G {
 
     public static void ClearRecentArticle(Context context) {
         liRecentArticle.clear();
-        StorageHelper.setStringArrayPref(context, KEY_RECENT_ARTICLES, liRecentArticle);
+        StorageHelper.setArrayPref(context, KEY_RECENT_ARTICLES, liRecentArticle);
     }
 
     public static void LoadReadedArticle(Context context) {
         liReadArticleCheck = new HashSet<>(StorageHelper.getIntArrayPref(context, KEY_READED_ARTICLES));
     }
 
-    public static boolean isReaded(int hash) {
+    public static boolean IsReaded(int hash) {
         return liReadArticleCheck.contains(hash);
+    }
+    public static void SetRead(Context context, int hash) {
+        liReadArticleCheck.add(hash);
+        ArrayList<Integer> a = new ArrayList<>(liReadArticleCheck);
+        StorageHelper.setArrayPref(context, KEY_READED_ARTICLES, a);
     }
 }

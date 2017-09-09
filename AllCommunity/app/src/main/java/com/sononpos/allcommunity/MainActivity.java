@@ -13,17 +13,22 @@ import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.sononpos.allcommunity.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding mBind;
     private InterstitialAd mInterstitialAd;
+    private RewardedVideoAd mRewardAd;
     private boolean exit = false;
 
     @Override
@@ -95,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         //  실제 서비스가 시작되면 주석 제거
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3598320494828213~8676238288");
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
+                .addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521")
                 .build();  // An example device ID
         mBind.adViewMain.loadAd(adRequest);
 
@@ -103,6 +108,51 @@ public class MainActivity extends AppCompatActivity {
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getResources().getString(R.string.full_ad_unit_id));
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+        mRewardAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
+            @Override
+            public void onRewardedVideoAdLoaded() {
+                Log.i("RewardAds", "onRewardedVideoAdLoaded");
+            }
+
+            @Override
+            public void onRewardedVideoAdOpened() {
+                Log.i("RewardAds", "onRewardedVideoAdOpened");
+            }
+
+            @Override
+            public void onRewardedVideoStarted() {
+                Log.i("RewardAds", "onRewardedVideoStarted");
+                mBind.faMenu.close(true);
+            }
+
+            @Override
+            public void onRewardedVideoAdClosed() {
+                Log.i("RewardAds", "onRewardedVideoAdClosed");
+                mRewardAd.loadAd(getString(R.string.reward_ad_unit_id_test), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+            }
+
+            @Override
+            public void onRewarded(RewardItem rewardItem) {
+                Log.i("RewardAds", "onRewarded");
+                mBind.fabItemHideAdmob.setEnabled(false);
+                mBind.adViewMain.destroy();
+                mBind.adViewMain.setVisibility(View.GONE);
+                mBind.faMenu.close(true);
+            }
+
+            @Override
+            public void onRewardedVideoAdLeftApplication() {
+                Log.i("RewardAds", "onRewardedVideoAdLeftApplication");
+            }
+
+            @Override
+            public void onRewardedVideoAdFailedToLoad(int i) {
+                Log.i("RewardAds", "onRewardedVideoAdFailedToLoad : " + i);
+            }
+        });
+        mRewardAd.loadAd(getString(R.string.reward_ad_unit_id_test), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
     }
 
     protected void setupTabs() {
@@ -132,13 +182,21 @@ public class MainActivity extends AppCompatActivity {
         mBind.fabItemHideAdmob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
+                if(mRewardAd.isLoaded()) {
+                    mRewardAd.show();
                 }
-                mBind.adViewMain.destroy();
-                mBind.adViewMain.setVisibility(View.GONE);
-                mBind.fabItemHideAdmob.hideButtonInMenu(true);
-                mBind.faMenu.close(false);
+            }
+        });
+
+        mBind.faMenu.setOnMenuButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBind.drawer.closeDrawer(mBind.navView);
+                if(mBind.faMenu.isOpened()) {
+                    mBind.faMenu.close(true);
+                }
+                else
+                    mBind.faMenu.open(true);
             }
         });
     }

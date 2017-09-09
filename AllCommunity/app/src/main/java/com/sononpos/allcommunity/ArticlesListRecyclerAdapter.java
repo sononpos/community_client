@@ -2,8 +2,10 @@ package com.sononpos.allcommunity;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -61,15 +63,21 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
         }
 
         holder.mBind.setItem(aItemList.get(position));
+        if(G.IsReaded(holder.mBind.getItem().m_sTitle.hashCode())) {
+            holder.mBind.artTitle.setTextColor(ContextCompat.getColor(holder.mBind.getRoot().getContext(), R.color.disabledTextColor));
+        }
 
         holder.mBind.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Context context = holderInner.mBind.getRoot().getContext();
+                holderInner.mBind.artTitle.setTextColor(ContextCompat.getColor(context, R.color.disabledTextColor));
                 Log.e("ClickedItem", holderInner.mBind.getItem().m_sJsonString);
                 Intent intent = new Intent(holderInner.mBind.getRoot().getContext(), CommunityArticle.class);
                 intent.putExtra("URL", holderInner.mBind.getItem().m_sLink);
                 intent.putExtra("TITLE", holderInner.mBind.getItem().m_sTitle);
                 holderInner.mBind.getRoot().getContext().startActivity(intent);
+                G.SetRead(context, holderInner.mBind.getItem().m_sTitle.hashCode());
             }
         });
 

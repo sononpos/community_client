@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 
 public class StorageHelper {
-    public static void setStringArrayPref(Context context , String sKey, ArrayList<String> values){
+    public static void setArrayPref(Context context , String sKey, ArrayList<?> values){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         JSONArray a = new JSONArray();

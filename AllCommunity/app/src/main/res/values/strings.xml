@@ -17,6 +17,8 @@
     <string name="banner_ad_unit_id">ca-app-pub-3598320494828213/1152971485</string>
     <string name="banner_ad_unit_id_for_webview">ca-app-pub-3598320494828213/1152971485</string>
     <string name="full_ad_unit_id">ca-app-pub-3598320494828213/3981177811</string>
+    <string name="reward_ad_unit_id">ca-app-pub-3598320494828213/9218892743</string>
+    <string name="reward_ad_unit_id_test">ca-app-pub-3940256099942544/5224354917</string>
     <string name="title_activity_community_article">CommunityArticle</string>
     <string name="title_activity_tutorial">TutorialActivity</string>
     <string name="title_activity_first_setting__theme">FirstSetting_ThemeActivity</string>

@@ -170,8 +170,8 @@ public class LoadingActivity extends AppCompatActivity {
                 }
                 G.LoadCommunityList(sResponse);
                 G.LoadFiltered(getApplicationContext());
-                //.G.LoadRecentArticle(getApplicationContext());
                 G.LoadReadedArticle(getApplicationContext());
+                //.G.LoadRecentArticle(getApplicationContext());
 
                 Collections.sort(G.liCommTypeInfo, new Comparator<CommunityTypeInfo>() {
                     @Override
