@@ -28,7 +28,7 @@ import jp.wasabeef.recyclerview.internal.ViewHelper;
 public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesListRecyclerAdapter.ArticleItemViewHolder> {
 
     ArrayList<ArticleItem> aItemList = new ArrayList<>();
-    private int mDuration = 300;
+    private int mDuration = 500;
     private Interpolator mInterpolator = new LinearInterpolator();
     int mLastPosition = -1;
     boolean isFirstOnly = false;
@@ -42,6 +42,8 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
         ArticleItemBinding bind = ArticleItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ArticleItemViewHolder(bind.getRoot());
     }
+
+
 
     @Override
     public void onBindViewHolder(ArticlesListRecyclerAdapter.ArticleItemViewHolder holder, int position) {
@@ -61,9 +63,10 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
         if(TextUtils.isEmpty(item.m_sRegDate)) {
             item.m_sRegDate = "nodate";
         }
-
-        holder.mBind.setItem(aItemList.get(position));
-        if(G.IsReaded(holder.mBind.getItem().m_sTitle.hashCode())) {
+        holder.mBind.setItem(item);
+        //holder.mBind.artTitle.setText(item.m_sTitle);
+        int nHashcode = item.m_sTitle.hashCode();
+        if(G.IsReaded(nHashcode)) {
             holder.mBind.artTitle.setTextColor(ContextCompat.getColor(holder.mBind.getRoot().getContext(), R.color.disabledTextColor));
         }
 
@@ -81,15 +84,17 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
             }
         });
 
+
         int adapterPosition = holder.getAdapterPosition();
         if (!isFirstOnly || adapterPosition > mLastPosition) {
-            Animator anim = ObjectAnimator.ofFloat(holder.itemView, "alpha", 0.3f, 1f);
+            Animator anim = ObjectAnimator.ofFloat(holder.itemView, "alpha", 0.5f, 1f);
             anim.setDuration(mDuration).start();
             anim.setInterpolator(mInterpolator);
             mLastPosition = adapterPosition;
         } else {
             ViewHelper.clear(holder.itemView);
         }
+
     }
 
     @Override
@@ -107,6 +112,7 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
     }
 
     public void ClearList() {
+        mLastPosition = -1;
         aItemList.clear();
     }
 
