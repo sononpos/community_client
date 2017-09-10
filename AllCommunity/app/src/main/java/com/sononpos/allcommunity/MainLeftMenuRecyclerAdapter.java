@@ -62,10 +62,12 @@ public class MainLeftMenuRecyclerAdapter extends RecyclerView.Adapter<MainLeftMe
     protected void SetItemColor(final LeftMenuItemViewHolder holder) {
         if(G.IsFilteredKey(holder.mBind.getItem().sKey)) {
             holder.mBind.tvName.setTextColor(ContextCompat.getColor(holder.mBind.getRoot().getContext(), R.color.disabledTextColor));
+            holder.mBind.btnDirectGo.setImageResource(R.drawable.shortcut_disabled_icon);
             holder.mBind.btnDirectGo.setEnabled(false);
         }
         else {
             holder.mBind.tvName.setTextColor(ContextCompat.getColor(holder.mBind.getRoot().getContext(), R.color.mainTextColor));
+            holder.mBind.btnDirectGo.setImageResource(R.drawable.shortcut_icon);
             holder.mBind.btnDirectGo.setEnabled(true);
         }
     }

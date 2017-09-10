@@ -73,7 +73,7 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
                 Context context = holderInner.mBind.getRoot().getContext();
                 holderInner.mBind.artTitle.setTextColor(ContextCompat.getColor(context, R.color.disabledTextColor));
                 Log.e("ClickedItem", holderInner.mBind.getItem().m_sJsonString);
-                Intent intent = new Intent(holderInner.mBind.getRoot().getContext(), CommunityArticle.class);
+                Intent intent = new Intent(holderInner.mBind.getRoot().getContext(), CommunityArticleActivity.class);
                 intent.putExtra("URL", holderInner.mBind.getItem().m_sLink);
                 intent.putExtra("TITLE", holderInner.mBind.getItem().m_sTitle);
                 holderInner.mBind.getRoot().getContext().startActivity(intent);

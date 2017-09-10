@@ -14,6 +14,19 @@ import java.util.ArrayList;
  */
 
 public class StorageHelper {
+    public static void setPref(Context context , String sKey, String sValue) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(sKey, sValue);
+        editor.apply();
+    }
+
+    public static String getPref(Context context , String sKey) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String sVal = prefs.getString(sKey, "");
+        return sVal;
+    }
+
     public static void setArrayPref(Context context , String sKey, ArrayList<?> values){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();

@@ -8,10 +8,12 @@
         <item name="colorAccent">@color/colorCustom</item>
     </style>
 
-    <style name="AppTheme_For_Settings" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme_For_Settings" parent="Theme.AppCompat.DayNight">
+    <!-- Customize your theme here. -->
         <item name="colorAccent">@color/mainColor</item>
-        <item name="android:background">@color/subTextColor</item>
+        <item name="android:textColorPrimary">@color/mainTextColor</item>
+        <item name="android:textColor">@color/mainTextColor</item>
+        <item name="android:background">@color/settings_back</item>
     </style>
 
     <style name="AppTheme.Icon">

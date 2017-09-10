@@ -136,9 +136,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRewarded(RewardItem rewardItem) {
                 Log.i("RewardAds", "onRewarded");
-                mBind.fabItemHideAdmob.setEnabled(false);
-                mBind.adViewMain.destroy();
-                mBind.adViewMain.setVisibility(View.GONE);
+                G.adsTimeChecker.SaveNow(getApplicationContext());
+                DestroyAds();
                 mBind.faMenu.close(true);
             }
 
@@ -153,6 +152,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         mRewardAd.loadAd(getString(R.string.reward_ad_unit_id_test), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+
+        if(!G.adsTimeChecker.IsTimeout(getApplicationContext())) {
+            DestroyAds();
+        }
     }
 
     protected void setupTabs() {
@@ -229,6 +232,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    protected void DestroyAds() {
+        mBind.fabItemHideAdmob.setEnabled(false);
+        mBind.adViewMain.destroy();
+        mBind.adViewMain.setVisibility(View.GONE);
     }
 
     public void onBtnLeftMenuOpen(View view) {

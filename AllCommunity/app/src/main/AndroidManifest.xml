@@ -28,7 +28,7 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
         <activity
-            android:name="com.sononpos.allcommunity.CommunityArticle"
+            android:name="com.sononpos.allcommunity.CommunityArticleActivity"
             android:label="@string/title_activity_community_article"
             android:screenOrientation="portrait" />
         <activity

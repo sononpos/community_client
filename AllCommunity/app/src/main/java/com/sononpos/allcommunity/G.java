@@ -3,13 +3,17 @@ package com.sononpos.allcommunity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 import com.sononpos.allcommunity.Funtional.StorageHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -30,6 +34,7 @@ public class G {
     public static final String FIRST_USE = "FirstUse";
 
     public static HashSet<Integer> liReadArticleCheck = new HashSet<>();
+    protected static AdsTimeChecker adsTimeChecker = new AdsTimeChecker();
 
     public static boolean IsFirstUse(Context context) {        /*
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -157,5 +162,41 @@ public class G {
         liReadArticleCheck.add(hash);
         ArrayList<Integer> a = new ArrayList<>(liReadArticleCheck);
         StorageHelper.setArrayPref(context, KEY_READED_ARTICLES, a);
+    }
+
+    public static class AdsTimeChecker {
+        public static final String KEY_ADS_TIME_CHECKER = "AdsTimeCheck";
+        public static final long DIFF_LIMIT_HOUR = 6;
+        public void SaveNow(Context context) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault());
+            long now = System.currentTimeMillis();
+            Date date = new Date(now);
+            String strDate = dateFormat.format(date);
+            StorageHelper.setPref(context, KEY_ADS_TIME_CHECKER, strDate);
+        }
+
+        public boolean IsTimeout(Context context) {
+            String sDate = StorageHelper.getPref(context, KEY_ADS_TIME_CHECKER);
+            if(TextUtils.isEmpty(sDate)) {
+                return true;
+            }
+
+            SimpleDateFormat dateFormat = new  SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault());
+            try {
+                Date dateSaved = dateFormat.parse(sDate);
+                long now = System.currentTimeMillis();
+                Date dateNow = new Date(now);
+                long diff = dateNow.getTime() - dateSaved.getTime();
+                long diffHour = diff / (60 * 60 * 1000);
+                if(DIFF_LIMIT_HOUR <= diffHour) {
+                    return true;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return true;
+            }
+
+            return false;
+        }
     }
 }

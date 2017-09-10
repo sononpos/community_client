@@ -16,17 +16,22 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.sononpos.allcommunity.AlertManager.AlertManager;
 import com.sononpos.allcommunity.databinding.ActivityCommunityArticleBinding;
 
 import im.delight.android.webview.AdvancedWebView;
 
-public class CommunityArticle extends AppCompatActivity implements AdvancedWebView.Listener {
+public class CommunityArticleActivity extends AppCompatActivity implements AdvancedWebView.Listener {
 
     ActivityCommunityArticleBinding mBind;
     private String url;
     private String title;
     AlertDialog.Builder builder;
+    private RewardedVideoAd mRewardAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +134,7 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
         boolean bTutorial = pref.getBoolean(G.KEY_TUTORIAL_COMPLETE , false);
 
         if(!bTutorial) {
-            AlertManager.ShowOk(CommunityArticle.this, "튜토리얼 설명", "좌에서 우 슬라이드 : 닫기", "닫기", new DialogInterface.OnClickListener() {
+            AlertManager.ShowOk(CommunityArticleActivity.this, "튜토리얼 설명", "좌에서 우 슬라이드 : 닫기", "닫기", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     SharedPreferences pref_inner = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -165,9 +170,57 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
     protected void setupAds() {
         // Load an ad into the AdMob banner view.
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
+                .addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521")
                 .build();
         mBind.adViewWeb.loadAd(adRequest);
+
+        mRewardAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
+            @Override
+            public void onRewardedVideoAdLoaded() {
+                Log.i("RewardAds", "onRewardedVideoAdLoaded");
+            }
+
+            @Override
+            public void onRewardedVideoAdOpened() {
+                Log.i("RewardAds", "onRewardedVideoAdOpened");
+            }
+
+            @Override
+            public void onRewardedVideoStarted() {
+                Log.i("RewardAds", "onRewardedVideoStarted");
+                mBind.faMenu.close(true);
+            }
+
+            @Override
+            public void onRewardedVideoAdClosed() {
+                Log.i("RewardAds", "onRewardedVideoAdClosed");
+                mRewardAd.loadAd(getString(R.string.reward_ad_unit_id_test), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+            }
+
+            @Override
+            public void onRewarded(RewardItem rewardItem) {
+                Log.i("RewardAds", "onRewarded");
+                G.adsTimeChecker.SaveNow(getApplicationContext());
+                DestroyAds();
+                mBind.faMenu.close(true);
+            }
+
+            @Override
+            public void onRewardedVideoAdLeftApplication() {
+                Log.i("RewardAds", "onRewardedVideoAdLeftApplication");
+            }
+
+            @Override
+            public void onRewardedVideoAdFailedToLoad(int i) {
+                Log.i("RewardAds", "onRewardedVideoAdFailedToLoad : " + i);
+            }
+        });
+        mRewardAd.loadAd(getString(R.string.reward_ad_unit_id_test), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+
+        if(!G.adsTimeChecker.IsTimeout(getApplicationContext())) {
+            DestroyAds();
+        }
     }
 
     protected void setupFAB() {
@@ -184,6 +237,15 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
                 mBind.faMenu.close(false);
             }
         });
+
+        mBind.fabItemHideAdmob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mRewardAd.isLoaded()) {
+                    mRewardAd.show();
+                }
+            }
+        });
     }
 
     protected void loadURL() {
@@ -191,5 +253,11 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
         url = intent.getStringExtra("URL");
         title = intent.getStringExtra("TITLE");
         mBind.webview.loadUrl(url);
+    }
+
+    protected void DestroyAds() {
+        mBind.fabItemHideAdmob.setEnabled(false);
+        mBind.adViewWeb.destroy();
+        mBind.adViewWeb.setVisibility(View.GONE);
     }
 }
