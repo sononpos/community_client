@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.TextView;
 
 import com.sononpos.allcommunity.databinding.ArticleItemBinding;
 
@@ -64,10 +65,13 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
             item.m_sRegDate = "nodate";
         }
         holder.mBind.setItem(item);
-        //holder.mBind.artTitle.setText(item.m_sTitle);
+        final TextView tv = holder.mBind.artTitle;
         int nHashcode = item.m_sTitle.hashCode();
         if(G.IsReaded(nHashcode)) {
-            holder.mBind.artTitle.setTextColor(ContextCompat.getColor(holder.mBind.getRoot().getContext(), R.color.disabledTextColor));
+            tv.setTextColor(ContextCompat.getColor(tv.getContext(), R.color.disabledTextColor));
+        }
+        else {
+            tv.setTextColor(ContextCompat.getColor(tv.getContext(), R.color.mainTextColor));
         }
 
         holder.mBind.getRoot().setOnClickListener(new View.OnClickListener() {
@@ -84,7 +88,6 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
             }
         });
 
-
         int adapterPosition = holder.getAdapterPosition();
         if (!isFirstOnly || adapterPosition > mLastPosition) {
             Animator anim = ObjectAnimator.ofFloat(holder.itemView, "alpha", 0.5f, 1f);
@@ -99,7 +102,9 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
 
     @Override
     public long getItemId(int position) {
-        return aItemList.get(position).m_sTitle.toString().hashCode();
+        int hashcode = aItemList.get(position).m_sTitle.toString().hashCode();
+        Log.d("getItemId", "Pos : " + position + ", hash : " + hashcode);
+        return hashcode;
     }
 
     @Override
