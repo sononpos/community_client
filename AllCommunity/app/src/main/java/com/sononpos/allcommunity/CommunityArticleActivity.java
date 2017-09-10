@@ -231,10 +231,10 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
             }
         });
         if(BuildConfig.DEBUG) {
-            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id_test), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
         }
         else {
-            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id_test), new AdRequest.Builder().build());
+            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().build());
         }
 
         if(!G.adsTimeChecker.IsTimeout(getApplicationContext())) {
