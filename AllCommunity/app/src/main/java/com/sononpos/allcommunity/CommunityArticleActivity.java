@@ -74,28 +74,30 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
 
     @Override
     public void onPageStarted(String url, Bitmap favicon) {
-        Log.e("WEB_ERROR", "onPageStarted : " + url);
+        Log.i("CAAWebView", "onPageStarted : " + url);
     }
 
     @Override
     public void onPageFinished(String url) {
-        Log.e("WEB_ERROR", "onPageFinished : " + url);
+        Log.i("CAAWebView", "onPageFinished : " + url);
     }
 
     @Override
     public void onPageError(int errorCode, String description, String failingUrl) {
-        Log.e("WEB_ERROR", "onPageError");
+        Log.i("CAAWebView", "onPageError" + url);
     }
 
     @Override
     public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) {
-
+        Log.i("CAAWebView", "onDownloadRequested : " + url);
     }
 
     @Override
     public void onExternalPageRequest(String url) {
-        Log.e("WEB_ERROR", "onExternalPageRequest");
+        Log.i("CAAWebView", "onExternalPageRequest : " + url);
     }
+
+
 
     protected void setupWebView() {
         mBind.webview.setListener(this, this);
@@ -169,10 +171,17 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
 
     protected void setupAds() {
         // Load an ad into the AdMob banner view.
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521")
-                .build();
-        mBind.adViewWeb.loadAd(adRequest);
+        if(BuildConfig.DEBUG) {
+            AdRequest adRequest = new AdRequest.Builder()
+                    .addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521")
+                    .build();
+            mBind.adViewWeb.loadAd(adRequest);
+        }
+        else {
+            AdRequest adRequest = new AdRequest.Builder()
+                    .build();
+            mBind.adViewWeb.loadAd(adRequest);
+        }
 
         mRewardAd = MobileAds.getRewardedVideoAdInstance(this);
         mRewardAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
@@ -195,7 +204,12 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
             @Override
             public void onRewardedVideoAdClosed() {
                 Log.i("RewardAds", "onRewardedVideoAdClosed");
-                mRewardAd.loadAd(getString(R.string.reward_ad_unit_id_test), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+                if(BuildConfig.DEBUG) {
+                    mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+                }
+                else {
+                    mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().build());
+                }
             }
 
             @Override
@@ -216,7 +230,12 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
                 Log.i("RewardAds", "onRewardedVideoAdFailedToLoad : " + i);
             }
         });
-        mRewardAd.loadAd(getString(R.string.reward_ad_unit_id_test), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+        if(BuildConfig.DEBUG) {
+            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id_test), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+        }
+        else {
+            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id_test), new AdRequest.Builder().build());
+        }
 
         if(!G.adsTimeChecker.IsTimeout(getApplicationContext())) {
             DestroyAds();
@@ -241,9 +260,27 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
         mBind.fabItemHideAdmob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mRewardAd.isLoaded()) {
-                    mRewardAd.show();
-                }
+                AlertManager.ShowYesNo(CommunityArticleActivity.this, "알림", "영상 광고를 다 보시면 6시간 동안 배너광고가 제거됩니다.", "본다", "됐네요",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch(which) {
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                    {
+                                        if(mRewardAd.isLoaded()) {
+                                            mRewardAd.show();
+                                        }
+                                    }
+                                        break;
+
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                    {
+
+                                    }
+                                        break;
+                                }
+                            }
+                        });
             }
         });
     }

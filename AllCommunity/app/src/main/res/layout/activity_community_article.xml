@@ -51,7 +51,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="@dimen/fab_margin_bottom"
         android:layout_marginRight="@dimen/fab_margin"
-        fab:menu_colorNormal="@color/subTextColor"
+        fab:menu_colorNormal="@color/mainColor"
         >
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_item_share"

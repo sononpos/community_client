@@ -31,27 +31,10 @@ public class G {
     public static final String KEY_SHOW_RECENT= "list_show_recent";
     public static final String KEY_TUTORIAL_COMPLETE = "tutorial_complete";
     public static final String KEY_READED_ARTICLES = "ReadedArticles";
-    public static final String FIRST_USE = "FirstUse";
 
     public static HashSet<Integer> liReadArticleCheck = new HashSet<>();
     protected static AdsTimeChecker adsTimeChecker = new AdsTimeChecker();
-
-    public static boolean IsFirstUse(Context context) {        /*
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean bFirstUse = prefs.getBoolean(FIRST_USE, true);
-        return bFirstUse;
-        */
-        return false;
-    }
-
-    public static void SetFirstUse(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(FIRST_USE, false);
-        editor.apply();
-    }
-
-
+    public static Options options = new Options();
 
     public static void LoadCommunityList(String response) {
         JSONObject jobj = null;
@@ -162,6 +145,23 @@ public class G {
         liReadArticleCheck.add(hash);
         ArrayList<Integer> a = new ArrayList<>(liReadArticleCheck);
         StorageHelper.setArrayPref(context, KEY_READED_ARTICLES, a);
+    }
+
+    public static class Options {
+        public static final String TUTORIAL_END = "TutorialEnd";
+
+        public static boolean IsTutorialEnd(Context context) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean bEnd = prefs.getBoolean(TUTORIAL_END, false);
+            return bEnd;
+        }
+
+        public static void SetTutorialEnd(Context context) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(TUTORIAL_END, true);
+            editor.apply();
+        }
     }
 
     public static class AdsTimeChecker {

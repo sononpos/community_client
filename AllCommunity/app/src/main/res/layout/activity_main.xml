@@ -85,6 +85,7 @@
         ads:adSize="BANNER"
         ads:adUnitId="@string/banner_ad_unit_id"
         />
+
     </RelativeLayout>
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/fa_menu"
@@ -93,7 +94,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="@dimen/fab_margin_bottom"
         android:layout_marginRight="@dimen/fab_margin"
-        fab:menu_colorNormal="@color/subTextColor"
+        fab:menu_colorNormal="@color/mainColor"
         >
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_item_settings"
@@ -110,5 +111,14 @@
             fab:fab_colorNormal="@color/subTextColor"
             />
     </com.github.clans.fab.FloatingActionMenu>
+    <ImageView
+        android:id="@+id/tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/tutorial1"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="#bb000000"
+        />
 </android.support.design.widget.CoordinatorLayout >
 </layout>

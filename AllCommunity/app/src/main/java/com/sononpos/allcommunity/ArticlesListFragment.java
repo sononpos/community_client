@@ -28,7 +28,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 
 import com.sononpos.allcommunity.Funtional.ArticleParsingHelper;
@@ -39,9 +38,6 @@ import com.sononpos.allcommunity.databinding.FragmentCommlistBinding;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
-import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
-
 public class ArticlesListFragment extends Fragment implements HttpHelperListener, SwipeRefreshLayout.OnRefreshListener {
     FragmentCommlistBinding mBind;
     HttpHelper httpHelper;
@@ -49,8 +45,13 @@ public class ArticlesListFragment extends Fragment implements HttpHelperListener
     ArticleLoadInfo loadInfo = new ArticleLoadInfo();
     int m_nPosition;
 
-    public ArticlesListFragment(int _nPosition) {
-        m_nPosition = _nPosition;
+    public ArticlesListFragment() {}
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        m_nPosition = getArguments().getInt("POS");
     }
 
     @Override

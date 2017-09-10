@@ -103,7 +103,6 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
     @Override
     public long getItemId(int position) {
         int hashcode = aItemList.get(position).m_sTitle.toString().hashCode();
-        Log.d("getItemId", "Pos : " + position + ", hash : " + hashcode);
         return hashcode;
     }
 

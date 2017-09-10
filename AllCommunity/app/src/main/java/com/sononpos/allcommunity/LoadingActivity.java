@@ -1,5 +1,6 @@
 package com.sononpos.allcommunity;
 
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -49,19 +50,22 @@ public class LoadingActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            // 첫번째 실행이면 FirstSetting으로
-            if(G.IsFirstUse(getApplicationContext())){
-                //G.SetFirstUse();    //  이후부터는 첫번째 실행이 아니게 된다
+            G.RefreshFilteredInfo();
+
+            Intent intent = new Intent(mainActivity, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                Bundle bndlanimation =
+                        ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.anim1,R.anim.anim2).toBundle();
+                startActivity(intent, bndlanimation);
             }
             else {
-                G.RefreshFilteredInfo();
-
-                Intent intent = new Intent(mainActivity, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
             }
+
+
         }
     }
 

@@ -1,5 +1,6 @@
 package com.sononpos.allcommunity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
@@ -14,6 +15,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
+import com.sononpos.allcommunity.AlertManager.AlertManager;
 import com.sononpos.allcommunity.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -99,10 +102,17 @@ public class MainActivity extends AppCompatActivity {
     protected void setupAd() {
         //  실제 서비스가 시작되면 주석 제거
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3598320494828213~8676238288");
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521")
-                .build();  // An example device ID
-        mBind.adViewMain.loadAd(adRequest);
+        if(BuildConfig.DEBUG) {
+            AdRequest adRequest = new AdRequest.Builder()
+                    .addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521")
+                    .build();  // An example device ID
+            mBind.adViewMain.loadAd(adRequest);
+        }
+        else {
+            AdRequest adRequest = new AdRequest.Builder()
+                    .build();
+            mBind.adViewMain.loadAd(adRequest);
+        }
 
         //  전면광고 초기화
         mInterstitialAd = new InterstitialAd(this);
@@ -130,7 +140,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRewardedVideoAdClosed() {
                 Log.i("RewardAds", "onRewardedVideoAdClosed");
-                mRewardAd.loadAd(getString(R.string.reward_ad_unit_id_test), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+                if(BuildConfig.DEBUG) {
+                    mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+                }
+                else {
+                    mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().build());
+                }
             }
 
             @Override
@@ -151,7 +166,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("RewardAds", "onRewardedVideoAdFailedToLoad : " + i);
             }
         });
-        mRewardAd.loadAd(getString(R.string.reward_ad_unit_id_test), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+        if(BuildConfig.DEBUG) {
+            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id_test), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+        }
+        else {
+            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id_test), new AdRequest.Builder().build());
+        }
 
         if(!G.adsTimeChecker.IsTimeout(getApplicationContext())) {
             DestroyAds();
@@ -161,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
     protected void setupTabs() {
         mBind.pager.setAdapter(new CommListPagerAdapter(getSupportFragmentManager()));
         mBind.tabs.setViewPager(mBind.pager);
+        mBind.tabs.setIndicatorColorResource(R.color.mainColor);
     }
 
     protected  void setupFAB() {
@@ -185,9 +206,27 @@ public class MainActivity extends AppCompatActivity {
         mBind.fabItemHideAdmob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mRewardAd.isLoaded()) {
-                    mRewardAd.show();
-                }
+                AlertManager.ShowYesNo(MainActivity.this, "알림", "영상 광고를 다 보시면 6시간 동안 배너광고가 제거됩니다.", "본다", "됐네요",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch(which) {
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                    {
+                                        if(mRewardAd.isLoaded()) {
+                                            mRewardAd.show();
+                                        }
+                                    }
+                                    break;
+
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                    {
+
+                                    }
+                                    break;
+                                }
+                            }
+                        });
             }
         });
 
@@ -208,6 +247,21 @@ public class MainActivity extends AppCompatActivity {
         mBind.leftlistview.setHasFixedSize(true);
         mBind.leftlistview.setLayoutManager(new LinearLayoutManager(mBind.getRoot().getContext()));
         mBind.leftlistview.setAdapter(new MainLeftMenuRecyclerAdapter(mBind));
+        mBind.leftlistview.addItemDecoration(new SimpleDividerItemDecoration(mBind.getRoot().getContext()));
+        if(!G.options.IsTutorialEnd(getApplicationContext())) {
+            mBind.tutorial.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    mBind.tutorial.setVisibility(View.GONE);
+                    G.options.SetTutorialEnd(getApplicationContext());
+                    return true;
+                }
+            });
+        }
+        else {
+            mBind.tutorial.setVisibility(View.GONE);
+        }
+
         mBind.drawer.addDrawerListener(new ActionBarDrawerToggle(this, mBind.drawer,R.string.app_name, R.string.app_name) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -257,7 +311,11 @@ class CommListPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return new ArticlesListFragment(position);
+        Fragment f = new ArticlesListFragment();
+        Bundle b = new Bundle();
+        b.putInt("POS", position);
+        f.setArguments(b);
+        return f;
     }
 
     @Override
