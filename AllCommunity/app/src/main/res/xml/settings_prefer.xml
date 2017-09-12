@@ -2,21 +2,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="앱 정보">
         <Preference
-            android:key="app_recommand"
-            android:title="앱 평가하기"
-            />
-
-        <Preference
             android:key="ver"
             android:title="버전 정보"
             android:summary="1.0"
             />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="개발자 도와주기">
+    <PreferenceCategory android:title="개발자에게 기부하기">
         <Preference
             android:key="donate_coffee"
-            android:title="커피 한잔"
+            android:title="커피 한잔 쏘기"
             />
     </PreferenceCategory>
 </PreferenceScreen>

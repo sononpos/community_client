@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setupTabs();        // 상단 탭
         setupFAB();         // 플로팅 버튼 설정
         setupLeftMenu();    // 왼쪽 메뉴
+        setupStatusBar();   // 최상단 상태바
     }
 
     @Override
@@ -140,12 +144,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRewardedVideoAdClosed() {
                 Log.i("RewardAds", "onRewardedVideoAdClosed");
-                if(BuildConfig.DEBUG) {
-                    mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
-                }
-                else {
-                    mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().build());
-                }
+                AlertManager.ShowOk(MainActivity.this, "알림", "광고영상을 끝까지 보셔야 배너광고가 제거 됩니다.", "네", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(BuildConfig.DEBUG) {
+                            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+                        }
+                        else {
+                            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().build());
+                        }
+                    }
+                });
             }
 
             @Override
@@ -159,11 +168,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRewardedVideoAdLeftApplication() {
                 Log.i("RewardAds", "onRewardedVideoAdLeftApplication");
+                mBind.faMenu.close(true);
             }
 
             @Override
             public void onRewardedVideoAdFailedToLoad(int i) {
                 Log.i("RewardAds", "onRewardedVideoAdFailedToLoad : " + i);
+                mBind.faMenu.close(true);
             }
         });
         if(BuildConfig.DEBUG) {
@@ -286,6 +297,20 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    protected void setupStatusBar() {
+        Window window = getWindow();
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(ContextCompat.getColor(this,R.color.mainColor));
+        }
     }
 
     protected void DestroyAds() {

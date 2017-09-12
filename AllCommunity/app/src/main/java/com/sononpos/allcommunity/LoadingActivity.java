@@ -5,13 +5,18 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.sononpos.allcommunity.AlertManager.AlertManager;
@@ -131,6 +136,7 @@ public class LoadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mBind = DataBindingUtil.setContentView(this, R.layout.activity_loading);
         getSupportActionBar().hide();
+        setupStatusBar();
         FirebaseInstanceId.getInstance().getToken();
         CheckUpdate();
     }
@@ -138,13 +144,13 @@ public class LoadingActivity extends AppCompatActivity {
     private void CheckUpdate() {
         handlerUpdate = new CheckUpdateHandler();
 
-        /*
         new Thread(new Runnable() {
             @Override
             public void run() {
                 Message msg = handlerUpdate.obtainMessage();
                 try {
                     String device_version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+                    G.deviceVer = device_version;
                     int nState = MarketVersionChecker.getVersionState(device_version);
                     msg.arg1 = nState;
                     handlerUpdate.sendMessage(msg);
@@ -155,10 +161,6 @@ public class LoadingActivity extends AppCompatActivity {
                 }
             }
         }).start();
-        */
-
-        Message completeMsg = handlerUpdate.obtainMessage(0);
-        completeMsg.sendToTarget();
     }
 
     private void LoadCommunityList() {
@@ -207,5 +209,19 @@ public class LoadingActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+    }
+
+    protected void setupStatusBar() {
+        Window window = getWindow();
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(ContextCompat.getColor(this,R.color.mainColor));
+        }
     }
 }

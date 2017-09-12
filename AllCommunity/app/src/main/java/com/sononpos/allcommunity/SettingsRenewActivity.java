@@ -5,17 +5,21 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
@@ -57,6 +61,7 @@ public class SettingsRenewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsRenewFragment()).commit();
         getSupportActionBar().setTitle("설정");
+        setupStatusBar();
 
         //  인앱 결제 초기화
         Intent serviceIntent =
@@ -107,6 +112,8 @@ public class SettingsRenewActivity extends AppCompatActivity {
                 });
             }
 
+            Preference pfVer = (Preference)findPreference("ver");
+            pfVer.setSummary(G.deviceVer);
             return v;
         }
     }
@@ -170,4 +177,18 @@ public class SettingsRenewActivity extends AppCompatActivity {
             }
         }
     };
+
+    protected void setupStatusBar() {
+        Window window = getWindow();
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(ContextCompat.getColor(this,R.color.mainColor));
+        }
+    }
 }

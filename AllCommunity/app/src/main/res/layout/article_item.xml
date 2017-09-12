@@ -10,7 +10,7 @@
     </data>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:gravity="center_vertical"
         android:clipToPadding="false"
         android:orientation="horizontal"
@@ -23,9 +23,8 @@
             android:orientation="horizontal"
             >
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="72"
                 android:orientation="vertical"
                 >
                 <TextView
@@ -33,8 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="7"
-                    android:text="@{item.m_sTitle}"
-                    tools:text="View animations sample"
+                    tools:text="Title text sample"
                     android:gravity="center_vertical"
                     style="@style/AppTheme.TextView"
                     />
@@ -65,33 +63,6 @@
                         style="@style/AppTheme.TextView2"
                         />
                 </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="28"
-                >
-                <TextView
-                    android:id="@+id/art_views"
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="0dp"
-                    android:text="@{item.m_sViewCnt}"
-                    tools:text="200"
-                    android:gravity="center"
-                    android:textColor="#000000"
-                    />
-                <TextView
-                    android:id="@+id/art_comment"
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="0dp"
-                    android:text="@{item.m_sCommentCnt}"
-                    tools:text="200"
-                    android:gravity="center"
-                    android:textColor="#ff0000"
-                    />
             </LinearLayout>
         </LinearLayout>
 

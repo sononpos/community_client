@@ -6,11 +6,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -42,6 +46,7 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
         setupOptions();
         setupAds();
         setupFAB();
+        setupStatusBar();
         loadURL();
     }
 
@@ -296,5 +301,19 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
         mBind.fabItemHideAdmob.setEnabled(false);
         mBind.adViewWeb.destroy();
         mBind.adViewWeb.setVisibility(View.GONE);
+    }
+
+    protected void setupStatusBar() {
+        Window window = getWindow();
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(ContextCompat.getColor(this,R.color.mainColor));
+        }
     }
 }

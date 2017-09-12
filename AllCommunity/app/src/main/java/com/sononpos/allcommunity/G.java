@@ -31,6 +31,7 @@ public class G {
     public static final String KEY_SHOW_RECENT= "list_show_recent";
     public static final String KEY_TUTORIAL_COMPLETE = "tutorial_complete";
     public static final String KEY_READED_ARTICLES = "ReadedArticles";
+    public static String deviceVer = "1.0";
 
     public static HashSet<Integer> liReadArticleCheck = new HashSet<>();
     protected static AdsTimeChecker adsTimeChecker = new AdsTimeChecker();
