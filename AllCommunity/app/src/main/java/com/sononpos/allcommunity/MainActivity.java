@@ -36,6 +36,57 @@ public class MainActivity extends AppCompatActivity {
     private InterstitialAd mInterstitialAd;
     private RewardedVideoAd mRewardAd;
     private boolean exit = false;
+    private RewardedVideoAdListener RewardListener = new RewardedVideoAdListener() {
+        @Override
+        public void onRewardedVideoAdLoaded() {
+            Log.i("RewardAds", "onRewardedVideoAdLoaded");
+            mBind.fabItemHideAdmob.setEnabled(true);
+        }
+
+        @Override
+        public void onRewardedVideoAdOpened() {
+            Log.i("RewardAds", "onRewardedVideoAdOpened");
+        }
+
+        @Override
+        public void onRewardedVideoStarted() {
+            Log.i("RewardAds", "onRewardedVideoStarted");
+            mBind.faMenu.close(true);
+        }
+
+        @Override
+        public void onRewardedVideoAdClosed() {
+            Log.i("RewardAds", "onRewardedVideoAdClosed");
+            AlertManager.ShowOk(MainActivity.this, "알림", "광고영상을 끝까지 보셔야 배너광고가 제거 됩니다.", "네", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ReloadAds();
+                }
+            });
+        }
+
+        @Override
+        public void onRewarded(RewardItem rewardItem) {
+            Log.i("RewardAds", "onRewarded");
+            G.adsTimeChecker.SaveNow(getApplicationContext());
+            DestroyAds();
+            mBind.faMenu.close(true);
+        }
+
+        @Override
+        public void onRewardedVideoAdLeftApplication() {
+            Log.i("RewardAds", "onRewardedVideoAdLeftApplication");
+            mBind.faMenu.close(true);
+            ReloadAds();
+        }
+
+        @Override
+        public void onRewardedVideoAdFailedToLoad(int i) {
+            Log.i("RewardAds", "onRewardedVideoAdFailedToLoad : " + i);
+            mBind.faMenu.close(true);
+            mBind.fabItemHideAdmob.setEnabled(false);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +108,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if( G.GetCommunityList(false).size() <= 0 ) {
-            G.ReloadCommunityListFromSharedPref(getApplicationContext());
+        Log.i("MainActivity", "onResume");
+        if(G.adsTimeChecker.IsTimeout(getApplicationContext())) {
+            ReloadAds();
         }
 
         if(mBind.adViewMain != null) {
@@ -124,59 +176,8 @@ public class MainActivity extends AppCompatActivity {
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
         mRewardAd = MobileAds.getRewardedVideoAdInstance(this);
-        mRewardAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
-            @Override
-            public void onRewardedVideoAdLoaded() {
-                Log.i("RewardAds", "onRewardedVideoAdLoaded");
-            }
+        mRewardAd.setRewardedVideoAdListener(RewardListener);
 
-            @Override
-            public void onRewardedVideoAdOpened() {
-                Log.i("RewardAds", "onRewardedVideoAdOpened");
-            }
-
-            @Override
-            public void onRewardedVideoStarted() {
-                Log.i("RewardAds", "onRewardedVideoStarted");
-                mBind.faMenu.close(true);
-            }
-
-            @Override
-            public void onRewardedVideoAdClosed() {
-                Log.i("RewardAds", "onRewardedVideoAdClosed");
-                AlertManager.ShowOk(MainActivity.this, "알림", "광고영상을 끝까지 보셔야 배너광고가 제거 됩니다.", "네", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if(BuildConfig.DEBUG) {
-                            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
-                        }
-                        else {
-                            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().build());
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onRewarded(RewardItem rewardItem) {
-                Log.i("RewardAds", "onRewarded");
-                G.adsTimeChecker.SaveNow(getApplicationContext());
-                DestroyAds();
-                mBind.faMenu.close(true);
-            }
-
-            @Override
-            public void onRewardedVideoAdLeftApplication() {
-                Log.i("RewardAds", "onRewardedVideoAdLeftApplication");
-                mBind.faMenu.close(true);
-            }
-
-            @Override
-            public void onRewardedVideoAdFailedToLoad(int i) {
-                Log.i("RewardAds", "onRewardedVideoAdFailedToLoad : " + i);
-                mBind.faMenu.close(true);
-            }
-        });
         if(BuildConfig.DEBUG) {
             mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
         }
@@ -192,7 +193,6 @@ public class MainActivity extends AppCompatActivity {
     protected void setupTabs() {
         mBind.pager.setAdapter(new CommListPagerAdapter(getSupportFragmentManager()));
         mBind.tabs.setViewPager(mBind.pager);
-        mBind.tabs.setIndicatorColorResource(R.color.mainColor);
     }
 
     protected  void setupFAB() {
@@ -317,6 +317,30 @@ public class MainActivity extends AppCompatActivity {
         mBind.fabItemHideAdmob.setEnabled(false);
         mBind.adViewMain.destroy();
         mBind.adViewMain.setVisibility(View.GONE);
+    }
+
+    protected void ReloadAds() {
+        if(BuildConfig.DEBUG) {
+            AdRequest adRequest = new AdRequest.Builder()
+                    .addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521")
+                    .build();  // An example device ID
+            mBind.adViewMain.loadAd(adRequest);
+        }
+        else {
+            AdRequest adRequest = new AdRequest.Builder()
+                    .build();
+            mBind.adViewMain.loadAd(adRequest);
+        }
+
+        mRewardAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardAd.setRewardedVideoAdListener(RewardListener);
+
+        if(BuildConfig.DEBUG) {
+            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+        }
+        else {
+            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().build());
+        }
     }
 
     public void onBtnLeftMenuOpen(View view) {

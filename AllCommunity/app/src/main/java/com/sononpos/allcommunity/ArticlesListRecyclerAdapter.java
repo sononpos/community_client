@@ -26,8 +26,6 @@ import com.sononpos.allcommunity.databinding.ArticleItemBinding;
 
 import java.util.ArrayList;
 
-import jp.wasabeef.recyclerview.internal.ViewHelper;
-
 /**
  * Created by nnnyyy on 2017-09-05.
  */
@@ -115,8 +113,6 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
             anim.setDuration(mDuration).start();
             anim.setInterpolator(mInterpolator);
             mLastPosition = adapterPosition;
-        } else {
-            ViewHelper.clear(holder.itemView);
         }
 
     }
