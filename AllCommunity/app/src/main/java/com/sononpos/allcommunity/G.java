@@ -189,6 +189,9 @@ public class G {
                 Date dateNow = new Date(now);
                 long diff = dateNow.getTime() - dateSaved.getTime();
                 long diffHour = diff / (60 * 60 * 1000);
+                if( BuildConfig.DEBUG ) {
+                    diffHour = diff / (60 * 1000);  // 디버그일 때는 분으로
+                }
                 if(DIFF_LIMIT_HOUR <= diffHour) {
                     return true;
                 }

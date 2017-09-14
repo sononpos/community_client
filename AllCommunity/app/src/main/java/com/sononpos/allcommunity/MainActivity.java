@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding mBind;
     private InterstitialAd mInterstitialAd;
     private RewardedVideoAd mRewardAd;
+    private boolean bAdRemoved = false;
     private boolean exit = false;
     private RewardedVideoAdListener RewardListener = new RewardedVideoAdListener() {
         @Override
@@ -57,12 +58,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onRewardedVideoAdClosed() {
             Log.i("RewardAds", "onRewardedVideoAdClosed");
-            AlertManager.ShowOk(MainActivity.this, "알림", "광고영상을 끝까지 보셔야 배너광고가 제거 됩니다.", "네", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ReloadAds();
-                }
-            });
+            LoadRewardedVideoAd();
         }
 
         @Override
@@ -83,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onRewardedVideoAdFailedToLoad(int i) {
             Log.i("RewardAds", "onRewardedVideoAdFailedToLoad : " + i);
-            mBind.faMenu.close(true);
             mBind.fabItemHideAdmob.setEnabled(false);
+            mBind.fabItemHideAdmob.refreshDrawableState();
         }
     };
 
@@ -94,11 +90,11 @@ public class MainActivity extends AppCompatActivity {
         mBind = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mBind.setActivity(this);
             getSupportActionBar().hide();
-        setupAd();          // 광고
         setupTabs();        // 상단 탭
         setupFAB();         // 플로팅 버튼 설정
         setupLeftMenu();    // 왼쪽 메뉴
         setupStatusBar();   // 최상단 상태바
+        setupAd();          // 광고
     }
 
     @Override
@@ -109,13 +105,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         Log.i("MainActivity", "onResume");
-        if(G.adsTimeChecker.IsTimeout(getApplicationContext())) {
-            ReloadAds();
-        }
 
         if(mBind.adViewMain != null) {
             mBind.adViewMain.resume();
             mBind.adViewMain.refreshDrawableState();
+        }
+
+        mRewardAd.resume(this);
+
+        if(bAdRemoved && G.adsTimeChecker.IsTimeout(this)) {
+            ReloadAds();
+            bAdRemoved = false;
+        }
+        else if(!G.adsTimeChecker.IsTimeout(this)) {
+            DestroyAds();
         }
 
         super.onResume();
@@ -126,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
         if(mBind.adViewMain != null) {
             mBind.adViewMain.pause();
         }
+
+        mRewardAd.pause(this);
         super.onPause();
     }
 
@@ -134,6 +139,8 @@ public class MainActivity extends AppCompatActivity {
         if(mBind.adViewMain != null) {
             mBind.adViewMain.destroy();
         }
+
+        mRewardAd.destroy(this);
         super.onDestroy();
     }
 
@@ -178,14 +185,9 @@ public class MainActivity extends AppCompatActivity {
         mRewardAd = MobileAds.getRewardedVideoAdInstance(this);
         mRewardAd.setRewardedVideoAdListener(RewardListener);
 
-        if(BuildConfig.DEBUG) {
-            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
-        }
-        else {
-            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().build());
-        }
+        LoadRewardedVideoAd();
 
-        if(!G.adsTimeChecker.IsTimeout(getApplicationContext())) {
+        if(!G.adsTimeChecker.IsTimeout(this)) {
             DestroyAds();
         }
     }
@@ -315,11 +317,17 @@ public class MainActivity extends AppCompatActivity {
 
     protected void DestroyAds() {
         mBind.fabItemHideAdmob.setEnabled(false);
+        mBind.fabItemHideAdmob.refreshDrawableState();
         mBind.adViewMain.destroy();
         mBind.adViewMain.setVisibility(View.GONE);
+        bAdRemoved = true;
     }
 
     protected void ReloadAds() {
+        mBind.adViewMain.destroy();
+        mRewardAd.destroy(this);
+        mBind.fabItemHideAdmob.setEnabled(false);
+
         if(BuildConfig.DEBUG) {
             AdRequest adRequest = new AdRequest.Builder()
                     .addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521")
@@ -335,11 +343,17 @@ public class MainActivity extends AppCompatActivity {
         mRewardAd = MobileAds.getRewardedVideoAdInstance(this);
         mRewardAd.setRewardedVideoAdListener(RewardListener);
 
-        if(BuildConfig.DEBUG) {
-            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
-        }
-        else {
-            mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().build());
+        LoadRewardedVideoAd();
+    }
+
+    protected void LoadRewardedVideoAd() {
+        if(!mRewardAd.isLoaded()) {
+            if(BuildConfig.DEBUG) {
+                mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+            }
+            else {
+                mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().build());
+            }
         }
     }
 
