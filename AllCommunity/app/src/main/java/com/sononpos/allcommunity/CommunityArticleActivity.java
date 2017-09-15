@@ -315,6 +315,7 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
 
     protected void ReloadAds() {
         mBind.adViewWeb.destroy();
+        mBind.adViewWeb.setVisibility(View.VISIBLE);
         mRewardAd.destroy(this);
         mBind.fabItemHideAdmob.setEnabled(false);
 

@@ -325,6 +325,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void ReloadAds() {
         mBind.adViewMain.destroy();
+        mBind.adViewMain.setVisibility(View.VISIBLE);
         mRewardAd.destroy(this);
         mBind.fabItemHideAdmob.setEnabled(false);
 
