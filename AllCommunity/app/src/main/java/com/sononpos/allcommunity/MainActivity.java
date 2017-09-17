@@ -29,6 +29,10 @@ import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.sononpos.allcommunity.AlertManager.AlertManager;
+import com.sononpos.allcommunity.ArticleType.ArticleTypeInfo;
+import com.sononpos.allcommunity.ArticlesFragment.ArticlesListFragment;
+import com.sononpos.allcommunity.ArticlesFragment.NewsFragment;
+import com.sononpos.allcommunity.RecyclerAdapter.MainLeftMenuRecyclerAdapter;
 import com.sononpos.allcommunity.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -164,10 +168,10 @@ public class MainActivity extends AppCompatActivity {
 
     protected void setupAd() {
         //  실제 서비스가 시작되면 주석 제거
-        MobileAds.initialize(getApplicationContext(), "ca-app-pub-3598320494828213~8676238288");
+        MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.admob_app_id));
         if(BuildConfig.DEBUG) {
             AdRequest adRequest = new AdRequest.Builder()
-                    .addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521")
+                    .addTestDevice(getResources().getString(R.string.admob_test_device_id))
                     .build();  // An example device ID
             mBind.adViewMain.loadAd(adRequest);
         }
@@ -331,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(BuildConfig.DEBUG) {
             AdRequest adRequest = new AdRequest.Builder()
-                    .addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521")
+                    .addTestDevice(getResources().getString(R.string.admob_test_device_id))
                     .build();  // An example device ID
             mBind.adViewMain.loadAd(adRequest);
         }
@@ -350,7 +354,7 @@ public class MainActivity extends AppCompatActivity {
     protected void LoadRewardedVideoAd() {
         if(!mRewardAd.isLoaded()) {
             if(BuildConfig.DEBUG) {
-                mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+                mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice(getResources().getString(R.string.admob_test_device_id)).build());
             }
             else {
                 mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().build());
@@ -375,16 +379,33 @@ class CommListPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment f = new ArticlesListFragment();
-        Bundle b = new Bundle();
-        b.putInt("POS", position);
-        f.setArguments(b);
-        return f;
+        ArticleTypeInfo info = G.GetCommunityList(false).get(position);
+        switch(info.GetType()) {
+            case ArticleTypeInfo.TYPE_COMMUNITY:
+            {
+                Fragment f = new ArticlesListFragment();
+                Bundle b = new Bundle();
+                b.putInt("POS", position);
+                f.setArguments(b);
+                return f;
+            }
+
+            case ArticleTypeInfo.TYPE_MOST_NEWS:
+            {
+                Fragment f = new NewsFragment();
+                Bundle b = new Bundle();
+                b.putInt("POS", position);
+                f.setArguments(b);
+                return f;
+            }
+        }
+
+        return null;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return G.GetCommunityList(false).get(position).sName;
+        return G.GetCommunityList(false).get(position).GetName();
     }
 
     @Override

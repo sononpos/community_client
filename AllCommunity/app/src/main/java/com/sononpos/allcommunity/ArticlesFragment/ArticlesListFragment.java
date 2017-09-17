@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sononpos.allcommunity;
+package com.sononpos.allcommunity.ArticlesFragment;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -30,9 +30,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.sononpos.allcommunity.Funtional.ArticleParsingHelper;
+import com.sononpos.allcommunity.ArticleItem;
+import com.sononpos.allcommunity.ArticleType.ArticleTypeInfo;
+import com.sononpos.allcommunity.ArticleType.CommunityTypeInfo;
+import com.sononpos.allcommunity.RecyclerAdapter.ArticlesListRecyclerAdapter;
+import com.sononpos.allcommunity.Funtional.ParsingHelper;
+import com.sononpos.allcommunity.G;
 import com.sononpos.allcommunity.HttpHelper.HttpHelper;
 import com.sononpos.allcommunity.HttpHelper.HttpHelperListener;
+import com.sononpos.allcommunity.R;
+import com.sononpos.allcommunity.SimpleDividerItemDecoration;
 import com.sononpos.allcommunity.databinding.FragmentCommlistBinding;
 
 import java.lang.ref.WeakReference;
@@ -99,7 +106,7 @@ public class ArticlesListFragment extends Fragment implements HttpHelperListener
             return;
         }
         ArrayList<ArticleItem> list = new ArrayList<>();
-        if(ArticleParsingHelper.parse(sResponse, loadInfo, list)) {
+        if(ParsingHelper.Article.parse(sResponse, loadInfo, list)) {
             //  파싱 성공
             loadInfo.bLoading = false;
             loadInfo.bFirstLoad = false;
@@ -128,10 +135,14 @@ public class ArticlesListFragment extends Fragment implements HttpHelperListener
 
     protected void LoadContents() {
         if(loadInfo.isLoading()) return;
-        CommunityTypeInfo info = G.GetCommunityList(false).get(m_nPosition);
-        if(info != null) {
-            httpHelper.Request(0, G.SERV_ROOT + info.sKey + loadInfo.getPage());
+        ArticleTypeInfo info = G.GetCommunityList(false).get(m_nPosition);
+        if(info.GetType() != ArticleTypeInfo.TYPE_COMMUNITY) {
+            // Error
+            return;
         }
+        CommunityTypeInfo commInfo = (CommunityTypeInfo)info;
+        httpHelper.Request(0, G.SERV_ROOT + commInfo.sKey + loadInfo.getPage());
+
     }
 
     class NotifyHandler extends Handler {

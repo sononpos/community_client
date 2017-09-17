@@ -1,4 +1,4 @@
-package com.sononpos.allcommunity;
+package com.sononpos.allcommunity.RecyclerAdapter;
 
 import android.databinding.DataBindingUtil;
 import android.support.v4.content.ContextCompat;
@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sononpos.allcommunity.ArticleType.ArticleTypeInfo;
+import com.sononpos.allcommunity.G;
+import com.sononpos.allcommunity.R;
 import com.sononpos.allcommunity.databinding.ActivityMainBinding;
 import com.sononpos.allcommunity.databinding.LeftMenuItemBinding;
 
@@ -29,7 +32,7 @@ public class MainLeftMenuRecyclerAdapter extends RecyclerView.Adapter<MainLeftMe
 
     @Override
     public void onBindViewHolder(final LeftMenuItemViewHolder holder, final int position) {
-        final CommunityTypeInfo info = G.GetCommunityList(true).get(position);
+        final ArticleTypeInfo info = G.GetCommunityList(true).get(position);
         holder.mBind.setItem(info);
         SetItemColor(holder);
         holder.mBind.btnDirectGo.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +48,7 @@ public class MainLeftMenuRecyclerAdapter extends RecyclerView.Adapter<MainLeftMe
         holder.mBind.tvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                G.ToggleFilter(info.sKey);
+                G.ToggleFilter(info.mHashKey);
                 G.RefreshFilteredInfo();
                 mBind.tabs.notifyDataSetChanged();
                 mBind.pager.getAdapter().notifyDataSetChanged();
@@ -60,7 +63,7 @@ public class MainLeftMenuRecyclerAdapter extends RecyclerView.Adapter<MainLeftMe
     }
 
     protected void SetItemColor(final LeftMenuItemViewHolder holder) {
-        if(G.IsFilteredKey(holder.mBind.getItem().sKey)) {
+        if(G.IsFilteredKey(holder.mBind.getItem().mHashKey)) {
             holder.mBind.tvName.setTextColor(ContextCompat.getColor(holder.mBind.getRoot().getContext(), R.color.disabledTextColor));
             holder.mBind.btnDirectGo.setImageResource(R.drawable.shortcut_disabled_icon);
             holder.mBind.btnDirectGo.setEnabled(false);

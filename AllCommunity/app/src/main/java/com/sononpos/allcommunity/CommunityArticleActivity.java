@@ -235,7 +235,7 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
         // Load an ad into the AdMob banner view.
         if(BuildConfig.DEBUG) {
             AdRequest adRequest = new AdRequest.Builder()
-                    .addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521")
+                    .addTestDevice(getResources().getString(R.string.admob_test_device_id))
                     .build();
             mBind.adViewWeb.loadAd(adRequest);
         }
@@ -340,7 +340,7 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
     protected void LoadRewardedVideoAd() {
         if(!mRewardAd.isLoaded()) {
             if(BuildConfig.DEBUG) {
-                mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice("3776568EFE655D6E6A2B7FA4F2B8F521").build());
+                mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice(getResources().getString(R.string.admob_test_device_id)).build());
             }
             else {
                 mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().build());

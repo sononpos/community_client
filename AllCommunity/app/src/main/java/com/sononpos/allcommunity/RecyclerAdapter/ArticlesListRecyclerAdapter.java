@@ -1,4 +1,4 @@
-package com.sononpos.allcommunity;
+package com.sononpos.allcommunity.RecyclerAdapter;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -22,6 +22,10 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 
+import com.sononpos.allcommunity.ArticleItem;
+import com.sononpos.allcommunity.CommunityArticleActivity;
+import com.sononpos.allcommunity.G;
+import com.sononpos.allcommunity.R;
 import com.sononpos.allcommunity.databinding.ArticleItemBinding;
 
 import java.util.ArrayList;

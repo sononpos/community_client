@@ -14,12 +14,12 @@
     <!-- -
         This is an ad unit ID for a banner test ad. Replace with your own banner ad unit id.
         For more information, see https://support.google.com/admob/answer/3052638 -->
-    <string name="banner_ad_unit_id">ca-app-pub-3598320494828213/1152971485</string>
-    <string name="banner_ad_unit_id_for_webview">ca-app-pub-3598320494828213/1152971485</string>
+    <string name="admob_app_id">ca-app-pub-3598320494828213~5025270941</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3598320494828213/6112434989</string>
+    <string name="banner_ad_unit_id_for_webview">ca-app-pub-3598320494828213/6112434989</string>
+    <string name="admob_test_device_id">FD28D10C9CBC654D55144EFD0EE4A09D</string>
     <string name="full_ad_unit_id">ca-app-pub-3598320494828213/3981177811</string>
-    <string name="reward_ad_unit_id">ca-app-pub-3598320494828213/9218892743</string>
-    <string name="reward_ad_unit_id_test">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="reward_ad_unit_id">ca-app-pub-3598320494828213/6500459553</string>
     <string name="title_activity_community_article">CommunityArticle</string>
     <string name="title_activity_tutorial">TutorialActivity</string>
-    <string name="title_activity_first_setting__theme">FirstSetting_ThemeActivity</string>
 </resources>

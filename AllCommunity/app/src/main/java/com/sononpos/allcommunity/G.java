@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
+import com.sononpos.allcommunity.ArticleType.ArticleTypeInfo;
+import com.sononpos.allcommunity.ArticleType.CommunityTypeInfo;
+import com.sononpos.allcommunity.ArticleType.NewsTypeInfo;
 import com.sononpos.allcommunity.Funtional.StorageHelper;
 
 import org.json.JSONException;
@@ -21,9 +24,9 @@ import java.util.Iterator;
  * Created by nnnyy on 2017-03-06.
  */
 public class G {
-    public static ArrayList<CommunityTypeInfo> liCommTypeInfo = new ArrayList<>();
-    public static ArrayList<CommunityTypeInfo> liFilteredInfo = new ArrayList<>();
-    public static HashSet<String> liFiltered = new HashSet<>();
+    public static ArrayList<ArticleTypeInfo> liArticleTypeInfo = new ArrayList<>();
+    public static ArrayList<ArticleTypeInfo> liFilteredInfo = new ArrayList<>();
+    public static HashSet<Integer> liFiltered = new HashSet<>();
     private static ArrayList<String> liRecentArticle = new ArrayList<>();
     public static final String SERV_ROOT = "http://52.79.205.198:3000/";
     public static final String KEY_FILTERED_COMM = "FilteredCommunity";
@@ -47,11 +50,13 @@ public class G {
                 JSONObject element = jobj.getJSONObject(key);
                 String sName = element.getString("name");
                 int nIndex = element.getInt("index");
-                G.liCommTypeInfo.add(new CommunityTypeInfo(key, sName, nIndex));
+                G.liArticleTypeInfo.add(new CommunityTypeInfo(key, sName, nIndex));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        G.liArticleTypeInfo.add(new NewsTypeInfo("news"," 실시간 인기 검색어",0));
     }
 
     public static void ReloadCommunityListFromSharedPref(Context context) {
@@ -59,9 +64,9 @@ public class G {
         String list_backup = prefs.getString("list_backup", "");
         LoadCommunityList(list_backup);
 
-        ArrayList<String> aFiltered = StorageHelper.getStringArrayPref(context, G.KEY_FILTERED_COMM);
+        ArrayList<Integer> aFiltered = StorageHelper.getIntArrayPref(context, G.KEY_FILTERED_COMM);
         if(aFiltered != null)
-            G.liFiltered = new HashSet<String>(aFiltered);
+            G.liFiltered = new HashSet<>(aFiltered);
         RefreshFilteredInfo();
     }
 
@@ -69,16 +74,9 @@ public class G {
         liFilteredInfo.clear();
         if(liFiltered.size() == 0 ) return;
 
-        for (CommunityTypeInfo communityTypeInfo : G.liCommTypeInfo) {
-            boolean bFind = false;
-            for (String s : liFiltered) {
-                if( communityTypeInfo.sKey.compareTo(s) == 0 ) {
-                    bFind = true;
-                    break;
-                }
-            }
-            if(!bFind) {
-                liFilteredInfo.add(communityTypeInfo);
+        for (ArticleTypeInfo articleTypeInfo : G.liArticleTypeInfo) {
+            if(!liFiltered.contains(articleTypeInfo.mHashKey)) {
+                liFilteredInfo.add(articleTypeInfo);
             }
         }
     }
@@ -86,10 +84,10 @@ public class G {
     public static boolean IsFiltered() {
         return (liFiltered.size() != 0);
     }
-    public static boolean IsFilteredKey(String sKey) {
-        return liFiltered.contains(sKey);
+    public static boolean IsFilteredKey(int nKey) {
+        return liFiltered.contains(nKey);
     }
-    public static void ToggleFilter(String key) {
+    public static void ToggleFilter(int key) {
         if(liFiltered.contains(key)){
             liFiltered.remove(key);
         }
@@ -102,26 +100,26 @@ public class G {
     }
     public static void LoadFiltered(Context context) {
         liFiltered.clear();
-        ArrayList<String> aFiltered = StorageHelper.getStringArrayPref(context, G.KEY_FILTERED_COMM);
+        ArrayList<Integer> aFiltered = StorageHelper.getIntArrayPref(context, G.KEY_FILTERED_COMM);
         if(aFiltered != null)
             liFiltered = new HashSet<>(aFiltered);
         RefreshFilteredInfo();
     }
 
-    public static ArrayList<CommunityTypeInfo> GetCommunityList(boolean bForceAll) {
+    public static ArrayList<ArticleTypeInfo> GetCommunityList(boolean bForceAll) {
         if(!bForceAll && IsFiltered()) {
             return liFilteredInfo;
         }
 
-        return liCommTypeInfo;
+        return liArticleTypeInfo;
     }
 
     public static int GetFilteredIndex(int _nPosNotFiltered) {
-        CommunityTypeInfo info = liCommTypeInfo.get(_nPosNotFiltered);
-        Iterator<CommunityTypeInfo> iter = IsFiltered() ? liFilteredInfo.iterator() : liCommTypeInfo.iterator();
+        ArticleTypeInfo info = liArticleTypeInfo.get(_nPosNotFiltered);
+        Iterator<ArticleTypeInfo> iter = IsFiltered() ? liFilteredInfo.iterator() : liArticleTypeInfo.iterator();
         int idx = 0;
         while(iter.hasNext()){
-            if(iter.next().sKey == info.sKey) {
+            if(iter.next().mHashKey == info.mHashKey) {
                 return idx;
             }
             idx++;

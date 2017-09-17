@@ -20,6 +20,8 @@ import android.view.WindowManager;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.sononpos.allcommunity.AlertManager.AlertManager;
+import com.sononpos.allcommunity.ArticleType.ArticleTypeInfo;
+import com.sononpos.allcommunity.ArticleType.CommunityTypeInfo;
 import com.sononpos.allcommunity.Funtional.KBONetworkInfo;
 import com.sononpos.allcommunity.HttpHelper.HttpHelper;
 import com.sononpos.allcommunity.HttpHelper.HttpHelperListener;
@@ -164,7 +166,7 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     private void LoadCommunityList() {
-        G.liCommTypeInfo.clear();
+        G.liArticleTypeInfo.clear();
         handlerPager = new MyHandler(this);
         httpHelper.SetListener(new HttpHelperListener() {
             @Override
@@ -177,12 +179,13 @@ public class LoadingActivity extends AppCompatActivity {
                 G.LoadCommunityList(sResponse);
                 G.LoadFiltered(getApplicationContext());
                 G.LoadReadedArticle(getApplicationContext());
-                //.G.LoadRecentArticle(getApplicationContext());
-
-                Collections.sort(G.liCommTypeInfo, new Comparator<CommunityTypeInfo>() {
+                Collections.sort(G.liArticleTypeInfo, new Comparator<ArticleTypeInfo>() {
                     @Override
-                    public int compare(CommunityTypeInfo o1, CommunityTypeInfo o2) {
-                        return o1.index < o2.index ? -1 : 1;
+                    public int compare(ArticleTypeInfo o1, ArticleTypeInfo o2) {
+                        if(o1.GetType() != ArticleTypeInfo.TYPE_COMMUNITY) return -1;
+                        if(o2.GetType() != ArticleTypeInfo.TYPE_COMMUNITY) return 1;
+
+                        return ((CommunityTypeInfo)o1).index < ((CommunityTypeInfo)o2).index ? -1 : 1;
                     }
                 });
 
