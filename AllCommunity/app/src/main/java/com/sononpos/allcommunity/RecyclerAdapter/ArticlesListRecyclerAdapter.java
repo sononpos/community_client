@@ -58,6 +58,8 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
     public void onBindViewHolder(ArticlesListRecyclerAdapter.ArticleItemViewHolder holder, int position) {
         final ArticleItemViewHolder holderInner = holder;
         final ArticleItem item =  aItemList.get(position);
+        if(item == null ) return;
+
         if(TextUtils.isEmpty(item.m_sViewCnt)) {
             item.m_sViewCnt = "-";
         }
@@ -123,6 +125,8 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
 
     @Override
     public long getItemId(int position) {
+        if(aItemList.size() <= position ) return 0;
+
         int hashcode = aItemList.get(position).m_sTitle.toString().hashCode();
         return hashcode;
     }

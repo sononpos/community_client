@@ -35,6 +35,8 @@ import com.sononpos.allcommunity.ArticlesFragment.NewsFragment;
 import com.sononpos.allcommunity.RecyclerAdapter.MainLeftMenuRecyclerAdapter;
 import com.sononpos.allcommunity.databinding.ActivityMainBinding;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding mBind;
     private InterstitialAd mInterstitialAd;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         public void onRewardedVideoAdLoaded() {
             Log.i("RewardAds", "onRewardedVideoAdLoaded");
             mBind.fabItemHideAdmob.setEnabled(true);
+            mBind.fabItemHideAdmob.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -94,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         mBind = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mBind.setActivity(this);
             getSupportActionBar().hide();
+
         setupTabs();        // 상단 탭
         setupFAB();         // 플로팅 버튼 설정
         setupLeftMenu();    // 왼쪽 메뉴
@@ -109,6 +113,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         Log.i("MainActivity", "onResume");
+
+        ArrayList<ArticleTypeInfo> tablist = G.GetCommunityList(true);
+        if( tablist == null || tablist.size() == 0 ) {
+            Intent intent = new Intent(this, LoadingActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(intent);
+            return;
+        }
 
         if(mBind.adViewMain != null) {
             mBind.adViewMain.resume();
@@ -321,6 +335,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void DestroyAds() {
         mBind.fabItemHideAdmob.setEnabled(false);
+        mBind.fabItemHideAdmob.setVisibility(View.GONE);
         mBind.fabItemHideAdmob.refreshDrawableState();
         mBind.adViewMain.destroy();
         mBind.adViewMain.setVisibility(View.GONE);
