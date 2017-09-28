@@ -22,7 +22,7 @@ public class ParsingHelper {
             try {
                 JSONArray arrRoot = new JSONArray(sResponse);
                 JSONObject oRoot = arrRoot.getJSONObject(0);
-                int nURL = oRoot.getInt("next_url");
+                int nURL = oRoot.getInt("next_page");
                 info.sNext = String.valueOf(nURL);
                 JSONArray arrList = oRoot.getJSONArray("list");
                 int nListLen = arrList.length();

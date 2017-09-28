@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i("RewardAds", "onRewardedVideoAdLoaded");
             mBind.fabItemHideAdmob.setEnabled(true);
             mBind.fabItemHideAdmob.setVisibility(View.VISIBLE);
+            mBind.faMenu.close(true);
         }
 
         @Override

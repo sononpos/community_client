@@ -104,7 +104,7 @@ public class LoadingActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent marketLaunch = new Intent(Intent.ACTION_VIEW);
-                            marketLaunch.setData(Uri.parse("market://details?id=com.sononpos.communityviwerex"));
+                            marketLaunch.setData(Uri.parse("market://details?id=com.sononpos.allcommunity"));
                             startActivity(marketLaunch);
                             finish();
                             dialog.dismiss();
@@ -200,7 +200,7 @@ public class LoadingActivity extends AppCompatActivity {
             }
         });
 
-        httpHelper.Request(0, "http://52.79.205.198:3000/list");
+        httpHelper.Request(0, "https://hotcommunity-163106.appspot.com/community/list");
     }
 
     public void finishApp() {
