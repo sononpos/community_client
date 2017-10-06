@@ -1,10 +1,8 @@
 package com.sononpos.allcommunity;
 
-import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
@@ -105,38 +103,6 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View v = super.onCreateView(inflater, container, savedInstanceState);
-
-            Preference clearRecent = (Preference)findPreference("clear_recent");
-            if(clearRecent != null) {
-                clearRecent.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-                        builder.setTitle("삭제 확인");
-                        builder.setMessage("최근 글 목록을 지우시겠습니까?");
-                        builder.setPositiveButton("네", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                G.ClearRecentArticle(getActivity());
-                                Toast.makeText(getActivity(), "최근 글 목록이 지워졌습니다", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                            }
-                        });
-                        builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                        AlertDialog alert = builder.create();
-                        alert.show();
-                        return false;
-                    }
-                });
-            }
 
             Preference pfRecommand = (Preference)findPreference("app_recommand");
             if(pfRecommand != null ) {

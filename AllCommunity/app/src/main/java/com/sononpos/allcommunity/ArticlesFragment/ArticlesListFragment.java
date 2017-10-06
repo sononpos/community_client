@@ -33,12 +33,13 @@ import android.widget.Toast;
 import com.sononpos.allcommunity.ArticleItem;
 import com.sononpos.allcommunity.ArticleType.ArticleTypeInfo;
 import com.sononpos.allcommunity.ArticleType.CommunityTypeInfo;
-import com.sononpos.allcommunity.RecyclerAdapter.ArticlesListRecyclerAdapter;
+import com.sononpos.allcommunity.Funtional.LogHelper;
 import com.sononpos.allcommunity.Funtional.ParsingHelper;
-import com.sononpos.allcommunity.G;
+import com.sononpos.allcommunity.Global;
 import com.sononpos.allcommunity.HttpHelper.HttpHelper;
 import com.sononpos.allcommunity.HttpHelper.HttpHelperListener;
 import com.sononpos.allcommunity.R;
+import com.sononpos.allcommunity.RecyclerAdapter.ArticlesListRecyclerAdapter;
 import com.sononpos.allcommunity.SimpleDividerItemDecoration;
 import com.sononpos.allcommunity.databinding.FragmentCommlistBinding;
 
@@ -49,6 +50,8 @@ public class ArticlesListFragment extends Fragment implements HttpHelperListener
     FragmentCommlistBinding mBind;
     HttpHelper httpHelper;
     NotifyHandler notifyHandler;
+    Global.ArticleListManager listman;
+    ArrayList<ArticleTypeInfo> mList;
     ArticleLoadInfo loadInfo = new ArticleLoadInfo();
     int m_nPosition;
 
@@ -95,6 +98,8 @@ public class ArticlesListFragment extends Fragment implements HttpHelperListener
         httpHelper = new HttpHelper();
         httpHelper.SetListener(this);
         loadInfo.Reset();
+        listman = Global.getInstance().getListMan();
+        mList = listman.getCommunityList(false);
         LoadContents();
     }
 
@@ -106,6 +111,7 @@ public class ArticlesListFragment extends Fragment implements HttpHelperListener
             return;
         }
         ArrayList<ArticleItem> list = new ArrayList<>();
+        LogHelper.di(sResponse);
         if(ParsingHelper.Article.parse(sResponse, loadInfo, list)) {
             //  파싱 성공
             loadInfo.bLoading = false;
@@ -135,13 +141,15 @@ public class ArticlesListFragment extends Fragment implements HttpHelperListener
 
     protected void LoadContents() {
         if(loadInfo.isLoading()) return;
-        ArticleTypeInfo info = G.GetCommunityList(false).get(m_nPosition);
+        ArticleTypeInfo info = mList.get(m_nPosition);
         if(info.GetType() != ArticleTypeInfo.TYPE_COMMUNITY) {
             // Error
             return;
         }
         CommunityTypeInfo commInfo = (CommunityTypeInfo)info;
-        httpHelper.Request(0, G.SERV_ROOT + commInfo.sKey + loadInfo.getPage());
+        String pageURL = listman.makePageURL(commInfo.sKey, loadInfo.getPage());
+        LogHelper.di(pageURL);
+        httpHelper.Request(0, pageURL );
 
     }
 

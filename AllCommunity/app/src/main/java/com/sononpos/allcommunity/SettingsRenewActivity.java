@@ -113,7 +113,7 @@ public class SettingsRenewActivity extends AppCompatActivity {
             }
 
             Preference pfVer = (Preference)findPreference("ver");
-            pfVer.setSummary(G.deviceVer);
+            pfVer.setSummary(Global.getInstance().getDeviceVer());
             return v;
         }
     }

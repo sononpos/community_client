@@ -64,7 +64,7 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
         @Override
         public void onRewarded(RewardItem rewardItem) {
             Log.i("RewardAds", "onRewarded");
-            G.adsTimeChecker.SaveNow(getApplicationContext());
+            Global.getInstance().getAdsTimeChecker().SaveNow(getApplicationContext());
             DestroyAds();
             mBind.faMenu.close(true);
         }
@@ -106,10 +106,10 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
         }
         mRewardAd.resume(this);
 
-        if(bAdRemoved && G.adsTimeChecker.IsTimeout(this)) {
+        if(bAdRemoved && Global.getInstance().getAdsTimeChecker().IsTimeout(this)) {
             ReloadAds();
             bAdRemoved = false;
-        }else if(!G.adsTimeChecker.IsTimeout(this)) {
+        }else if(!Global.getInstance().getAdsTimeChecker().IsTimeout(this)) {
             DestroyAds();
         }
     }
@@ -195,7 +195,7 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
 
     protected void setupOptions() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean bTutorial = pref.getBoolean(G.KEY_TUTORIAL_COMPLETE , false);
+        boolean bTutorial = pref.getBoolean(Global.KEY_TUTORIAL_COMPLETE , false);
 
         if(!bTutorial) {
             AlertManager.ShowOk(CommunityArticleActivity.this, "튜토리얼 설명", "좌에서 우 슬라이드 : 닫기", "닫기", new DialogInterface.OnClickListener() {
@@ -203,7 +203,7 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
                 public void onClick(DialogInterface dialog, int which) {
                     SharedPreferences pref_inner = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     SharedPreferences.Editor editor = pref_inner.edit();
-                    editor.putBoolean(G.KEY_TUTORIAL_COMPLETE, true);
+                    editor.putBoolean(Global.KEY_TUTORIAL_COMPLETE, true);
                     editor.apply();
                     dialog.dismiss();
                 }
@@ -250,7 +250,7 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
 
         LoadRewardedVideoAd();
 
-        if(!G.adsTimeChecker.IsTimeout(this)) {
+        if(!Global.getInstance().getAdsTimeChecker().IsTimeout(this)) {
             DestroyAds();
         }
     }

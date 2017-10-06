@@ -4,7 +4,6 @@ import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -12,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
@@ -20,15 +18,10 @@ import android.view.WindowManager;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.sononpos.allcommunity.AlertManager.AlertManager;
-import com.sononpos.allcommunity.ArticleType.ArticleTypeInfo;
-import com.sononpos.allcommunity.ArticleType.CommunityTypeInfo;
 import com.sononpos.allcommunity.Funtional.KBONetworkInfo;
 import com.sononpos.allcommunity.HttpHelper.HttpHelper;
 import com.sononpos.allcommunity.HttpHelper.HttpHelperListener;
 import com.sononpos.allcommunity.databinding.ActivityLoadingBinding;
-
-import java.util.Collections;
-import java.util.Comparator;
 
 public class LoadingActivity extends AppCompatActivity {
     ActivityLoadingBinding mBind;
@@ -56,8 +49,6 @@ public class LoadingActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            G.RefreshFilteredInfo();
 
             Intent intent = new Intent(mainActivity, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -152,7 +143,7 @@ public class LoadingActivity extends AppCompatActivity {
                 Message msg = handlerUpdate.obtainMessage();
                 try {
                     String device_version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-                    G.deviceVer = device_version;
+                    Global.getInstance().setDeviceVer(device_version);
                     int nState = MarketVersionChecker.getVersionState(device_version);
                     msg.arg1 = nState;
                     handlerUpdate.sendMessage(msg);
@@ -166,7 +157,11 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     private void LoadCommunityList() {
-        G.liArticleTypeInfo.clear();
+        final Global g = Global.getInstance();
+        g.Init();
+        final Global.ArticleListManager listman = g.getListMan();
+
+        //G.liArticleTypeInfo.clear();
         handlerPager = new MyHandler(this);
         httpHelper.SetListener(new HttpHelperListener() {
             @Override
@@ -176,31 +171,17 @@ public class LoadingActivity extends AppCompatActivity {
                     handlerPager.sendMessage(msg);
                     return;
                 }
-                G.LoadCommunityList(sResponse);
-                G.LoadFiltered(getApplicationContext());
-                G.LoadReadedArticle(getApplicationContext());
-                Collections.sort(G.liArticleTypeInfo, new Comparator<ArticleTypeInfo>() {
-                    @Override
-                    public int compare(ArticleTypeInfo o1, ArticleTypeInfo o2) {
-                        if(o1.GetType() != ArticleTypeInfo.TYPE_COMMUNITY) return -1;
-                        if(o2.GetType() != ArticleTypeInfo.TYPE_COMMUNITY) return 1;
-
-                        return ((CommunityTypeInfo)o1).index < ((CommunityTypeInfo)o2).index ? -1 : 1;
-                    }
-                });
-
-                SharedPreferences setRefer = PreferenceManager
-                        .getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor editor = setRefer.edit();
-                editor.putString("list_backup", sResponse);
-                editor.apply();
+                listman.parseListResponse(sResponse);
+                listman.loadFilteredList(LoadingActivity.this);
+                listman.loadReadList(LoadingActivity.this);
+                listman.sort();
 
                 Message msg = handlerPager.obtainMessage(0);
                 handlerPager.sendMessage(msg);
             }
         });
 
-        httpHelper.Request(0, "https://hotcommunity-163106.appspot.com/community/list");
+        httpHelper.Request(0, listman.getListURL());
     }
 
     public void finishApp() {

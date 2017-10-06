@@ -1,7 +1,5 @@
 package com.sononpos.allcommunity.RecyclerAdapter;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +22,8 @@ import android.widget.TextView;
 
 import com.sononpos.allcommunity.ArticleItem;
 import com.sononpos.allcommunity.CommunityArticleActivity;
-import com.sononpos.allcommunity.G;
+import com.sononpos.allcommunity.Funtional.LogHelper;
+import com.sononpos.allcommunity.Global;
 import com.sononpos.allcommunity.R;
 import com.sononpos.allcommunity.databinding.ArticleItemBinding;
 
@@ -85,7 +84,8 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
 
         final TextView tv = holder.mBind.artTitle;
         int nHashcode = item.m_sTitle.hashCode();
-        if(G.IsReaded(nHashcode)) {
+        final Global.ArticleListManager listman = Global.getInstance().getListMan();
+        if(listman.isReaded(nHashcode)) {
             tv.setTextColor(ContextCompat.getColor(tv.getContext(), R.color.disabledTextColor));
         }
         else {
@@ -101,6 +101,9 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
                 Intent intent = new Intent(holderInner.mBind.getRoot().getContext(), CommunityArticleActivity.class);
                 intent.putExtra("URL", holderInner.mBind.getItem().m_sLink);
                 intent.putExtra("TITLE", holderInner.mBind.getItem().m_sTitle);
+                LogHelper.di(holderInner.mBind.getItem().m_sTitle);
+                LogHelper.di(holderInner.mBind.getItem().m_sLink);
+                LogHelper.di(item.m_sLink);
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
                     Bundle bndlanimation =
                             ActivityOptions.makeCustomAnimation(holderInner.mBind.getRoot().getContext(), R.anim.anim1,R.anim.anim2).toBundle();
@@ -109,18 +112,9 @@ public class ArticlesListRecyclerAdapter extends RecyclerView.Adapter<ArticlesLi
                 else {
                     holderInner.mBind.getRoot().getContext().startActivity(intent);
                 }
-                G.SetRead(context, holderInner.mBind.getItem().m_sTitle.hashCode());
+                listman.setRead(context, holderInner.mBind.getItem().m_sTitle.hashCode());
             }
         });
-
-        int adapterPosition = holder.getAdapterPosition();
-        if (!isFirstOnly || adapterPosition > mLastPosition) {
-            Animator anim = ObjectAnimator.ofFloat(holder.itemView, "alpha", 0.5f, 1f);
-            anim.setDuration(mDuration).start();
-            anim.setInterpolator(mInterpolator);
-            mLastPosition = adapterPosition;
-        }
-
     }
 
     @Override
