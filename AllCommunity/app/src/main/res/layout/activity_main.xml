@@ -95,15 +95,6 @@
                         android:background="#ffffff"
                         android:textSize="15dp"
                         android:text="설정"/>
-                    <Button
-                        android:id="@+id/btn_nomore_ads"
-                        android:layout_width="match_parent"
-                        android:layout_height="43dp"
-                        android:gravity="left|center_vertical"
-                        android:paddingLeft="15dp"
-                        android:background="#ffffff"
-                        android:textSize="15dp"
-                        android:text="광고배너 제거"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="38dp"
@@ -115,12 +106,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                     </android.support.v7.widget.RecyclerView>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="38dp"
-                        style="@style/AppTheme.TextView4"
-                        android:gravity="center_vertical"
-                        android:text="필터"/>
                 </LinearLayout>
             </android.support.v4.widget.NestedScrollView>
         </android.support.design.widget.NavigationView>

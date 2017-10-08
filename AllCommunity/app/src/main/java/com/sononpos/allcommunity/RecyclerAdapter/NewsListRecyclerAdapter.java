@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import com.sononpos.allcommunity.ArticleItem;
 import com.sononpos.allcommunity.CommunityArticleActivity;
 import com.sononpos.allcommunity.R;
+import com.sononpos.allcommunity.YoutubeListActivity;
 import com.sononpos.allcommunity.databinding.ArticleNewsItemBinding;
-import com.sononpos.allcommunity.youtube.VideoPlayerActivity;
 
 import java.util.ArrayList;
 
@@ -66,7 +66,8 @@ public class NewsListRecyclerAdapter extends RecyclerView.Adapter<NewsListRecycl
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
-                Intent intent = new Intent(context, VideoPlayerActivity.class);
+                Intent intent = new Intent(context, YoutubeListActivity.class);
+                intent.putExtra("Word", item.m_sTitle);
                 context.startActivity(intent);
             }
         });

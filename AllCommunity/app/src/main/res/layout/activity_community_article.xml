@@ -60,13 +60,6 @@
             ads:fab_label="@string/fab_share"
             fab:fab_colorNormal="@color/subTextColor"
             />
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab_item_hide_admob"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            ads:fab_label="@string/fab_hide_admob"
-            fab:fab_colorNormal="@color/subTextColor"
-            />
     </com.github.clans.fab.FloatingActionMenu>
 </android.support.design.widget.CoordinatorLayout>
 </layout>

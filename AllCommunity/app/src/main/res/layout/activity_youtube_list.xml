@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.sononpos.allcommunity.YoutubeListActivity">
+
+            <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+                <RelativeLayout
+                    android:id="@+id/rl_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/contop_new"
+                        android:background="@color/mainColor"
+                        />
+                </RelativeLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_list"
+                    android:layout_below="@id/rl_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
+                <com.fsn.cauly.CaulyAdView
+                    xmlns:app="http://schemas.android.com/apk/res/com.sononpos.allcommunity"
+                    android:id="@+id/xmladview"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    app:appcode="CAULY"
+                    app:effect="RightSlide"
+                    app:dynamicReloadInterval="true"
+                    app:reloadInterval="20"
+                    app:bannerHeight="Fixed"
+                    />
+            </RelativeLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

@@ -2,6 +2,7 @@ package com.sononpos.allcommunity.Funtional;
 
 import com.sononpos.allcommunity.ArticleItem;
 import com.sononpos.allcommunity.ArticlesFragment.ArticlesListFragment;
+import com.sononpos.allcommunity.youtube.YoutubeArticleItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -93,6 +94,27 @@ public class ParsingHelper {
                     aList.add(ai);
                 }
             } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    public static class Youtube {
+        public static boolean parse(String sRes, ArrayList<YoutubeArticleItem> aList) {
+            try {
+                JSONObject oRoot = new JSONObject(sRes);
+                JSONArray aContents = oRoot.getJSONArray("contents");
+                for( int i = 0 ; i < aContents.length() ; ++i ) {
+                    JSONObject iteminfo = aContents.getJSONObject(i);
+                    YoutubeArticleItem newItem = new YoutubeArticleItem();
+                    newItem.set(iteminfo);
+                    aList.add(newItem);
+                }
+
+            }catch( JSONException e ) {
                 e.printStackTrace();
                 return false;
             }

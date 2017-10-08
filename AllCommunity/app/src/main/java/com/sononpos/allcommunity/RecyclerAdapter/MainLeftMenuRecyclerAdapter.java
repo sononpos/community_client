@@ -55,12 +55,6 @@ public class MainLeftMenuRecyclerAdapter extends RecyclerView.Adapter<MainLeftMe
                 SetItemColor(holder);
             }
         });
-        holder.mBind.cbEnabled.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
         holder.mBind.tvName.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -77,47 +77,16 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        /*
-        if(mBind.adViewMain != null) {
-            mBind.adViewMain.resume();
-            mBind.adViewMain.refreshDrawableState();
-        }
-        */
-
-        mRewardAd.resume(this);
-
-        if(bAdRemoved && Global.getInstance().getAdsTimeChecker().IsTimeout(this)) {
-            ReloadAds();
-            bAdRemoved = false;
-        }
-        else if(!Global.getInstance().getAdsTimeChecker().IsTimeout(this)) {
-            DestroyAds();
-        }
-
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        /*
-        if(mBind.adViewMain != null) {
-            mBind.adViewMain.pause();
-        }
-        */
-
-        mRewardAd.pause(this);
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        /*
-        if(mBind.adViewMain != null) {
-            mBind.adViewMain.destroy();
-        }
-        */
-
-        mRewardAd.destroy(this);
         super.onDestroy();
     }
 
@@ -163,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRewardedVideoAdLoaded() {
                 Log.i("RewardAds", "onRewardedVideoAdLoaded");
-                mBind.btnNomoreAds.setEnabled(true);
+                //mBind.btnNomoreAds.setEnabled(true);
             }
 
             @Override
@@ -201,14 +170,14 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        mRewardAd = MobileAds.getRewardedVideoAdInstance(this);
-        mRewardAd.setRewardedVideoAdListener(RewardListener);
+//        mRewardAd = MobileAds.getRewardedVideoAdInstance(this);
+//        mRewardAd.setRewardedVideoAdListener(RewardListener);
+//
+//        LoadRewardedVideoAd();
 
-        LoadRewardedVideoAd();
-
-        if(!Global.getInstance().getAdsTimeChecker().IsTimeout(this)) {
-            DestroyAds();
-        }
+//        if(!Global.getInstance().getAdsTimeChecker().IsTimeout(this)) {
+//            DestroyAds();
+//        }
 
         CaulyAdInfo adInfo = new CaulyAdInfoBuilder(getString(R.string.cauly_app_id)).
                 effect("RightSlide").
@@ -285,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mBind.btnNomoreAds.setEnabled(false);
+        //mBind.btnNomoreAds.setEnabled(false);
     }
 
     protected void setupStatusBar() {
@@ -305,28 +274,28 @@ public class MainActivity extends AppCompatActivity {
     protected void DestroyAds() {
         //mBind.adViewMain.destroy();
         //mBind.adViewMain.setVisibility(View.GONE);
-        bAdRemoved = true;
+        //bAdRemoved = true;
     }
 
     protected void ReloadAds() {
         //mBind.adViewMain.destroy();
         //mBind.adViewMain.setVisibility(View.VISIBLE);
-        mRewardAd.destroy(this);
+        //mRewardAd.destroy(this);
 
-        if(BuildConfig.DEBUG) {
-            AdRequest adRequest = new AdRequest.Builder()
-                    .addTestDevice(getResources().getString(R.string.admob_test_device_id))
-                    .build();  // An example device ID
-            //mBind.adViewMain.loadAd(adRequest);
-        }
-        else {
-            AdRequest adRequest = new AdRequest.Builder()
-                    .build();
-            //mBind.adViewMain.loadAd(adRequest);
-        }
-
-        mRewardAd = MobileAds.getRewardedVideoAdInstance(this);
-        mRewardAd.setRewardedVideoAdListener(RewardListener);
+//        if(BuildConfig.DEBUG) {
+//            AdRequest adRequest = new AdRequest.Builder()
+//                    .addTestDevice(getResources().getString(R.string.admob_test_device_id))
+//                    .build();  // An example device ID
+//            //mBind.adViewMain.loadAd(adRequest);
+//        }
+//        else {
+//            AdRequest adRequest = new AdRequest.Builder()
+//                    .build();
+//            //mBind.adViewMain.loadAd(adRequest);
+//        }
+//
+//        mRewardAd = MobileAds.getRewardedVideoAdInstance(this);
+//        mRewardAd.setRewardedVideoAdListener(RewardListener);
 
         LoadRewardedVideoAd();
     }

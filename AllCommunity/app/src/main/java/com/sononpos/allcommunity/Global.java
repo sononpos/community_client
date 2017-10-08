@@ -28,6 +28,8 @@ import java.util.Iterator;
 
 public class Global {
     public static final String SERV_ROOT = "https://hotcommunity-163106.appspot.com/community/";
+    public static final String YOUTUBE_ROOT = "https://hotcommunity-163106.appspot.com/youtube/";
+    public static final String YOUTUBE_COMMENT_ROOT = "https://hotcommunity-163106.appspot.com/youtube/comments/";
     public static final String KEY_RECENT_ARTICLES = "RecentArticles";
     public static final String KEY_TUTORIAL_COMPLETE = "tutorial_complete";
     public static final String ANDROID_KEY = "AIzaSyAgOtMxWNk2NmaCsiBynf8O7kBty9SXPrk";
