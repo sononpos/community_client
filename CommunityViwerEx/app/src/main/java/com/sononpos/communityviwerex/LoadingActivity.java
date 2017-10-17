@@ -17,6 +17,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.sononpos.communityviwerex.FirstSettings.FirstSetting_ThemeActivity;
 import com.sononpos.communityviwerex.Funtional.KBONetworkInfo;
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
+import com.sononpos.communityviwerex.HttpHelper.HttpHelper;
+import com.sononpos.communityviwerex.HttpHelper.HttpHelperListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -195,63 +197,24 @@ public class LoadingActivity extends AppCompatActivity {
         else {
             G.liFiltered.clear();
         }
+
         handlerPager = new MyHandler(this);
-
-        new Thread(new Runnable() {
+        new HttpHelper().SetListener(new HttpHelperListener() {
             @Override
-            public void run() {
-
-                try {
-                    Thread.sleep(750);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            public void onResponse(int nType, int nErrorCode, String sResponse) {
+                if(nErrorCode == 0) {
+                    Message msg = handlerPager.obtainMessage();
+                    msg.arg1 = 0;
+                    msg.obj = sResponse;
+                    handlerPager.sendMessage(msg);
                 }
-                try{
-                    URL url = new URL("http://52.79.205.198:3000/list");
-
-                    HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-                    conn.setRequestMethod("GET");
-                    conn.setConnectTimeout(3000);
-                    conn.setReadTimeout(3000);
-
-                    conn.connect();
-
-                    int responseCode = conn.getResponseCode();
-                    if( responseCode == HttpURLConnection.HTTP_OK){
-                        InputStream is   = null;
-                        ByteArrayOutputStream baos = null;
-                        String response;
-                        is = conn.getInputStream();
-                        baos = new ByteArrayOutputStream();
-                        byte[] byteBuffer = new byte[1024];
-                        byte[] byteData = null;
-                        int nLength = 0;
-
-                        while((nLength = is.read(byteBuffer, 0, byteBuffer.length)) != -1) {
-                            baos.write(byteBuffer, 0, nLength);
-                        }
-                        byteData = baos.toByteArray();
-                        response = new String(byteData);
-
-                        Message msg = handlerPager.obtainMessage();
-                        msg.arg1 = 0;
-                        msg.obj = response;
-                        handlerPager.sendMessage(msg);
-                    }
-                    else {
-                        Message msg = handlerPager.obtainMessage();
-                        msg.arg1 = -1;
-                        handlerPager.sendMessage(msg);
-                    }
-                }catch(IOException e){
-                    e.printStackTrace();
+                else {
                     Message msg = handlerPager.obtainMessage();
                     msg.arg1 = -1;
                     handlerPager.sendMessage(msg);
-                }finally {
                 }
             }
-        }).start();
+        }).Request(0, "http://52.79.205.198:3000/list");
     }
 
     public void finishApp() {

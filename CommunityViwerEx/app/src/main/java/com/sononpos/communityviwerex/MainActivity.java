@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     private CommunityTypePagerAdapter adapter;
     private LeftMenuItemAdapter adapterLeftMenu;
     private CommunityTypeInfo recent;
-    private Toolbar toolbar;
     private DrawerLayout dl;
     private View dlv;
     private AdView mAdView;
@@ -159,10 +158,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //  Setup ActionBar
-        toolbar = (Toolbar) findViewById(R.id.toolBar);
-        setSupportActionBar(toolbar);
-
         InitLeftMenu();
         RefreshTheme();
         ResetDropDownList();
@@ -193,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         */
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -276,9 +270,6 @@ public class MainActivity extends AppCompatActivity {
         ThemeManager.ThemeFontObject themeFont = ThemeManager.GetFont();
         //toolbar.setBackgroundColor(Color.parseColor(theme.BgTitle));
         dl.setBackgroundColor(Color.parseColor(theme.BgList));
-        toolbar.getRootView().setBackgroundColor(Color.parseColor(theme.BgList));
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         tabs.setTextColor(Color.parseColor(theme.BasicFont));
         tabs.setBackgroundColor(Color.parseColor(theme.BgList));
         tabs.setIndicatorColor(Color.parseColor(theme.BasicFont));
@@ -361,7 +352,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton ibtn = (ImageButton)toolbar.findViewById(R.id.btn_leftmenu);
+        ImageButton ibtn = (ImageButton)findViewById(R.id.btn_leftmenu);
         ibtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
