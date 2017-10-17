@@ -322,4 +322,14 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
             window.setStatusBarColor(ContextCompat.getColor(this,R.color.mainColor));
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if(mBind.webview.canGoBack()) {
+            mBind.webview.goBack();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
 }
