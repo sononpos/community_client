@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,9 +43,10 @@ public class LeftMenuItemAdapter extends ArrayAdapter<LeftMenuItem> {
         TextView tvName = (TextView)vListItem.findViewById(R.id.textViewName);
         tvName.setText(menudata.get(position).name);
 
-        CommunityTypeInfo info = G.liCommTypeInfo.get(position);
+        TabItemManager timan = Global.obj().getTabItemManager();
+        TabItem item = timan.getListAll().get(position);
 
-        if( G.liFiltered.contains(info.sKey) ) {
+        if( timan.isFiltered(item.getKey()) ) {
             tvName.setTextColor(Color.parseColor(theme.LeftDisable));
         }
         else {

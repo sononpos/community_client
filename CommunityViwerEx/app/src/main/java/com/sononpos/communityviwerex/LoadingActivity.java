@@ -6,29 +6,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.sononpos.communityviwerex.FirstSettings.FirstSetting_ThemeActivity;
 import com.sononpos.communityviwerex.Funtional.KBONetworkInfo;
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
 import com.sononpos.communityviwerex.HttpHelper.HttpHelper;
 import com.sononpos.communityviwerex.HttpHelper.HttpHelperListener;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -49,16 +38,20 @@ public class LoadingActivity extends AppCompatActivity {
             }
 
             String response = (String)msg.obj;
-            G.LoadCommunityList(response);
+            TabItemManager timan = Global.obj().getTabItemManager();
+            String sJsonList = Storage.load(getApplicationContext(), G.KEY_FILTERED_COMM);
+            timan.setFilteredList(sJsonList);
+
+            timan.init();
+            if(!Parcer.communityList(response, timan)) {
+                finish();
+            }
+            timan.refreshList();
+            timan.sort();
+
+            //G.LoadCommunityList(response);
             G.LoadRecentArticle(getApplicationContext());
             G.LoadReadedArticle(getApplicationContext());
-
-            Collections.sort(G.liCommTypeInfo, new Comparator<CommunityTypeInfo>() {
-                @Override
-                public int compare(CommunityTypeInfo o1, CommunityTypeInfo o2) {
-                    return o1.index < o2.index ? -1 : 1;
-                }
-            });
 
             // 첫번째 실행이면 FirstSetting으로
             if(G.IsFirstUse(getApplicationContext())){
@@ -76,8 +69,6 @@ public class LoadingActivity extends AppCompatActivity {
                 startActivity(intent);
             }
             else {
-                G.RefreshFilteredInfo();
-
                 Intent intent = new Intent(mainActivity, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -168,6 +159,7 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     private void CheckUpdate() {
+
         handlerUpdate = new CheckUpdateHandler();
 
         new Thread(new Runnable() {
@@ -189,15 +181,6 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     private void LoadCommunityList() {
-        G.liCommTypeInfo.clear();
-        ArrayList<String> aFiltered = G.getStringArrayPref(this, G.KEY_FILTERED_COMM);
-        if(aFiltered != null) {
-            G.liFiltered = new HashSet<String>(aFiltered);
-        }
-        else {
-            G.liFiltered.clear();
-        }
-
         handlerPager = new MyHandler(this);
         new HttpHelper().SetListener(new HttpHelperListener() {
             @Override
