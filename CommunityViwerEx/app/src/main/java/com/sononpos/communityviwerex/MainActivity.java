@@ -14,18 +14,16 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Space;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -41,7 +39,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding mBind;
     private CommunityTypePagerAdapter adapter;
-    private LeftMenuItemAdapter adapterLeftMenu;
     private CommunityTypeInfo recent;
     LinearLayout dropdownListLayout;
 
@@ -253,50 +250,51 @@ public class MainActivity extends AppCompatActivity {
             LeftMenuItem item = new LeftMenuItem(info.getName(), info.getKey());
             leftMenuList.add(item);
         }
-        adapterLeftMenu = new LeftMenuItemAdapter(this, R.layout.leftmenuitem, leftMenuList);
-        ListView listLeft = (ListView)findViewById(R.id.list_left);
-        listLeft.setAdapter(adapterLeftMenu);
-        listLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //  메뉴 아이템 클릭
-                LeftMenuItem item =  (LeftMenuItem)parent.getItemAtPosition(position);
-                TextView tvName = (TextView)view.findViewById(R.id.textViewName);
+        mBind.listLeft.setHasFixedSize(true);
+        mBind.listLeft.setLayoutManager(new LinearLayoutManager(mBind.getRoot().getContext()));
+        mBind.listLeft.setAdapter(new MainLeftMenuRecyclerAdapter(mBind));
 
-                ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
-
-                int nPrevSize = aList.size();
-
-                if( timan.isFiltered(item.sKey) ) {
-                    timan.removeFilter(item.sKey);
-                    tvName.setTextColor(Color.parseColor(theme.LeftEnable));
-                }
-                else {
-                    if(nPrevSize <= 1 ){
-                        Toast.makeText(view.getContext(), R.string.at_least_one_community, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    timan.addFilter(item.sKey);
-                    tvName.setTextColor(Color.parseColor(theme.LeftDisable));
-                    if( (nPrevSize-1) <= mBind.pager.getCurrentItem() ){
-                        mBind.pager.setCurrentItem(mBind.pager.getCurrentItem()-1);
-                    }
-                }
-
-                Storage.save(getApplicationContext(), G.KEY_FILTERED_COMM, timan.makeFilteredList());;
-                timan.refreshList();
-
-                try{
-                    ResetArticleList();
-                    adapter.notifyDataSetChanged();
-                    mBind.tabs.notifyDataSetChanged();
-                }
-                catch(NullPointerException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        listLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                //  메뉴 아이템 클릭
+//                LeftMenuItem item =  (LeftMenuItem)parent.getItemAtPosition(position);
+//                TextView tvName = (TextView)view.findViewById(R.id.textViewName);
+//
+//                ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
+//
+//                int nPrevSize = aList.size();
+//
+//                if( timan.isFiltered(item.sKey) ) {
+//                    timan.removeFilter(item.sKey);
+//                    tvName.setTextColor(Color.parseColor(theme.LeftEnable));
+//                }
+//                else {
+//                    if(nPrevSize <= 1 ){
+//                        Toast.makeText(view.getContext(), R.string.at_least_one_community, Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//
+//                    timan.addFilter(item.sKey);
+//                    tvName.setTextColor(Color.parseColor(theme.LeftDisable));
+//                    if( (nPrevSize-1) <= mBind.pager.getCurrentItem() ){
+//                        mBind.pager.setCurrentItem(mBind.pager.getCurrentItem()-1);
+//                    }
+//                }
+//
+//                Storage.save(getApplicationContext(), G.KEY_FILTERED_COMM, timan.makeFilteredList());;
+//                timan.refreshList();
+//
+//                try{
+//                    ResetArticleList();
+//                    adapter.notifyDataSetChanged();
+//                    mBind.tabs.notifyDataSetChanged();
+//                }
+//                catch(NullPointerException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
         ImageButton ibtn = (ImageButton)findViewById(R.id.btn_leftmenu);
         ibtn.setOnClickListener(new View.OnClickListener() {
