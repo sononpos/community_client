@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.sononpos.allcommunity.ArticleItem;
 import com.sononpos.allcommunity.CommunityArticleActivity;
 import com.sononpos.allcommunity.R;
+import com.sononpos.allcommunity.YoutubeListActivity;
 import com.sononpos.allcommunity.databinding.ArticleNewsItemBinding;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class NewsListRecyclerAdapter extends RecyclerView.Adapter<NewsListRecycl
         final ArticleItem item =  aItemList.get(position);
         holder.mBind.setItem(item);
 
-        holder.mBind.getRoot().setOnClickListener(new View.OnClickListener() {
+        holder.mBind.tvTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
@@ -58,6 +59,16 @@ public class NewsListRecyclerAdapter extends RecyclerView.Adapter<NewsListRecycl
                 else {
                     context.startActivity(intent);
                 }
+            }
+        });
+
+        holder.mBind.ivYoutube.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = v.getContext();
+                Intent intent = new Intent(context, YoutubeListActivity.class);
+                intent.putExtra("Word", item.m_sTitle);
+                context.startActivity(intent);
             }
         });
     }

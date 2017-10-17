@@ -13,6 +13,13 @@
         android:layout_height="38dp"
         android:orientation="horizontal"
         >
+        <CheckBox
+            android:id="@+id/cb_enabled"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            style="@style/AppTheme.CheckBox"
+            />
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="0dp"
@@ -22,17 +29,6 @@
             android:layout_weight="7"
             style="@style/AppTheme.TextView3"
             tools:text="Test Community"
-            />
-        <ImageButton
-            android:id="@+id/btn_direct_go"
-            android:adjustViewBounds="true"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:src="@drawable/shortcut_icon"
-            android:scaleType="fitCenter"
-            android:layout_margin="5dp"
-            android:background="#00000000"
             />
     </LinearLayout>
 </layout>

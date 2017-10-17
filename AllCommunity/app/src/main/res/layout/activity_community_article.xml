@@ -51,20 +51,13 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="@dimen/fab_margin_bottom"
         android:layout_marginRight="@dimen/fab_margin"
-        fab:menu_colorNormal="@color/mainColor"
+        fab:menu_colorNormal="@color/mainColorTrans"
         >
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_item_share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             ads:fab_label="@string/fab_share"
-            fab:fab_colorNormal="@color/subTextColor"
-            />
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab_item_hide_admob"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            ads:fab_label="@string/fab_hide_admob"
             fab:fab_colorNormal="@color/subTextColor"
             />
     </com.github.clans.fab.FloatingActionMenu>

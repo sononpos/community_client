@@ -41,7 +41,6 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
         @Override
         public void onRewardedVideoAdLoaded() {
             Log.i("RewardAds", "onRewardedVideoAdLoaded");
-            mBind.fabItemHideAdmob.setEnabled(true);
         }
 
         @Override
@@ -64,7 +63,7 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
         @Override
         public void onRewarded(RewardItem rewardItem) {
             Log.i("RewardAds", "onRewarded");
-            G.adsTimeChecker.SaveNow(getApplicationContext());
+            Global.getInstance().getAdsTimeChecker().SaveNow(getApplicationContext());
             DestroyAds();
             mBind.faMenu.close(true);
         }
@@ -79,8 +78,6 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
         @Override
         public void onRewardedVideoAdFailedToLoad(int i) {
             Log.i("RewardAds", "onRewardedVideoAdFailedToLoad : " + i);
-            mBind.fabItemHideAdmob.setEnabled(false);
-            mBind.fabItemHideAdmob.refreshDrawableState();
         }
     };
 
@@ -106,10 +103,10 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
         }
         mRewardAd.resume(this);
 
-        if(bAdRemoved && G.adsTimeChecker.IsTimeout(this)) {
+        if(bAdRemoved && Global.getInstance().getAdsTimeChecker().IsTimeout(this)) {
             ReloadAds();
             bAdRemoved = false;
-        }else if(!G.adsTimeChecker.IsTimeout(this)) {
+        }else if(!Global.getInstance().getAdsTimeChecker().IsTimeout(this)) {
             DestroyAds();
         }
     }
@@ -195,7 +192,7 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
 
     protected void setupOptions() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean bTutorial = pref.getBoolean(G.KEY_TUTORIAL_COMPLETE , false);
+        boolean bTutorial = pref.getBoolean(Global.KEY_TUTORIAL_COMPLETE , false);
 
         if(!bTutorial) {
             AlertManager.ShowOk(CommunityArticleActivity.this, "튜토리얼 설명", "좌에서 우 슬라이드 : 닫기", "닫기", new DialogInterface.OnClickListener() {
@@ -203,7 +200,7 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
                 public void onClick(DialogInterface dialog, int which) {
                     SharedPreferences pref_inner = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     SharedPreferences.Editor editor = pref_inner.edit();
-                    editor.putBoolean(G.KEY_TUTORIAL_COMPLETE, true);
+                    editor.putBoolean(Global.KEY_TUTORIAL_COMPLETE, true);
                     editor.apply();
                     dialog.dismiss();
                 }
@@ -247,12 +244,6 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
 
         mRewardAd = MobileAds.getRewardedVideoAdInstance(this);
         mRewardAd.setRewardedVideoAdListener(RewardListener);
-
-        LoadRewardedVideoAd();
-
-        if(!G.adsTimeChecker.IsTimeout(this)) {
-            DestroyAds();
-        }
     }
 
     protected void setupFAB() {
@@ -269,33 +260,6 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
                 mBind.faMenu.close(false);
             }
         });
-
-        mBind.fabItemHideAdmob.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertManager.ShowYesNo(CommunityArticleActivity.this, "알림", "영상 광고를 다 보시면 6시간 동안 배너광고가 제거됩니다.", "본다", "됐네요",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch(which) {
-                                    case DialogInterface.BUTTON_POSITIVE:
-                                    {
-                                        if(mRewardAd.isLoaded()) {
-                                            mRewardAd.show();
-                                        }
-                                    }
-                                        break;
-
-                                    case DialogInterface.BUTTON_NEGATIVE:
-                                    {
-
-                                    }
-                                        break;
-                                }
-                            }
-                        });
-            }
-        });
     }
 
     protected void loadURL() {
@@ -306,8 +270,6 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
     }
 
     protected void DestroyAds() {
-        mBind.fabItemHideAdmob.setEnabled(false);
-        mBind.fabItemHideAdmob.refreshDrawableState();
         mBind.adViewWeb.destroy();
         mBind.adViewWeb.setVisibility(View.GONE);
         bAdRemoved = true;
@@ -317,7 +279,6 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
         mBind.adViewWeb.destroy();
         mBind.adViewWeb.setVisibility(View.VISIBLE);
         mRewardAd.destroy(this);
-        mBind.fabItemHideAdmob.setEnabled(false);
 
         if(BuildConfig.DEBUG) {
             AdRequest adRequest = new AdRequest.Builder()
@@ -338,14 +299,14 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
     }
 
     protected void LoadRewardedVideoAd() {
-        if(!mRewardAd.isLoaded()) {
-            if(BuildConfig.DEBUG) {
-                mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice(getResources().getString(R.string.admob_test_device_id)).build());
-            }
-            else {
-                mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().build());
-            }
-        }
+//        if(!mRewardAd.isLoaded()) {
+//            if(BuildConfig.DEBUG) {
+//                mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().addTestDevice(getResources().getString(R.string.admob_test_device_id)).build());
+//            }
+//            else {
+//                mRewardAd.loadAd(getString(R.string.reward_ad_unit_id), new AdRequest.Builder().build());
+//            }
+//        }
     }
 
     protected void setupStatusBar() {
@@ -359,6 +320,16 @@ public class CommunityArticleActivity extends AppCompatActivity implements Advan
 // finally change the color
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.setStatusBarColor(ContextCompat.getColor(this,R.color.mainColor));
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mBind.webview.canGoBack()) {
+            mBind.webview.goBack();
+        }
+        else {
+            super.onBackPressed();
         }
     }
 }

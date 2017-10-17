@@ -34,5 +34,14 @@
             android:gravity="center"
             tools:text="왕예식"
             />
+        <ImageView
+            android:id="@+id/iv_youtube"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="2"
+            android:src="@drawable/youtube_icon"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            />
     </LinearLayout>
 </layout>

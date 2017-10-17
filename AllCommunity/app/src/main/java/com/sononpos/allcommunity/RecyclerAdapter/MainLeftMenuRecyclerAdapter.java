@@ -6,9 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import com.sononpos.allcommunity.ArticleType.ArticleTypeInfo;
-import com.sononpos.allcommunity.G;
+import com.sononpos.allcommunity.Global;
 import com.sononpos.allcommunity.R;
 import com.sononpos.allcommunity.databinding.ActivityMainBinding;
 import com.sononpos.allcommunity.databinding.LeftMenuItemBinding;
@@ -32,46 +33,56 @@ public class MainLeftMenuRecyclerAdapter extends RecyclerView.Adapter<MainLeftMe
 
     @Override
     public void onBindViewHolder(final LeftMenuItemViewHolder holder, final int position) {
-        final ArticleTypeInfo info = G.GetCommunityList(true).get(position);
+        final Global.ArticleListManager listman = Global.getInstance().getListMan();
+        if(listman == null) return;
+
+        final ArticleTypeInfo info = listman.getCommunityList(true).get(position);
         holder.mBind.setItem(info);
         SetItemColor(holder);
-        holder.mBind.btnDirectGo.setOnClickListener(new View.OnClickListener() {
+        holder.mBind.cbEnabled.setChecked(!listman.isFilteredKey(info.mHashKey));
+        holder.mBind.cbEnabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                int nFilteredPos = G.GetFilteredIndex(position);
-                if(nFilteredPos == -1) return;
-                mBind.pager.setCurrentItem(nFilteredPos);
-                mBind.drawer.closeDrawer(mBind.navView);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(listman.isFilteredKey(info.mHashKey) && isChecked) {
+                    listman.toggleFilter(info.mHashKey);
+                }
+                else if(!listman.isFilteredKey(info.mHashKey) && !isChecked) {
+                    listman.toggleFilter(info.mHashKey);
+                }
+                listman.refreshListWithFiltered();
+                mBind.tabs.notifyDataSetChanged();
+                mBind.pager.getAdapter().notifyDataSetChanged();
+                SetItemColor(holder);
             }
         });
 
         holder.mBind.tvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                G.ToggleFilter(info.mHashKey);
-                G.RefreshFilteredInfo();
-                mBind.tabs.notifyDataSetChanged();
-                mBind.pager.getAdapter().notifyDataSetChanged();
-                SetItemColor(holder);
+                int nFilteredPos = listman.getFilteredIndex(position);
+                if(nFilteredPos == -1) return;
+                mBind.pager.setCurrentItem(nFilteredPos);
+                mBind.drawer.closeDrawer(mBind.navView);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return G.GetCommunityList(true).size();
+        final Global.ArticleListManager listman = Global.getInstance().getListMan();
+        if(listman == null) return 0;
+        return listman.getCommunityList(true).size();
     }
 
     protected void SetItemColor(final LeftMenuItemViewHolder holder) {
-        if(G.IsFilteredKey(holder.mBind.getItem().mHashKey)) {
+        final Global.ArticleListManager listman = Global.getInstance().getListMan();
+        if(listman == null) return;
+
+        if(listman.isFilteredKey(holder.mBind.getItem().mHashKey)) {
             holder.mBind.tvName.setTextColor(ContextCompat.getColor(holder.mBind.getRoot().getContext(), R.color.disabledTextColor));
-            holder.mBind.btnDirectGo.setImageResource(R.drawable.shortcut_disabled_icon);
-            holder.mBind.btnDirectGo.setEnabled(false);
         }
         else {
             holder.mBind.tvName.setTextColor(ContextCompat.getColor(holder.mBind.getRoot().getContext(), R.color.mainTextColor));
-            holder.mBind.btnDirectGo.setImageResource(R.drawable.shortcut_icon);
-            holder.mBind.btnDirectGo.setEnabled(true);
         }
     }
 
