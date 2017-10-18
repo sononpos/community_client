@@ -102,60 +102,42 @@
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#E49F00"
+        android:layout_height="60dp"
         android:orientation="horizontal">
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/dino_icon"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"/>
-        <TextView
+            android:id="@+id/ivSetting"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:src="@drawable/icon_setting"
+            android:padding="15dp"
+            />
+        <Button
+            android:id="@+id/btn_settings"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="#E49F00"
-            android:textColor="#ffffff"
+            android:layout_height="match_parent"
+            android:text="@string/action_settings"
+            android:layout_margin="0dp"
+            android:textSize="16dp"
             android:gravity="left|center_vertical"
-            android:textSize="18dp"
-            android:height="28dp"
-            android:text="메뉴"
             android:paddingLeft="10dp"
             />
     </LinearLayout>
-    <Button
-        android:id="@+id/btn_settings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/action_settings"
-        android:layout_margin="0dp"
-        android:textSize="16dp"
-        android:gravity="left|center_vertical"
-        android:paddingLeft="10dp"
-        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#E49F00"
+        android:background="#fece00"
         android:orientation="horizontal">
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/dino_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:src="@drawable/left_filter_title"
             android:layout_marginLeft="10dp"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="#E49F00"
-            android:textColor="#ffffff"
-            android:gravity="left|center_vertical"
-            android:textSize="18dp"
-            android:height="28dp"
-            android:text="필터"
-            android:paddingLeft="10dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
             />
     </LinearLayout>
     <android.support.v7.widget.RecyclerView

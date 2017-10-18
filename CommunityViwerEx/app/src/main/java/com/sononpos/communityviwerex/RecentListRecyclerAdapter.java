@@ -1,15 +1,17 @@
 package com.sononpos.communityviwerex;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sononpos.communityviwerex.Funtional.ThemeManager;
 import com.sononpos.communityviwerex.databinding.ArticleListItemBinding;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by nnnyyy on 2017-10-18.
@@ -24,8 +26,22 @@ public class RecentListRecyclerAdapter extends RecyclerView.Adapter<RecentListRe
     }
 
     @Override
-    public void onBindViewHolder(ArticleListViewHolder holder, int position) {
-        holder.mBind.setItem(aRecents.get(position));
+    public void onBindViewHolder(final ArticleListViewHolder holder, int position) {
+        ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
+        final ListViewItem item = aRecents.get(position);
+        holder.mBind.setItem(item);
+        holder.mBind.artTitle.setTextColor(Color.parseColor(theme.BasicFont));
+        holder.mBind.artName.setTextColor(Color.parseColor(theme.SubFont));
+        holder.mBind.artRegdate.setTextColor(Color.parseColor(theme.SubFont));
+        holder.mBind.artTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(holder.mBind.getRoot().getContext(), CommunityArticle.class);
+                intent.putExtra("URL", item.m_sLink);
+                intent.putExtra("TITLE", item.m_sTitle);
+                holder.mBind.getRoot().getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override

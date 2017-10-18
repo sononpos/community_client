@@ -59,4 +59,9 @@ class ArticleListManager {
     public void saveRecent(Context context) {
         Storage.save(context, KEY_RECENT_ARTICLE, makeRecentJsonString());
     }
+
+    public void clearRecent(Context context) {
+        aRecentItems.clear();
+        saveRecent(context);
+    }
 }

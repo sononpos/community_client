@@ -11,16 +11,13 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -36,7 +33,6 @@ import com.sononpos.communityviwerex.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnStartDragListener{
     ActivityMainBinding mBind;
@@ -194,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
         ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
         ThemeManager.ThemeFontObject themeFont = ThemeManager.GetFont();
         //toolbar.setBackgroundColor(Color.parseColor(theme.BgTitle));
+        mBind.ivSetting.setBackgroundColor(Color.parseColor(theme.BgList));
         mBind.drawerLayout.setBackgroundColor(Color.parseColor(theme.BgList));
         mBind.listLeft.setBackgroundColor(Color.parseColor(theme.BgList));
         mBind.tabs.setTextColor(Color.parseColor(theme.BasicFont));
