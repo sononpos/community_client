@@ -1,11 +1,15 @@
 package com.sononpos.communityviwerex;
 
+import android.content.Context;
+
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -30,7 +34,22 @@ public class TabItemManager {
         items.add(newItem);
     }
 
-    public void refreshList() {
+    public void refreshList(Context context) {
+        int nListCnt = items.size();
+        JSONArray aSequance = new JSONArray();
+        for(int i = 0 ; i < nListCnt ; ++i) {
+            JSONObject obj = new JSONObject();
+            TabItem item = items.get(i);
+            try {
+                item.index = i;
+                obj.put("key", item.getKey());
+                obj.put("idx", item.index);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            aSequance.put(obj);
+        }
+
         Iterator iter = items.iterator();
         items_without_filtered.clear();
         while(iter.hasNext()) {
@@ -39,6 +58,32 @@ public class TabItemManager {
                 continue;
             }
             items_without_filtered.add(item);
+        }
+
+        Storage.save(context, "TabItemListSeq", aSequance.toString());
+    }
+
+    public void setSeq(String sSeqString) {
+        HashMap<String, Integer> map = new HashMap<>();
+        try {
+            JSONArray aSeq = new JSONArray(sSeqString);
+            int len = aSeq.length();
+            for(int i = 0 ; i < len ; ++i) {
+                JSONObject obj = aSeq.getJSONObject(i);
+                String sKey = obj.getString("key");
+                int nIdx = obj.getInt("idx");
+                map.put(sKey, nIdx);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Iterator<TabItem> iter = items.iterator();
+        while(iter.hasNext()) {
+            TabItem item = iter.next();
+            if(map.containsKey(item.getKey())) {
+                item.index = map.get(item.getKey());
+            }
         }
     }
 
@@ -72,6 +117,17 @@ public class TabItemManager {
 
     public void sort() {
         Collections.sort(items, new Comparator<TabItem>() {
+            @Override
+            public int compare(TabItem o1, TabItem o2) {
+                if(o1 instanceof TICommunity &&
+                        o2 instanceof TICommunity) {
+                    return ((TICommunity)o1).index < ((TICommunity)o2).index ? -1 : 1;
+                }
+                return -1;
+            }
+        });
+
+        Collections.sort(items_without_filtered, new Comparator<TabItem>() {
             @Override
             public int compare(TabItem o1, TabItem o2) {
                 if(o1 instanceof TICommunity &&

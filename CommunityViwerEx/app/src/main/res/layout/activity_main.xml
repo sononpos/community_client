@@ -25,7 +25,8 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:scaleType="centerInside"
-            android:layout_margin="9dp"
+            android:layout_margin="4dp"
+            android:padding="6dp"
             android:id="@+id/btn_leftmenu"
             />
     </RelativeLayout>
@@ -105,19 +106,19 @@
         android:background="#E49F00"
         android:orientation="horizontal">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/dino_icon"
             android:layout_marginLeft="10dp"
             android:layout_gravity="center"
             android:adjustViewBounds="true"/>
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="30dp"
             android:background="#E49F00"
             android:textColor="#ffffff"
             android:gravity="left|center_vertical"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:height="28dp"
             android:text="메뉴"
             android:paddingLeft="10dp"
@@ -139,19 +140,19 @@
         android:background="#E49F00"
         android:orientation="horizontal">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/dino_icon"
             android:layout_marginLeft="10dp"
             android:layout_gravity="center"
             android:adjustViewBounds="true"/>
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="30dp"
             android:background="#E49F00"
             android:textColor="#ffffff"
             android:gravity="left|center_vertical"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:height="28dp"
             android:text="필터"
             android:paddingLeft="10dp"
@@ -160,7 +161,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list_left"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        >
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

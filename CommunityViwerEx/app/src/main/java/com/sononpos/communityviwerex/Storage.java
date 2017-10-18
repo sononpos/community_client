@@ -20,4 +20,9 @@ public class Storage {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(sKey, "");
     }
+
+    public static boolean have(Context context, String sKey) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.contains(sKey);
+    }
 }

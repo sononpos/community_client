@@ -52,7 +52,7 @@ implements ItemTouchHelperAdapter {
                 else if(!timan.isFiltered(info.getKey()) && !isChecked) {
                     timan.addFilter(info.getKey());
                 }
-                timan.refreshList();
+                timan.refreshList(holder.mBind.getRoot().getContext());
                 mBind.tabs.notifyDataSetChanged();
                 mBind.pager.getAdapter().notifyDataSetChanged();
                 SetItemColor(holder);

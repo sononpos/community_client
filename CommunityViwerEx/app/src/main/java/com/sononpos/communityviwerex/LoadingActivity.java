@@ -46,8 +46,17 @@ public class LoadingActivity extends AppCompatActivity {
             if(!Parcer.communityList(response, timan)) {
                 finish();
             }
-            timan.refreshList();
-            timan.sort();
+            //  저장 된 순서가 없다면 서버에서 받은 순서대로 일단 정렬
+            //  저장 된 순서가 있다면 새로 세팅하고 정렬
+            if(Storage.have(getApplicationContext(), "TabItemListSeq")) {
+                String sSeqJsonString = Storage.load(getApplicationContext(), "TabItemListSeq");
+                timan.setSeq(sSeqJsonString);
+                timan.sort();
+            }
+            else {
+                timan.sort();
+            }
+            timan.refreshList(getApplicationContext());
 
             //G.LoadCommunityList(response);
             G.LoadRecentArticle(getApplicationContext());

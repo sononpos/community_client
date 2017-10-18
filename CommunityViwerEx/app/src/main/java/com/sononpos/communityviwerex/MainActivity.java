@@ -108,32 +108,6 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
         mBind.pager.setAdapter(adapter);
         mBind.tabs.setViewPager(mBind.pager);
 
-        mBind.tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                List<Fragment> fragments = getSupportFragmentManager().getFragments();
-                for (Fragment f : fragments) {
-                    if (f instanceof CommunityListFragment) {
-                        Log.e("Error", "onPageSelected" + ((CommunityListFragment) f).getPageNum());
-                        CommunityListFragment cf = ((CommunityListFragment) f);
-                        if (G.IsShowRecent(getApplicationContext()) && cf.getPageNum() == 0) {
-                            cf.Reload();
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
         InitLeftMenu();
         RefreshTheme();
         ResetDropDownList();
@@ -221,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
         ThemeManager.ThemeFontObject themeFont = ThemeManager.GetFont();
         //toolbar.setBackgroundColor(Color.parseColor(theme.BgTitle));
         mBind.drawerLayout.setBackgroundColor(Color.parseColor(theme.BgList));
+        mBind.listLeft.setBackgroundColor(Color.parseColor(theme.BgList));
         mBind.tabs.setTextColor(Color.parseColor(theme.BasicFont));
         mBind.tabs.setBackgroundColor(Color.parseColor(theme.BgList));
         mBind.tabs.setIndicatorColor(Color.parseColor(theme.BasicFont));
@@ -335,7 +310,11 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
 
             @Override
             public void onDrawerClosed(View drawerView) {
+                final TabItemManager timan = Global.obj().getTabItemManager();
+                timan.refreshList(getApplicationContext());
                 ResetDropDownList();
+                mBind.tabs.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             }
 
             @Override
