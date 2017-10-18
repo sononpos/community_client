@@ -2,8 +2,10 @@ package com.sononpos.communityviwerex;
 
 import android.databinding.DataBindingUtil;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -11,14 +13,20 @@ import android.widget.CompoundButton;
 import com.sononpos.communityviwerex.databinding.ActivityMainBinding;
 import com.sononpos.communityviwerex.databinding.LeftMenuItemBinding;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 /**
  * Created by nnnyyy on 2017-09-08.
  */
 
-public class MainLeftMenuRecyclerAdapter extends RecyclerView.Adapter<MainLeftMenuRecyclerAdapter.LeftMenuItemViewHolder> {
+public class MainLeftMenuRecyclerAdapter extends RecyclerView.Adapter<MainLeftMenuRecyclerAdapter.LeftMenuItemViewHolder>
+implements ItemTouchHelperAdapter {
     ActivityMainBinding mBind;
+    OnStartDragListener mDragListener;
 
-    public MainLeftMenuRecyclerAdapter(ActivityMainBinding _mBind) {
+    public MainLeftMenuRecyclerAdapter(ActivityMainBinding _mBind, OnStartDragListener listener) {
+        mDragListener = listener;
         mBind = _mBind;
     }
 
@@ -50,6 +58,16 @@ public class MainLeftMenuRecyclerAdapter extends RecyclerView.Adapter<MainLeftMe
                 SetItemColor(holder);
             }
         });
+
+        holder.mBind.ivDragHandler.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                    mDragListener.onStartDrag(holder);
+                }
+                return false;
+            }
+        });
 //
 //        holder.mBind.tvName.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -77,6 +95,27 @@ public class MainLeftMenuRecyclerAdapter extends RecyclerView.Adapter<MainLeftMe
         else {
             holder.mBind.tvName.setTextColor(ContextCompat.getColor(holder.mBind.getRoot().getContext(), R.color.colorPrimaryDark));
         }
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        final TabItemManager timan = Global.obj().getTabItemManager();
+        ArrayList<TabItem> aList = timan.getListAll();
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(aList, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(aList, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+
     }
 
     public class LeftMenuItemViewHolder extends RecyclerView.ViewHolder {

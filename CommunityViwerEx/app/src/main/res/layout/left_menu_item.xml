@@ -30,5 +30,14 @@
 
             tools:text="Test Community"
             />
+        <ImageView
+            android:id="@+id/iv_drag_handler"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_menu"
+            android:layout_marginRight="10dp"
+            android:padding="10dp"
+            />
     </LinearLayout>
 </layout>

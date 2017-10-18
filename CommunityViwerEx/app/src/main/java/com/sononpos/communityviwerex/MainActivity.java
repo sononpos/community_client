@@ -15,6 +15,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -36,11 +38,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnStartDragListener{
     ActivityMainBinding mBind;
     private CommunityTypePagerAdapter adapter;
     private CommunityTypeInfo recent;
     LinearLayout dropdownListLayout;
+    ItemTouchHelper mTouchHelper;
 
     @Override
     protected void onStart() {
@@ -252,7 +255,11 @@ public class MainActivity extends AppCompatActivity {
         }
         mBind.listLeft.setHasFixedSize(true);
         mBind.listLeft.setLayoutManager(new LinearLayoutManager(mBind.getRoot().getContext()));
-        mBind.listLeft.setAdapter(new MainLeftMenuRecyclerAdapter(mBind));
+        mBind.listLeft.setAdapter(new MainLeftMenuRecyclerAdapter(mBind, this));
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback((MainLeftMenuRecyclerAdapter)mBind.listLeft.getAdapter());
+        mTouchHelper = new ItemTouchHelper(callback);
+        mTouchHelper.attachToRecyclerView(mBind.listLeft);
+
 
 //        listLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -419,4 +426,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private AdView getAdView() { return mBind.adViewMain; }
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        mTouchHelper.startDrag(viewHolder);
+    }
 }
