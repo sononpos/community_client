@@ -227,8 +227,10 @@ public class CommunityListFragment extends Fragment {
                 intent.putExtra("TITLE", item.m_sTitle);
                 startActivity(intent);
 
-                if(!item.m_sJsonString.isEmpty())
-                    G.SaveRecentArticle(getContext(), item);
+                if(!item.m_sJsonString.isEmpty()) {
+                    Global.obj().getArticleListManager().add(item);
+                    Global.obj().getArticleListManager().saveRecent(getContext());
+                }
             }
         });
         fl.addView(listView);

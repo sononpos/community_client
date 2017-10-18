@@ -26,4 +26,12 @@ public class Global {
         }
         return timan;
     }
+
+    private ArticleListManager alman;
+    public ArticleListManager getArticleListManager() {
+        if(alman == null) {
+            alman = new ArticleListManager();
+        }
+        return alman;
+    }
 }

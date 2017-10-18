@@ -119,22 +119,14 @@ public class TabItemManager {
         Collections.sort(items, new Comparator<TabItem>() {
             @Override
             public int compare(TabItem o1, TabItem o2) {
-                if(o1 instanceof TICommunity &&
-                        o2 instanceof TICommunity) {
-                    return ((TICommunity)o1).index < ((TICommunity)o2).index ? -1 : 1;
-                }
-                return -1;
+                return o1.index < o2.index ? -1 : 1;
             }
         });
 
         Collections.sort(items_without_filtered, new Comparator<TabItem>() {
             @Override
             public int compare(TabItem o1, TabItem o2) {
-                if(o1 instanceof TICommunity &&
-                        o2 instanceof TICommunity) {
-                    return ((TICommunity)o1).index < ((TICommunity)o2).index ? -1 : 1;
-                }
-                return -1;
+                return o1.index < o2.index ? -1 : 1;
             }
         });
     }

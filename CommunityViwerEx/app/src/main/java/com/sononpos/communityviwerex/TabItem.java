@@ -15,4 +15,5 @@ public class TabItem {
 
     public String getName() { return sName; }
     public String getKey() { return sKey; }
+    public int getType() { return nType; }
 }

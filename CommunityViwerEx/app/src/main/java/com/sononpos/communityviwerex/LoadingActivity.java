@@ -39,6 +39,7 @@ public class LoadingActivity extends AppCompatActivity {
 
             String response = (String)msg.obj;
             TabItemManager timan = Global.obj().getTabItemManager();
+            ArticleListManager aiman = Global.obj().getArticleListManager();
             String sJsonList = Storage.load(getApplicationContext(), G.KEY_FILTERED_COMM);
             timan.setFilteredList(sJsonList);
 
@@ -46,6 +47,7 @@ public class LoadingActivity extends AppCompatActivity {
             if(!Parcer.communityList(response, timan)) {
                 finish();
             }
+            timan.addItem(new TIRecent("hc_recent", "최근 본 글", -1));
             //  저장 된 순서가 없다면 서버에서 받은 순서대로 일단 정렬
             //  저장 된 순서가 있다면 새로 세팅하고 정렬
             if(Storage.have(getApplicationContext(), "TabItemListSeq")) {
@@ -57,6 +59,11 @@ public class LoadingActivity extends AppCompatActivity {
                 timan.sort();
             }
             timan.refreshList(getApplicationContext());
+
+            if(Storage.have(getApplicationContext(), ArticleListManager.KEY_RECENT_ARTICLE)) {
+                String sRecentJsonList = Storage.load(getApplicationContext(), ArticleListManager.KEY_RECENT_ARTICLE);
+                aiman.loadRecent(sRecentJsonList);
+            }
 
             //G.LoadCommunityList(response);
             G.LoadRecentArticle(getApplicationContext());

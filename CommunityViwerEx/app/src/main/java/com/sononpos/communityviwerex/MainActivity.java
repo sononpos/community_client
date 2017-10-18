@@ -46,15 +46,39 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
     ItemTouchHelper mTouchHelper;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBind = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        //  실제 서비스가 시작되면 주석 제거
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-3598320494828213~8676238288");
+
+        // Load an ad into the AdMob banner view.
+        mBind.tabs.setTextSize(40);
+        dropdownListLayout = (LinearLayout)findViewById(R.id.grid_list_comm);
+        adapter = new CommunityTypePagerAdapter(getSupportFragmentManager());
+        recent = new CommunityTypeInfo("recent", "최근 본 글", -1);
+
+        ResetArticleList();
+        mBind.pager.setAdapter(adapter);
+        mBind.tabs.setViewPager(mBind.pager);
+
+        InitLeftMenu();
+        RefreshTheme();
+        ResetDropDownList();
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
+                .build();  // An example device ID
+        getAdView().loadAd(adRequest);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
-        Log.d("VLog","OnStart!");
     }
 
     @Override
     protected void onResume() {
-        Log.d("VLog","OnResume!");
-
         //  테스트
         SharedPreferences setRefer = PreferenceManager
                 .getDefaultSharedPreferences(this);
@@ -91,52 +115,10 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mBind = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
-        //  실제 서비스가 시작되면 주석 제거
-        MobileAds.initialize(getApplicationContext(), "ca-app-pub-3598320494828213~8676238288");
-
-        // Load an ad into the AdMob banner view.
-        mBind.tabs.setTextSize(40);
-        dropdownListLayout = (LinearLayout)findViewById(R.id.grid_list_comm);
-        adapter = new CommunityTypePagerAdapter(getSupportFragmentManager());
-        recent = new CommunityTypeInfo("recent", "최근 본 글", -1);
-
-        ResetArticleList();
-        mBind.pager.setAdapter(adapter);
-        mBind.tabs.setViewPager(mBind.pager);
-
-        InitLeftMenu();
-        RefreshTheme();
-        ResetDropDownList();
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
-                .build();  // An example device ID
-        getAdView().loadAd(adRequest);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        /*
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        */
-        return super.onOptionsItemSelected(item);
     }
 
     private boolean exit = false;
@@ -177,7 +159,25 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
 
         @Override
         public Fragment getItem(int position) {
-            CommunityListFragment f = new CommunityListFragment();
+            final TabItemManager timan = Global.obj().getTabItemManager();
+            final ArrayList<TabItem> aList = timan.getList();
+            TabItem item = aList.get(position);
+
+            Fragment f = null;
+            switch(item.getType()) {
+                case TabItem.IT_COMMUNITY:
+                    f = new CommunityListFragment();
+                    break;
+
+                case TabItem.IT_RECENT:
+                    f = new RecentFragment();
+                    break;
+            }
+
+            if(f == null) {
+                finish();
+            }
+
             Bundle b = new Bundle();
             b.putInt(ARG_POSITION, position);
             f.setArguments(b);
@@ -235,55 +235,11 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
         mTouchHelper = new ItemTouchHelper(callback);
         mTouchHelper.attachToRecyclerView(mBind.listLeft);
 
-
-//        listLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                //  메뉴 아이템 클릭
-//                LeftMenuItem item =  (LeftMenuItem)parent.getItemAtPosition(position);
-//                TextView tvName = (TextView)view.findViewById(R.id.textViewName);
-//
-//                ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
-//
-//                int nPrevSize = aList.size();
-//
-//                if( timan.isFiltered(item.sKey) ) {
-//                    timan.removeFilter(item.sKey);
-//                    tvName.setTextColor(Color.parseColor(theme.LeftEnable));
-//                }
-//                else {
-//                    if(nPrevSize <= 1 ){
-//                        Toast.makeText(view.getContext(), R.string.at_least_one_community, Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-//
-//                    timan.addFilter(item.sKey);
-//                    tvName.setTextColor(Color.parseColor(theme.LeftDisable));
-//                    if( (nPrevSize-1) <= mBind.pager.getCurrentItem() ){
-//                        mBind.pager.setCurrentItem(mBind.pager.getCurrentItem()-1);
-//                    }
-//                }
-//
-//                Storage.save(getApplicationContext(), G.KEY_FILTERED_COMM, timan.makeFilteredList());;
-//                timan.refreshList();
-//
-//                try{
-//                    ResetArticleList();
-//                    adapter.notifyDataSetChanged();
-//                    mBind.tabs.notifyDataSetChanged();
-//                }
-//                catch(NullPointerException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-
         ImageButton ibtn = (ImageButton)findViewById(R.id.btn_leftmenu);
         ibtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
                 mBind.drawerLayout.openDrawer(mBind.drawer);
                 closeDropdownList();
 

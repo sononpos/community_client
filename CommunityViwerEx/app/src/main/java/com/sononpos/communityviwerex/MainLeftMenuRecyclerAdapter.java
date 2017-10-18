@@ -53,8 +53,6 @@ implements ItemTouchHelperAdapter {
                     timan.addFilter(info.getKey());
                 }
                 timan.refreshList(holder.mBind.getRoot().getContext());
-                mBind.tabs.notifyDataSetChanged();
-                mBind.pager.getAdapter().notifyDataSetChanged();
                 SetItemColor(holder);
             }
         });
