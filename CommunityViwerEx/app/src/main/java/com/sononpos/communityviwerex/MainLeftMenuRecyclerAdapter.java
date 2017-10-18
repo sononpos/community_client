@@ -1,15 +1,17 @@
 package com.sononpos.communityviwerex;
 
 import android.databinding.DataBindingUtil;
-import android.support.v4.content.ContextCompat;
+import android.graphics.Color;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
+import com.sononpos.communityviwerex.Funtional.ThemeManager;
 import com.sononpos.communityviwerex.databinding.ActivityMainBinding;
 import com.sononpos.communityviwerex.databinding.LeftMenuItemBinding;
 
@@ -37,15 +39,19 @@ implements ItemTouchHelperAdapter {
     }
 
     @Override
-    public void onBindViewHolder(final LeftMenuItemViewHolder holder, final int position) {
+    public void onBindViewHolder(final LeftMenuItemViewHolder holder, int position) {
         final TabItemManager timan = Global.obj().getTabItemManager();
         final TabItem info = timan.getListAll().get(position);
+        Log.e("Bind","position : " + position + ", info : " + info.getName());
+        Log.e("Bind",timan.makeFilteredList());
         holder.mBind.setItem(info);
         SetItemColor(holder);
+        holder.mBind.cbEnabled.setOnCheckedChangeListener(null);
         holder.mBind.cbEnabled.setChecked(!timan.isFiltered(info.getKey()));
         holder.mBind.cbEnabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.e("Bind","info : " + info.getName());
                 if(timan.isFiltered(info.getKey()) && isChecked) {
                     timan.removeFilter(info.getKey());
                 }
@@ -85,13 +91,14 @@ implements ItemTouchHelperAdapter {
     }
 
     protected void SetItemColor(final LeftMenuItemViewHolder holder) {
+        ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
         final TabItemManager timan = Global.obj().getTabItemManager();
 
         if(timan.isFiltered(holder.mBind.getItem().getKey())) {
-            holder.mBind.tvName.setTextColor(ContextCompat.getColor(holder.mBind.getRoot().getContext(), R.color.common_google_signin_btn_text_light_disabled));
+            holder.mBind.tvName.setTextColor(Color.parseColor(theme.LeftDisable));
         }
         else {
-            holder.mBind.tvName.setTextColor(ContextCompat.getColor(holder.mBind.getRoot().getContext(), R.color.colorPrimaryDark));
+            holder.mBind.tvName.setTextColor(Color.parseColor(theme.LeftEnable));
         }
     }
 

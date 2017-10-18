@@ -18,6 +18,8 @@ import java.util.Iterator;
  */
 
 public class TabItemManager {
+    public static final String KEY_FILTERED = "hc_filter";
+
     ArrayList<TabItem>  items;
     ArrayList<TabItem>  items_without_filtered;
     HashSet<String>    filteredKey;

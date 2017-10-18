@@ -40,10 +40,14 @@ public class LoadingActivity extends AppCompatActivity {
             String response = (String)msg.obj;
             TabItemManager timan = Global.obj().getTabItemManager();
             ArticleListManager aiman = Global.obj().getArticleListManager();
-            String sJsonList = Storage.load(getApplicationContext(), G.KEY_FILTERED_COMM);
-            timan.setFilteredList(sJsonList);
-
             timan.init();
+            if(Storage.have(getApplicationContext(), TabItemManager.KEY_FILTERED))
+            {
+                String sJsonList = Storage.load(getApplicationContext(), TabItemManager.KEY_FILTERED);
+                timan.setFilteredList(sJsonList);
+            }
+
+
             if(!Parcer.communityList(response, timan)) {
                 finish();
             }

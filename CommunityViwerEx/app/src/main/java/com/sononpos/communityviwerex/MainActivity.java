@@ -228,6 +228,7 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
         mBind.listLeft.setHasFixedSize(true);
         mBind.listLeft.setLayoutManager(new LinearLayoutManager(mBind.getRoot().getContext()));
         mBind.listLeft.setAdapter(new MainLeftMenuRecyclerAdapter(mBind, this));
+        mBind.listLeft.addItemDecoration(new SimpleDividerItemDecoration(mBind.getRoot().getContext()));
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback((MainLeftMenuRecyclerAdapter)mBind.listLeft.getAdapter());
         mTouchHelper = new ItemTouchHelper(callback);
         mTouchHelper.attachToRecyclerView(mBind.listLeft);
@@ -266,8 +267,14 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
                 final TabItemManager timan = Global.obj().getTabItemManager();
                 timan.refreshList(getApplicationContext());
                 ResetDropDownList();
-                mBind.tabs.notifyDataSetChanged();
-                adapter.notifyDataSetChanged();
+                try {
+                    mBind.tabs.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();
+                }
+                catch(Exception e) {
+                    Toast.makeText(MainActivity.this, "리스트 갱신에 실패 했습니다.", Toast.LENGTH_LONG).show();
+                }
+                Storage.save(getApplicationContext(), TabItemManager.KEY_FILTERED, timan.makeFilteredList());
             }
 
             @Override
