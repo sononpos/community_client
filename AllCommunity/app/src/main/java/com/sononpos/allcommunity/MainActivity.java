@@ -217,6 +217,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+                Global.ArticleListManager listman = Global.getInstance().getListMan();
+                listman.refreshListWithFiltered();
+                mBind.tabs.notifyDataSetChanged();
+                mBind.pager.getAdapter().notifyDataSetChanged();
                 if(Global.getInstance().getListMan() != null) {
                     Global.getInstance().getListMan().saveFiltered(getApplicationContext());
                 }
