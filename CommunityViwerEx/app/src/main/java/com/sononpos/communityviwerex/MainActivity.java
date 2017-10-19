@@ -265,15 +265,10 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
             @Override
             public void onDrawerClosed(View drawerView) {
                 final TabItemManager timan = Global.obj().getTabItemManager();
-                timan.refreshList(getApplicationContext());
+                timan.refreshList(getApplicationContext(), true);
                 ResetDropDownList();
-                try {
-                    mBind.tabs.notifyDataSetChanged();
-                    adapter.notifyDataSetChanged();
-                }
-                catch(Exception e) {
-                    Toast.makeText(MainActivity.this, "리스트 갱신에 실패 했습니다.", Toast.LENGTH_LONG).show();
-                }
+                mBind.tabs.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
                 Storage.save(getApplicationContext(), TabItemManager.KEY_FILTERED, timan.makeFilteredList());
             }
 

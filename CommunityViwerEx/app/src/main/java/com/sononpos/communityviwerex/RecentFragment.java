@@ -42,7 +42,7 @@ public class RecentFragment extends Fragment implements  SwipeRefreshLayout.OnRe
         mBind.rvList.setHasFixedSize(true);
         mBind.rvList.setLayoutManager(new LinearLayoutManager(mBind.getRoot().getContext()));
         mBind.rvList.setAdapter(new RecentListRecyclerAdapter());
-//        mBind.rvList.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
+        mBind.rvList.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
 //        mBind.rvList.addOnScrollListener(new RecyclerView.OnScrollListener() {
 //            @Override
 //            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {

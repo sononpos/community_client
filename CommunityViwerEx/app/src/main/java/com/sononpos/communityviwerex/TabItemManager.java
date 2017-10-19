@@ -36,7 +36,7 @@ public class TabItemManager {
         items.add(newItem);
     }
 
-    public void refreshList(Context context) {
+    public void refreshList(Context context, boolean bSave) {
         int nListCnt = items.size();
         JSONArray aSequance = new JSONArray();
         for(int i = 0 ; i < nListCnt ; ++i) {
@@ -62,7 +62,9 @@ public class TabItemManager {
             items_without_filtered.add(item);
         }
 
-        Storage.save(context, "TabItemListSeq", aSequance.toString());
+        if( bSave ){
+            Storage.save(context, "TabItemListSeq", aSequance.toString());
+        }
     }
 
     public void setSeq(String sSeqString) {
@@ -90,11 +92,15 @@ public class TabItemManager {
     }
 
     public void addFilter(String key) {
-        filteredKey.add(key);
+        synchronized (filteredKey) {
+            filteredKey.add(key);
+        }
     }
 
     public void removeFilter(String key) {
-        filteredKey.remove(key);
+        synchronized (filteredKey) {
+            filteredKey.remove(key);
+        }
     }
 
     public boolean isFiltered(String key) {
@@ -102,13 +108,15 @@ public class TabItemManager {
     }
 
     public void setFilteredList(String sJson) {
-        try {
-            JSONArray aList = new JSONArray(sJson);
-            for(int i = 0 ; i < aList.length() ; ++i) {
-                filteredKey.add(aList.getString(i));
+        synchronized (filteredKey) {
+            try {
+                JSONArray aList = new JSONArray(sJson);
+                for(int i = 0 ; i < aList.length() ; ++i) {
+                    filteredKey.add(aList.getString(i));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 

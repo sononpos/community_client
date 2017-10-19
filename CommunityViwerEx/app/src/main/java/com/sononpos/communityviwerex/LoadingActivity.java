@@ -62,7 +62,7 @@ public class LoadingActivity extends AppCompatActivity {
             else {
                 timan.sort();
             }
-            timan.refreshList(getApplicationContext());
+            timan.refreshList(getApplicationContext(), true);
 
             if(Storage.have(getApplicationContext(), ArticleListManager.KEY_RECENT_ARTICLE)) {
                 String sRecentJsonList = Storage.load(getApplicationContext(), ArticleListManager.KEY_RECENT_ARTICLE);

@@ -51,14 +51,13 @@ implements ItemTouchHelperAdapter {
         holder.mBind.cbEnabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.e("Bind","info : " + info.getName());
                 if(timan.isFiltered(info.getKey()) && isChecked) {
                     timan.removeFilter(info.getKey());
                 }
                 else if(!timan.isFiltered(info.getKey()) && !isChecked) {
                     timan.addFilter(info.getKey());
                 }
-                timan.refreshList(holder.mBind.getRoot().getContext());
+                //timan.refreshList(holder.mBind.getRoot().getContext(), false);
                 SetItemColor(holder);
             }
         });
