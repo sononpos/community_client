@@ -2,6 +2,7 @@ package com.sononpos.communityviwerex;
 
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sononpos.communityviwerex.Funtional.ThemeManager;
 import com.sononpos.communityviwerex.databinding.FragmentRecentBinding;
 
 
@@ -41,21 +43,10 @@ public class RecentFragment extends Fragment implements  SwipeRefreshLayout.OnRe
         mBind.srlayout.setOnRefreshListener(this);
         mBind.rvList.setHasFixedSize(true);
         mBind.rvList.setLayoutManager(new LinearLayoutManager(mBind.getRoot().getContext()));
-        mBind.rvList.setAdapter(new RecentListRecyclerAdapter());
+        mBind.rvList.setAdapter(new RecentListRecyclerAdapter(mBind.tvTutorial));
         mBind.rvList.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
-//        mBind.rvList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                if(loadInfo.isLoading()) return;
-//
-//                int lastVisibleItemPosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-//                int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
-//                if (lastVisibleItemPosition == itemTotalCount) {
-//                    LoadContents();
-//                }
-//            }
-//        });
+        ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
+        mBind.tvTutorial.setTextColor(Color.parseColor(theme.BasicFont));
         loadRecent();
     }
 
@@ -67,7 +58,6 @@ public class RecentFragment extends Fragment implements  SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() {
-        Log.e("EEEEE", "EEEEE");
         mBind.srlayout.setRefreshing(false);
         RecentListRecyclerAdapter adapter = (RecentListRecyclerAdapter)mBind.rvList.getAdapter();
         adapter.clear();

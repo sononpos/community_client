@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="즐겨찾기 방법 - 글 제목을 꾸욱 눌러주세요"
+            android:text="스크랩 방법 - 글 제목을 꾸욱 눌러주세요 ^^"
             />
     </RelativeLayout>
 </layout>

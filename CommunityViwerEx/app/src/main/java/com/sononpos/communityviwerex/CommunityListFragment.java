@@ -204,35 +204,6 @@ public class CommunityListFragment extends Fragment {
             }
         });
 
-        //  커뮤니티 글 제목을 클릭했을 때, 상세 뷰로
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Animation animation1 = new AlphaAnimation(0.3f, 1.0f);
-                animation1.setDuration(1000);
-                view.startAnimation(animation1);
-
-                if( !(parent.getItemAtPosition(position) instanceof ListViewItem) ) {
-                    return;
-                }
-
-                ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
-                TextView titleTextView = (TextView) view.findViewById(R.id.tvTitle) ;
-                titleTextView.setTextColor(Color.parseColor("#aaaaaa"));
-
-                ListViewItem item = (ListViewItem)parent.getItemAtPosition(position);
-                G.readArticle(getContext(), item.m_sTitle.hashCode());
-                Intent intent = new Intent(getActivity(), CommunityArticle.class);
-                intent.putExtra("URL", item.m_sLink);
-                intent.putExtra("TITLE", item.m_sTitle);
-                startActivity(intent);
-
-                if(!item.m_sJsonString.isEmpty()) {
-                    Global.obj().getArticleListManager().addRecent(item);
-                    Global.obj().getArticleListManager().saveRecent(getContext());
-                }
-            }
-        });
         fl.addView(listView);
         LoadList();
 

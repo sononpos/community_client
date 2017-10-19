@@ -7,9 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
 import com.sononpos.communityviwerex.databinding.ArticleListItemBinding;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -19,6 +22,11 @@ import java.util.ArrayList;
 
 public class RecentListRecyclerAdapter extends RecyclerView.Adapter<RecentListRecyclerAdapter.ArticleListViewHolder> {
     ArrayList<ListViewItem> aRecents = new ArrayList<>();
+    TextView tutorialView;
+    public RecentListRecyclerAdapter(TextView tvTuto) {
+        tutorialView = tvTuto;
+    }
+
     @Override
     public ArticleListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ArticleListItemBinding bind = ArticleListItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
@@ -46,6 +54,12 @@ public class RecentListRecyclerAdapter extends RecyclerView.Adapter<RecentListRe
 
     @Override
     public int getItemCount() {
+        if(aRecents.size() == 0 ) {
+            tutorialView.setVisibility(View.VISIBLE);
+        }
+        else {
+            tutorialView.setVisibility(View.GONE);
+        }
         return aRecents.size();
     }
 
