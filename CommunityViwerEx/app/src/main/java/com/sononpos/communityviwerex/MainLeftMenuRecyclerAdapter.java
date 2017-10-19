@@ -42,8 +42,6 @@ implements ItemTouchHelperAdapter {
     public void onBindViewHolder(final LeftMenuItemViewHolder holder, int position) {
         final TabItemManager timan = Global.obj().getTabItemManager();
         final TabItem info = timan.getListAll().get(position);
-        Log.e("Bind","position : " + position + ", info : " + info.getName());
-        Log.e("Bind",timan.makeFilteredList());
         holder.mBind.setItem(info);
         SetItemColor(holder);
         holder.mBind.cbEnabled.setOnCheckedChangeListener(null);

@@ -61,7 +61,7 @@ public class RecentFragment extends Fragment implements  SwipeRefreshLayout.OnRe
 
     private void loadRecent() {
         RecentListRecyclerAdapter adapter = (RecentListRecyclerAdapter)mBind.rvList.getAdapter();
-        adapter.addItemList(Global.obj().getArticleListManager().getList());
+        adapter.addItemList(Global.obj().getArticleListManager().getRecentList());
         adapter.notifyDataSetChanged();
     }
 

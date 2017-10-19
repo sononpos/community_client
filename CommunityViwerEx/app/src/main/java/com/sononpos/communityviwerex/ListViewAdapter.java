@@ -1,6 +1,8 @@
 package com.sononpos.communityviwerex;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
 
@@ -80,7 +83,7 @@ public class ListViewAdapter extends BaseAdapter {
         }
         */
 
-        ListViewItem item = listViewItemList.get(position);
+        final ListViewItem item = listViewItemList.get(position);
         String sTitleRet = item.m_sTitle;
 
         if(G.isReaded(item.m_sTitle.hashCode())){
@@ -129,6 +132,27 @@ public class ListViewAdapter extends BaseAdapter {
         nameTextView.setText(item.m_sName); nameTextView.setTextSize(themeFont.SubFont);
         regDateTextView.setText(item.m_sRegDate); regDateTextView.setTextSize(themeFont.SubFont);
         countTextView.setText("조회수 : " + item.m_sViewCnt); countTextView.setTextSize(themeFont.SubFont);
+
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                final CharSequence[] items = {"즐겨찾기"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+                builder.setTitle("메뉴");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int itemid) {
+                        Global.obj().getArticleListManager().addFavorate(item);
+                        Global.obj().getArticleListManager().saveFavorate(context);
+                        Toast.makeText(context, "즐겨찾기에 등록 되었습니다", Toast.LENGTH_SHORT);
+                    }
+                });
+                builder.show();
+                return false;
+            }
+        });
 
         return convertView;
     }

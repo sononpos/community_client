@@ -168,6 +168,10 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
                 case TabItem.IT_RECENT:
                     f = new RecentFragment();
                     break;
+
+                case TabItem.IT_FAVORATE:
+                    f = new FavorateFragment();
+                    break;
             }
 
             if(f == null) {

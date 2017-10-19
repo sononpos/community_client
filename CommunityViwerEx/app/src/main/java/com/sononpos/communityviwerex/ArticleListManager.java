@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Created by nnnyyy on 2017-10-18.
@@ -14,7 +15,9 @@ import java.util.ArrayList;
 
 class ArticleListManager {
     public final static String KEY_RECENT_ARTICLE = "hc_recent";
+    public final static String KEY_FAVORITE_ARTICLE = "hc_favorate";
     ArrayList<ListViewItem> aRecentItems = new ArrayList<>();
+    Vector<ListViewItem> aFavorateItems = new Vector<>();
 
     public void loadRecent(String json) {
         aRecentItems.clear();
@@ -35,14 +38,14 @@ class ArticleListManager {
         }
     }
 
-    public void add(ListViewItem item) {
+    public void addRecent(ListViewItem item) {
         aRecentItems.add(0, item);
         if(aRecentItems.size() > 60) {
             aRecentItems.remove(aRecentItems.size()-1);
         }
     }
 
-    public ArrayList<ListViewItem> getList() {
+    public ArrayList<ListViewItem> getRecentList() {
         return aRecentItems;
     }
 
@@ -62,6 +65,58 @@ class ArticleListManager {
 
     public void clearRecent(Context context) {
         aRecentItems.clear();
+        saveRecent(context);
+    }
+
+
+    public void loadFavorate(String json) {
+        aFavorateItems.clear();
+        try {
+            JSONArray aList = new JSONArray(json);
+            int nLen = aList.length();
+            for(int i = 0 ; i < nLen ; ++i) {
+                JSONObject obj = aList.getJSONObject(i);
+                String sTitle = obj.getString("title");
+                String sName = obj.getString("name");
+                String sDate = obj.getString("date");
+                String sLink = obj.getString("link");
+                ListViewItem item = new ListViewItem(sTitle, sName, sDate, "", "", sLink, "");
+                aFavorateItems.add(item);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addFavorate(ListViewItem item) {
+        aFavorateItems.add(item);
+    }
+
+    public Vector<ListViewItem> getFavorateList() {
+        return aFavorateItems;
+    }
+
+    public String makeFavorateJsonString() {
+        JSONArray aList = new JSONArray();
+        for(int i = 0 ; i < aFavorateItems.size() ; ++i) {
+            JSONObject obj = aFavorateItems.get(i).makeJsonObject();
+            aList.put(obj);
+        }
+
+        return aList.toString();
+    }
+
+    public void saveFavorate(Context context) {
+        Storage.save(context, KEY_FAVORITE_ARTICLE, makeFavorateJsonString());
+    }
+
+    public void clearFavorate(Context context) {
+        aFavorateItems.clear();
+        saveRecent(context);
+    }
+
+    public void removeFavorate(Context context, int idx) {
+        aFavorateItems.remove(idx);
         saveRecent(context);
     }
 }
