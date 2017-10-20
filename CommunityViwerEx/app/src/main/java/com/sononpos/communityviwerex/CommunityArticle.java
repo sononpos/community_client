@@ -6,8 +6,10 @@ import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
 import android.preference.PreferenceManager;
@@ -25,42 +27,57 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
+import com.sononpos.communityviwerex.databinding.ActivityCommunityArticleBinding;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import im.delight.android.webview.AdvancedWebView;
 
 public class CommunityArticle extends AppCompatActivity implements AdvancedWebView.Listener {
-
-    private SwipeWebView mWebView;
-    private String url;
-    private String title;
+    ActivityCommunityArticleBinding mBind;
     private AdView adView;
+    ListViewItem item;
 
     AlertDialog.Builder builder;
+
+    long tDelay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_community_article);
+        mBind = DataBindingUtil.setContentView(this, R.layout.activity_community_article);
 
-        ImageButton ibtn = (ImageButton)findViewById(R.id.btn_share);
-        ibtn.setOnClickListener(new View.OnClickListener() {
-
+        mBind.btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent msg = new Intent(Intent.ACTION_SEND);
                 msg.addCategory(Intent.CATEGORY_DEFAULT);
-                msg.putExtra(Intent.EXTRA_SUBJECT, title);
-                msg.putExtra(Intent.EXTRA_TEXT, url);
-                msg.putExtra(Intent.EXTRA_TITLE, "핫 커뮤니티 - " + title);
+                msg.putExtra(Intent.EXTRA_SUBJECT, item.m_sTitle);
+                msg.putExtra(Intent.EXTRA_TEXT, item.m_sLink);
+                msg.putExtra(Intent.EXTRA_TITLE, "핫 커뮤니티 - " + item.m_sTitle);
                 msg.setType("text/plain");
                 startActivity(Intent.createChooser(msg, "공유하기"));
             }
         });
 
-        mWebView = (SwipeWebView)findViewById(R.id.webview);
-        mWebView.getRootView().setBackgroundColor(Color.parseColor(ThemeManager.GetTheme().BgList));
-        mWebView.setListener(this, this);
-        mWebView.setWebChromeClient(new WebChromeClient(){
+        mBind.btnScrap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Global.obj().getArticleListManager().isFavorated(item.m_sTitle.hashCode())) {
+                    Toast.makeText(getApplicationContext(), "이미 스크랩 되어 있습니다.", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Global.obj().getArticleListManager().addFavorate(item);
+                    Global.obj().getArticleListManager().saveFavorate(getApplicationContext());
+                    Toast.makeText(getApplicationContext(), "스크랩 탭에 등록 되었습니다", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        mBind.webview.getRootView().setBackgroundColor(Color.parseColor(ThemeManager.GetTheme().BgList));
+        mBind.webview.setListener(this, this);
+        mBind.webview.setWebChromeClient(new WebChromeClient(){
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
                 if(builder != null) {
@@ -91,7 +108,6 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean bTutorial = pref.getBoolean(G.KEY_TUTORIAL_COMPLETE , false);
-
         if(!bTutorial) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.tutorial_desc);
@@ -116,7 +132,7 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
 
         boolean bAction = pref.getBoolean("webview_slide_action" , true);
         if( bAction ) {
-            mWebView.setCallback(new SwipeWebView.SwipeCallback() {
+            mBind.webview.setCallback(new SwipeWebView.SwipeCallback() {
                 @Override
                 public void OnRightToLeft() {
                     finish();
@@ -133,10 +149,46 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
                 }
             });
         }
+
+        mBind.webview.setScrollCallback(new SwipeWebView.ScrollCallback() {
+            @Override
+            public void onScrollChanged(int l, int t, int oldl, int oldt) {
+                if(mBind.btnScrap.getVisibility() != View.GONE) {
+                    tDelay = System.currentTimeMillis();
+                    mBind.btnScrap.setVisibility(View.GONE);
+                    mBind.btnShare.setVisibility(View.GONE);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while(true) {
+                                try {
+                                    Thread.sleep(100);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                if( 2000 < System.currentTimeMillis() - tDelay) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mBind.btnScrap.setVisibility(View.VISIBLE);
+                                            mBind.btnShare.setVisibility(View.VISIBLE);
+                                        }
+                                    });
+                                    break;
+                                }
+                            }
+                        }
+                    }).start();
+                }
+                else {
+                    tDelay = System.currentTimeMillis();
+                }
+            }
+        });
+
         Intent intent = getIntent();
-        url = intent.getStringExtra("URL");
-        title = intent.getStringExtra("TITLE");
-        mWebView.loadUrl(url);
+        item = (ListViewItem) intent.getSerializableExtra("OBJ");
+        mBind.webview.loadUrl(item.m_sLink);
 
         // Load an ad into the AdMob banner view.
         adView = (AdView) findViewById(R.id.adViewWeb);
@@ -149,7 +201,7 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
     @Override
     protected void onResume() {
         super.onResume();
-        mWebView.onResume();
+        mBind.webview.onResume();
         if(adView != null) {
             adView.resume();
         }
@@ -157,7 +209,7 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
 
     @Override
     protected void onPause() {
-        mWebView.onPause();
+        mBind.webview.onPause();
         super.onPause();
         if(adView != null) {
             adView.pause();
@@ -166,7 +218,7 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
 
     @Override
     protected void onDestroy() {
-        mWebView.onDestroy();
+        mBind.webview.onDestroy();
         super.onDestroy();
         if(adView != null) {
             adView.destroy();

@@ -149,9 +149,14 @@ public class ListViewAdapter extends BaseAdapter {
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int itemid) {
-                        Global.obj().getArticleListManager().addFavorate(item);
-                        Global.obj().getArticleListManager().saveFavorate(context);
-                        Toast.makeText(context, "스크랩 탭에 등록 되었습니다", Toast.LENGTH_LONG).show();
+                        if(Global.obj().getArticleListManager().isFavorated(item.m_sTitle.hashCode())) {
+                            Toast.makeText(context, "이미 스크랩 되어 있습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Global.obj().getArticleListManager().addFavorate(item);
+                            Global.obj().getArticleListManager().saveFavorate(context);
+                            Toast.makeText(context, "스크랩 탭에 등록 되었습니다", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 builder.show();
@@ -168,6 +173,7 @@ public class ListViewAdapter extends BaseAdapter {
 
                 G.readArticle(context, item.m_sTitle.hashCode());
                 Intent intent = new Intent(context, CommunityArticle.class);
+                intent.putExtra("OBJ", item);
                 intent.putExtra("URL", item.m_sLink);
                 intent.putExtra("TITLE", item.m_sTitle);
                 context.startActivity(intent);

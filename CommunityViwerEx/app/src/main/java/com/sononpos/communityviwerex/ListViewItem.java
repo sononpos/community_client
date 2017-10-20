@@ -3,11 +3,13 @@ package com.sononpos.communityviwerex;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by nnnyyy on 2017-03-03.
  */
 
-public class ListViewItem {
+public class ListViewItem implements Serializable {
     public ListViewItem() {
 
     }

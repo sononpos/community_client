@@ -47,6 +47,7 @@ public class FavorateListRecyclerAdapter extends RecyclerView.Adapter<FavorateLi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(holder.mBind.getRoot().getContext(), CommunityArticle.class);
+                intent.putExtra("OBJ", item);
                 intent.putExtra("URL", item.m_sLink);
                 intent.putExtra("TITLE", item.m_sTitle);
                 holder.mBind.getRoot().getContext().startActivity(intent);

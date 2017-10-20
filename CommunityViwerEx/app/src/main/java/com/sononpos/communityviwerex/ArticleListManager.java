@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Vector;
 
 /**
@@ -18,6 +19,7 @@ class ArticleListManager {
     public final static String KEY_FAVORITE_ARTICLE = "hc_favorate";
     ArrayList<ListViewItem> aRecentItems = new ArrayList<>();
     Vector<ListViewItem> aFavorateItems = new Vector<>();
+    HashSet<Integer> aFavorateHash = new HashSet<>();
 
     public void loadRecent(String json) {
         aRecentItems.clear();
@@ -82,6 +84,7 @@ class ArticleListManager {
                 String sLink = obj.getString("link");
                 ListViewItem item = new ListViewItem(sTitle, sName, sDate, "", "", sLink, "");
                 aFavorateItems.add(item);
+                aFavorateHash.add(item.m_sTitle.hashCode());
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -90,6 +93,7 @@ class ArticleListManager {
 
     public void addFavorate(ListViewItem item) {
         aFavorateItems.add(item);
+        aFavorateHash.add(item.m_sTitle.hashCode());
     }
 
     public Vector<ListViewItem> getFavorateList() {
@@ -116,7 +120,14 @@ class ArticleListManager {
     }
 
     public void removeFavorate(Context context, int idx) {
+        ListViewItem item = aFavorateItems.get(idx);
+        aFavorateHash.remove(item.m_sTitle.hashCode());
         aFavorateItems.remove(idx);
         saveRecent(context);
     }
+
+    public boolean isFavorated(int _hash) {
+        return aFavorateHash.contains(_hash);
+    }
+
 }
