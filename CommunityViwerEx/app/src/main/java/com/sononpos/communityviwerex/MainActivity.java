@@ -83,6 +83,27 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
         int themeFontType = Integer.parseInt(setRefer.getString("theme_font_type", "1"));
         ThemeManager.SetThemeFont(themeFontType);
 
+        boolean bReload = true;
+        do {
+            if(Global.obj() == null) break;
+            TabItemManager timan = Global.obj().getTabItemManager();
+            if(timan == null) break;
+            if(timan.getListWithoutFiltered() == null) break;
+
+            bReload = false;
+
+            //return Global.obj().getTabItemManager().getListWithoutFiltered().size();
+        }while(false);
+
+        if(bReload) {
+            Intent intent = new Intent(MainActivity.this, LoadingActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            getApplicationContext().startActivity(intent);
+            return;
+        }
+
         RefreshTheme();
         ResetDropDownList();
 
@@ -150,7 +171,21 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
 
         @Override
         public int getCount() {
-            return Global.obj().getTabItemManager().getListWithoutFiltered().size();
+            do {
+                if(Global.obj() == null) break;
+                TabItemManager timan = Global.obj().getTabItemManager();
+                if(timan == null) break;
+                if(timan.getListWithoutFiltered() == null) break;
+
+                return Global.obj().getTabItemManager().getListWithoutFiltered().size();
+            }while(false);
+
+            Intent intent = new Intent(MainActivity.this, LoadingActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            getApplicationContext().startActivity(intent);
+            return 0;
         }
 
         @Override
@@ -223,6 +258,14 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
         ArrayList<LeftMenuItem> leftMenuList = new ArrayList<LeftMenuItem>();
         final TabItemManager timan = Global.obj().getTabItemManager();
         final ArrayList<TabItem> aList = timan.getListAll();
+        if(aList == null) {
+            Intent intent = new Intent(MainActivity.this, LoadingActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            getApplicationContext().startActivity(intent);
+            return;
+        }
         Iterator iter = aList.iterator();
         while(iter.hasNext()) {
             TabItem info = (TabItem)iter.next();
