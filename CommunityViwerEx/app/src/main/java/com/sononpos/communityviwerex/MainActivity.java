@@ -96,11 +96,7 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
         }while(false);
 
         if(bReload) {
-            Intent intent = new Intent(MainActivity.this, LoadingActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            getApplicationContext().startActivity(intent);
+            ReloadApp();
             return;
         }
 
@@ -180,11 +176,7 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
                 return Global.obj().getTabItemManager().getListWithoutFiltered().size();
             }while(false);
 
-            Intent intent = new Intent(MainActivity.this, LoadingActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            getApplicationContext().startActivity(intent);
+            ReloadApp();
             return 0;
         }
 
@@ -259,11 +251,7 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
         final TabItemManager timan = Global.obj().getTabItemManager();
         final ArrayList<TabItem> aList = timan.getListAll();
         if(aList == null) {
-            Intent intent = new Intent(MainActivity.this, LoadingActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            getApplicationContext().startActivity(intent);
+            ReloadApp();
             return;
         }
         Iterator iter = aList.iterator();
@@ -334,6 +322,10 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
 
             ArrayList<TabItem> aList = Global.obj().getTabItemManager().getListWithoutFiltered();
             final int COLUMN_CNT_PER_ROW = 4;
+            if(aList == null) {
+                ReloadApp();
+                return;
+            }
             int listCnt = aList.size();
             LinearLayout newLinear = null;
             for(int i = 0 ; i < listCnt ; ++i) {
@@ -406,6 +398,13 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
         mBind.btnListComm.setImageResource(R.drawable.arrow_down);
     }
 
+    private void ReloadApp() {
+        Intent intent = new Intent(MainActivity.this, LoadingActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        getApplicationContext().startActivity(intent);
+    }
     private AdView getAdView() { return mBind.adViewMain; }
 
     @Override

@@ -17,7 +17,6 @@
 package com.sononpos.communityviwerex;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -28,13 +27,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
@@ -247,6 +242,7 @@ public class CommunityListFragment extends Fragment {
 
     private void LoadInner(){
         final ArrayList<TabItem> aList = Global.obj().getTabItemManager().getList();
+        if(aList == null) return;
         if( aList.size() == 0 ) return;
         loadingMore = true;
         bLoading = true;

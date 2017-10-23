@@ -4,7 +4,6 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -84,6 +83,7 @@ implements ItemTouchHelperAdapter {
     @Override
     public int getItemCount() {
         final TabItemManager timan = Global.obj().getTabItemManager();
+        if(timan.getListAll() == null) return 0;
         return timan.getListAll().size();
     }
 
@@ -103,6 +103,7 @@ implements ItemTouchHelperAdapter {
     public void onItemMove(int fromPosition, int toPosition) {
         final TabItemManager timan = Global.obj().getTabItemManager();
         ArrayList<TabItem> aList = timan.getListAll();
+        if(aList == null) return;
         if (fromPosition < toPosition) {
             for (int i = fromPosition; i < toPosition; i++) {
                 Collections.swap(aList, i, i + 1);

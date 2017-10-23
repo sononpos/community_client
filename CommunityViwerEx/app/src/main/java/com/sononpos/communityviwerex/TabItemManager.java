@@ -144,6 +144,9 @@ public class TabItemManager {
     public ArrayList<TabItem> getListWithoutFiltered() { return items_without_filtered; }
     public ArrayList<TabItem> getListAll() { return items; }
     public ArrayList<TabItem> getList() {
+        if(filteredKey == null) {
+            return null;
+        }
         if(filteredKey.size() > 0) {
             return items_without_filtered;
         }
