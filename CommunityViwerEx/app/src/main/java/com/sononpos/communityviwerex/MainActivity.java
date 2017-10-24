@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
 
     @Override
     protected void onResume() {
+        super.onResume();
         //  테스트
         SharedPreferences setRefer = PreferenceManager
                 .getDefaultSharedPreferences(this);
@@ -107,8 +108,6 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
             getAdView().resume();
             getAdView().refreshDrawableState();
         }
-
-        super.onResume();
     }
 
     @Override
