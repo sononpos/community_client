@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.sononpos.communityviwerex.FirstSettings.FirstSetting_ThemeActivity;
@@ -18,6 +19,10 @@ import com.sononpos.communityviwerex.Funtional.KBONetworkInfo;
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
 import com.sononpos.communityviwerex.HttpHelper.HttpHelper;
 import com.sononpos.communityviwerex.HttpHelper.HttpHelperListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -187,22 +192,46 @@ public class LoadingActivity extends AppCompatActivity {
 
         handlerUpdate = new CheckUpdateHandler();
 
-        new Thread(new Runnable() {
+        new HttpHelper().SetListener(new HttpHelperListener() {
             @Override
-            public void run() {
-                Message msg = handlerUpdate.obtainMessage();
-                try {
-                    String device_version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-                    int nState = MarketVersionChecker.getVersionState(device_version);
-                    msg.arg1 = nState;
-                    handlerUpdate.sendMessage(msg);
-                } catch (PackageManager.NameNotFoundException e) {
-                    msg.arg1 = -1;
-                    handlerUpdate.sendMessage(msg);
-                    return;
+            public void onResponse(int nType, int nErrorCode, String sResponse) {
+                if(nErrorCode == 0) {
+
+                    try {
+                        JSONArray arr = new JSONArray(sResponse);
+                        JSONObject obj = arr.getJSONObject(0);
+                        String sRet = obj.getString("access");
+                        Global.obj().isKor = (sRet.compareTo("Y") == 0);
+
+                        Log.d("region", "Korea Region : " + Global.obj().isKor);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Message msg = handlerUpdate.obtainMessage();
+                            try {
+                                String device_version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+                                int nState = MarketVersionChecker.getVersionState(device_version);
+                                msg.arg1 = nState;
+                                handlerUpdate.sendMessage(msg);
+                            } catch (PackageManager.NameNotFoundException e) {
+                                msg.arg1 = -1;
+                                handlerUpdate.sendMessage(msg);
+                                return;
+                            }
+                        }
+                    }).start();
+                }
+                else {
+                    finishApp();
                 }
             }
-        }).start();
+        }).Request(0, "http://52.79.205.198:3000/check_ad");
     }
 
     private void LoadCommunityList() {

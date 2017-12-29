@@ -62,10 +62,13 @@ public class MainActivity extends AppCompatActivity implements OnStartDragListen
         InitLeftMenu();
         RefreshTheme();
         ResetDropDownList();
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
-                .build();  // An example device ID
-        getAdView().loadAd(adRequest);
+
+        if( Global.obj().isKor ) {
+            AdRequest adRequest = new AdRequest.Builder()
+                    .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
+                    .build();  // An example device ID
+            getAdView().loadAd(adRequest);
+        }
     }
 
     @Override

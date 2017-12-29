@@ -16,17 +16,32 @@
         android:layout_height="wrap_content">
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/contop"/>
-        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/toolBarArticle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            android:title=""
-            >
-        </android.support.v7.widget.Toolbar>
+            android:scaleType="fitStart"
+            android:background="#fece00"
+            android:src="@drawable/contop_webview"/>
+
+        <ImageButton
+            android:id="@+id/btn_share_new"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:src="@drawable/share_icon" />
+        <ImageButton
+            android:id="@+id/btn_scrap_new"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="54dp"
+            android:src="@drawable/scrab_icon" />
     </RelativeLayout>
 
     <com.sononpos.communityviwerex.SwipeWebView
@@ -34,30 +49,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rl_toolbar"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:orientation="horizontal"
-        android:layout_above="@+id/adViewWeb"
-        >        
-        <Button
-            android:id="@+id/btn_share"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#77000000"
-            android:text="공유"
-            />
-        <Button
-            android:id="@+id/btn_scrap"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="#77000000"
-            android:layout_weight="1"
-            android:text="스크랩"
-            />
-    </LinearLayout>
     <!-- view for AdMob Banner Ad -->
     <com.google.android.gms.ads.AdView
         android:id="@+id/adViewWeb"

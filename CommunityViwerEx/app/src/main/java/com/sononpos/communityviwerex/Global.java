@@ -20,6 +20,7 @@ public class Global {
     }
 
     private TabItemManager timan;
+    public boolean isKor = true;
     public TabItemManager getTabItemManager() {
         if(timan == null) {
             timan = new TabItemManager();

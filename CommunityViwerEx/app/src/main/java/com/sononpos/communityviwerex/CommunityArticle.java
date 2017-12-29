@@ -48,7 +48,7 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
         super.onCreate(savedInstanceState);
         mBind = DataBindingUtil.setContentView(this, R.layout.activity_community_article);
 
-        mBind.btnShare.setOnClickListener(new View.OnClickListener() {
+        mBind.btnShareNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent msg = new Intent(Intent.ACTION_SEND);
@@ -61,7 +61,7 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
             }
         });
 
-        mBind.btnScrap.setOnClickListener(new View.OnClickListener() {
+        mBind.btnScrapNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(Global.obj().getArticleListManager().isFavorated(item.m_sTitle.hashCode())) {
@@ -70,6 +70,7 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
                 else {
                     Global.obj().getArticleListManager().addFavorate(item);
                     Global.obj().getArticleListManager().saveFavorate(getApplicationContext());
+                    mBind.btnScrapNew.setImageResource(R.drawable.scrab_enable_icon);
                     Toast.makeText(getApplicationContext(), "스크랩 탭에 등록 되었습니다", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -150,7 +151,7 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
             });
         }
 
-        mBind.webview.setScrollCallback(new SwipeWebView.ScrollCallback() {
+        /*mBind.webview.setScrollCallback(new SwipeWebView.ScrollCallback() {
             @Override
             public void onScrollChanged(int l, int t, int oldl, int oldt) {
                 if(mBind.btnScrap.getVisibility() != View.GONE) {
@@ -184,18 +185,23 @@ public class CommunityArticle extends AppCompatActivity implements AdvancedWebVi
                     tDelay = System.currentTimeMillis();
                 }
             }
-        });
+        });*/
 
         Intent intent = getIntent();
         item = (ListViewItem) intent.getSerializableExtra("OBJ");
+        if(Global.obj().getArticleListManager().isFavorated(item.m_sTitle.hashCode())) {
+            mBind.btnScrapNew.setImageResource(R.drawable.scrab_enable_icon);
+        }
         mBind.webview.loadUrl(item.m_sLink);
 
-        // Load an ad into the AdMob banner view.
-        adView = (AdView) findViewById(R.id.adViewWeb);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
-                .build();
-        adView.loadAd(adRequest);
+        if( Global.obj().isKor ) {
+            // Load an ad into the AdMob banner view.
+            adView = (AdView) findViewById(R.id.adViewWeb);
+            AdRequest adRequest = new AdRequest.Builder()
+                    .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
+                    .build();
+            adView.loadAd(adRequest);
+        }
     }
 
     @Override
