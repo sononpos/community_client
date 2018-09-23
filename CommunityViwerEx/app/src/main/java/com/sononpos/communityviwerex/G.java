@@ -21,6 +21,7 @@ public class G {
     public static final String KEY_TUTORIAL_COMPLETE = "tutorial_complete";
     public static final String KEY_READED_ARTICLES = "ReadedArticles";
     public static final String FIRST_USE = "FirstUse";
+    public static final String READ_PRIVATE_POLICY = "ReadPP";
 
     public static HashSet<Integer> liReadArticleCheck = new HashSet<>();
 
@@ -40,6 +41,19 @@ public class G {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(FIRST_USE, false);
+        editor.apply();
+    }
+
+    public static boolean IsReadPP(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean bFirstUse = prefs.getBoolean(READ_PRIVATE_POLICY, false);
+        return bFirstUse;
+    }
+
+    public static void SetReadPP(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(READ_PRIVATE_POLICY, true);
         editor.apply();
     }
 

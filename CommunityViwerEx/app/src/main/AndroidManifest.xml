@@ -48,24 +48,26 @@
         <activity
             android:name=".FirstSettings.FirstSetting_ThemeActivity"
             android:label="@string/title_activity_first_setting__theme"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
 
         <!-- [START firebase_service] -->
-        <service
-            android:name=".FCMPush.MyFirebaseMessagingService">
+        <service android:name=".FCMPush.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <!-- [END firebase_service] -->
         <!-- [START firebase_iid_service] -->
-        <service
-            android:name=".FCMPush.MyFirebaseInstanceIDService">
+        <service android:name=".FCMPush.MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <!-- [END firebase_iid_service] -->
+        <activity
+            android:name=".PrivatePolicyActivity"
+            android:label="@string/title_activity_private_policy"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

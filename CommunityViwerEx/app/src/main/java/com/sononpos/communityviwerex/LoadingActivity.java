@@ -83,10 +83,8 @@ public class LoadingActivity extends AppCompatActivity {
             G.LoadRecentArticle(getApplicationContext());
             G.LoadReadedArticle(getApplicationContext());
 
-            // 첫번째 실행이면 FirstSetting으로
-            if(G.IsFirstUse(getApplicationContext())){
-                //G.SetFirstUse();    //  이후부터는 첫번째 실행이 아니게 된다
-                Intent intent = new Intent(mainActivity, FirstSetting_ThemeActivity.class);
+            if( !G.IsReadPP(getApplicationContext())) {
+                Intent intent = new Intent(mainActivity, PrivatePolicyActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -99,21 +97,38 @@ public class LoadingActivity extends AppCompatActivity {
                 startActivity(intent);
             }
             else {
-                Intent intent = new Intent(mainActivity, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                // 첫번째 실행이면 FirstSetting으로
+                if(G.IsFirstUse(getApplicationContext())){
+                    //G.SetFirstUse();    //  이후부터는 첫번째 실행이 아니게 된다
+                    Intent intent = new Intent(mainActivity, FirstSetting_ThemeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-                SharedPreferences setRefer = PreferenceManager
-                        .getDefaultSharedPreferences(getApplicationContext());
-                int themeType = Integer.parseInt(setRefer.getString("theme_type", "0"));
-                int themeFontType = Integer.parseInt(setRefer.getString("theme_font_type", "1"));
-                ThemeManager.SetTheme(themeType);
-                ThemeManager.SetThemeFont(themeFontType);
-                SharedPreferences.Editor editor = setRefer.edit();
-                editor.putString("list_backup", response);
-                editor.apply();
-                startActivity(intent);
+                    SharedPreferences setRefer = PreferenceManager
+                            .getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = setRefer.edit();
+                    editor.putString("list_backup", response);
+                    editor.apply();
+                    startActivity(intent);
+                }
+                else {
+                    Intent intent = new Intent(mainActivity, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                    SharedPreferences setRefer = PreferenceManager
+                            .getDefaultSharedPreferences(getApplicationContext());
+                    int themeType = Integer.parseInt(setRefer.getString("theme_type", "0"));
+                    int themeFontType = Integer.parseInt(setRefer.getString("theme_font_type", "1"));
+                    ThemeManager.SetTheme(themeType);
+                    ThemeManager.SetThemeFont(themeFontType);
+                    SharedPreferences.Editor editor = setRefer.edit();
+                    editor.putString("list_backup", response);
+                    editor.apply();
+                    startActivity(intent);
+                }
             }
         }
     }
@@ -127,7 +142,7 @@ public class LoadingActivity extends AppCompatActivity {
             super.handleMessage(msg);
 
             if(msg.arg1 == -1) {
-                finishApp();
+                LoadCommunityList();
                 return;
             }
 
