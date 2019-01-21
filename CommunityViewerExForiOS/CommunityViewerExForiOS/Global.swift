@@ -8,14 +8,6 @@
 
 import Foundation
 
-//  커뮤니티 리스트 정보
-class CommInfo {
-    var sName : String = ""
-    var nIndex : Int = 0
-    var sKey : String = ""
-    var sType : String = "web"
-}
-
 class GVal {
     
     static var ARTICLE_URL_BASE : String = "http://4seasonpension.com:3000/";
@@ -29,15 +21,15 @@ class GVal {
     static var filtered : NSMutableSet = NSMutableSet()
     
     // 커뮤니티 리스트
-    static var mComms = [String:CommInfo]()
-    static var aComms = [CommInfo]()
-    static var aCommsFiltered = [CommInfo]()
+    static var mComms = [String:CommunityModel]()
+    static var aComms = [CommunityModel]()
+    static var aCommsFiltered = [CommunityModel]()
     
     // 읽었던 글
     static var readArticle : NSMutableSet = NSMutableSet()
     
     static func SetCommInfo(_sKey : String, _sName : String, _nIdx : Int, _sType : String) {
-        let newInfo = CommInfo()
+        let newInfo = CommunityModel()
         newInfo.sName = _sName
         newInfo.nIndex = _nIdx
         newInfo.sKey = _sKey
@@ -46,14 +38,14 @@ class GVal {
         aComms.append(newInfo)
     }
     
-    static func GetCommInfoList() -> [CommInfo] {
+    static func GetCommInfoList() -> [CommunityModel] {
         if filtered.count > 0 {
             return aCommsFiltered
         }
         return aComms
     }
     
-    static func GetCommInfoListNotFiltered() -> [CommInfo] {
+    static func GetCommInfoListNotFiltered() -> [CommunityModel] {
         return aComms
     }
     

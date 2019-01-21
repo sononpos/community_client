@@ -22,7 +22,7 @@ class ContentVC : UIViewController, UITableViewDelegate, UITableViewDataSource {
     var aContents : [Content]  = [Content]()
     var nNextIndex = 1
     var bLoadingData = false
-    var commInfo : CommInfo?
+    var commInfo : CommunityModel?
     
     var alertController : UIAlertController?
     
