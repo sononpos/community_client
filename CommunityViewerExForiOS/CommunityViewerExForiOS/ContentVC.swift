@@ -8,18 +8,8 @@
 
 import UIKit
 
-class Content {
-    var sURL : String = ""
-    var sViewCnt : String?
-    var sUserName : String = ""
-    var sTitle : String = ""
-    var sRegDate : String = ""
-    var sCommentCnt : String?
-    var sLinkEncoding : String?
-}
-
 class ContentVC : UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var aContents : [Content]  = [Content]()
+    var aContents : [ContentModel]  = [ContentModel]()
     var nNextIndex = 1
     var bLoadingData = false
     var commInfo : CommunityModel?
@@ -161,7 +151,7 @@ extension ContentVC {
                             self.nNextIndex = Int(nNext!)!
                             let articles = j2["list"] as! [AnyObject]
                             for data in articles {
-                                let newArticle = Content()
+                                let newArticle = ContentModel()
                                 let data_inner = data as! [String:AnyObject]
                                 let sTitle = data_inner["title"]
                                 newArticle.sTitle = sTitle as! String
