@@ -17,7 +17,7 @@ public class MarketVersionChecker {
     public static String getMarketVersion(String packageName) {
         try {
             Document doc = Jsoup.connect("https://play.google.com/store/apps/details?id=" + packageName).get();
-            Elements Version = doc.select(".content");
+            Elements Version = doc.select(".htlgb").eq(3);
 
             for(Element mElement : Version) {
                 if (mElement.attr("itemprop").equals("softwareVersion")) {

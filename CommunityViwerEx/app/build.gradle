@@ -18,6 +18,8 @@ android {
     }
 }
 
+apply plugin: 'com.google.gms.google-services'
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -35,6 +37,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.8'
     implementation 'com.google.firebase:firebase-ads:17.2.0'
     implementation 'com.google.firebase:firebase-messaging:17.6.0'
+    implementation 'com.google.firebase:firebase-config:16.5.0'
     implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
     implementation 'com.github.delight-im:Android-AdvancedWebView:v3.0.0'
     implementation 'com.github.woxthebox:draglistview:1.3'

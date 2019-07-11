@@ -14,6 +14,7 @@ import android.os.Bundle;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.sononpos.communityviwerex.FirstSettings.FirstSetting_ThemeActivity;
 import com.sononpos.communityviwerex.Funtional.KBONetworkInfo;
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
@@ -174,11 +175,12 @@ public class LoadingActivity extends AppCompatActivity {
                 Message msg = handlerUpdate.obtainMessage();
                 try {
                     String device_version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-                    int nState = MarketVersionChecker.getVersionState(device_version);
-                    msg.arg1 = nState;
+                    String last_ver = FirebaseRemoteConfig.getInstance().getString("last_ver");
+                    //int nState = MarketVersionChecker.getVersionState(device_version);
+                    msg.arg1 = 0;
                     handlerUpdate.sendMessage(msg);
                 } catch (PackageManager.NameNotFoundException e) {
-                    msg.arg1 = -1;
+                    msg.arg1 = 0;
                     handlerUpdate.sendMessage(msg);
                     return;
                 }
