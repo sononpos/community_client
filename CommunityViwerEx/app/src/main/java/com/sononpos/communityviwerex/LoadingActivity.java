@@ -9,14 +9,20 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.sononpos.communityviwerex.FirstSettings.FirstSetting_ThemeActivity;
 import com.sononpos.communityviwerex.Funtional.KBONetworkInfo;
+import com.sononpos.communityviwerex.Funtional.RFData;
+import com.sononpos.communityviwerex.Funtional.RetrofitExService;
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
 
 import java.io.ByteArrayOutputStream;
@@ -28,6 +34,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -163,6 +175,25 @@ public class LoadingActivity extends AppCompatActivity {
 
         FirebaseInstanceId.getInstance().getToken();
 
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(RetrofitExService.URL).addConverterFactory(GsonConverterFactory.create()).build();
+        RetrofitExService retrofitExService = retrofit.create(RetrofitExService.class);
+        retrofitExService.getData("1").enqueue(new Callback<RFData>() {
+            @Override
+            public void onResponse(Call<RFData> call, Response<RFData> response) {
+                if( response.isSuccessful() ) {
+                    RFData body = response.body();
+                    if( body != null ) {
+                        Log.d("nnnyyy", body.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RFData> call, Throwable t) {
+
+            }
+        });
+
         CheckUpdate();
     }
 
@@ -172,15 +203,29 @@ public class LoadingActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Message msg = handlerUpdate.obtainMessage();
+                final Message msg = handlerUpdate.obtainMessage();
                 try {
-                    String device_version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-                    String last_ver = FirebaseRemoteConfig.getInstance().getString("last_ver");
+                    final String device_version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+                    final FirebaseRemoteConfig config = FirebaseRemoteConfig.getInstance();
+                    FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                            .setDeveloperModeEnabled(BuildConfig.DEBUG)
+                            .setMinimumFetchIntervalInSeconds(3600)
+                            .build();
+                    config.setConfigSettings(configSettings);
+                    config.fetchAndActivate().addOnCompleteListener(new OnCompleteListener<Boolean>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Boolean> task) {
+                            String sVer = config.getString("last_ver");
+                            msg.arg1 = 0;
+                            handlerUpdate.sendMessage(msg);
+                        }
+                    });
+
+
+
                     //int nState = MarketVersionChecker.getVersionState(device_version);
-                    msg.arg1 = 0;
-                    handlerUpdate.sendMessage(msg);
                 } catch (PackageManager.NameNotFoundException e) {
-                    msg.arg1 = 0;
+                    msg.arg1 = -1;
                     handlerUpdate.sendMessage(msg);
                     return;
                 }

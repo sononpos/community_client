@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sononpos.communityviwerex">
-
     <!-- Include required permissions for Google Mobile Ads to run. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,15 +12,16 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity
+            android:name=".SplashActivity">
+        </activity>
         <!-- This meta-data tag is required to use Google Play Services. -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3598320494828213~8676238288"/>
+            android:value="ca-app-pub-3598320494828213~8676238288" />
 
         <activity
             android:name=".MainActivity"
@@ -52,24 +52,18 @@
         <activity
             android:name=".FirstSettings.FirstSetting_ThemeActivity"
             android:label="@string/title_activity_first_setting__theme"
-            android:theme="@style/AppTheme"></activity>
-
-        <!-- [START firebase_service] -->
-        <service
-            android:name=".FCMPush.MyFirebaseMessagingService">
+            android:theme="@style/AppTheme" /> <!-- [START firebase_service] -->
+        <service android:name=".FCMPush.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service>
-        <!-- [END firebase_service] -->
+        </service> <!-- [END firebase_service] -->
         <!-- [START firebase_iid_service] -->
-        <service
-            android:name=".FCMPush.MyFirebaseInstanceIDService">
+        <service android:name=".FCMPush.MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <!-- [END firebase_iid_service] -->
     </application>
 
 </manifest>
