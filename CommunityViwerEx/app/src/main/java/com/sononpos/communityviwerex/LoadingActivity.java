@@ -10,10 +10,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.sononpos.communityviwerex.FirstSettings.FirstSetting_ThemeActivity;
 import com.sononpos.communityviwerex.Funtional.KBONetworkInfo;
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
@@ -23,6 +28,10 @@ import com.sononpos.communityviwerex.HttpHelper.HttpHelperListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -203,50 +212,64 @@ public class LoadingActivity extends AppCompatActivity {
         CheckUpdate();
     }
 
+    //  버전 체크
     private void CheckUpdate() {
+        Observable.<Integer>create(e-> {
+            FirebaseRemoteConfig frc = FirebaseRemoteConfig.getInstance();
+            FirebaseRemoteConfigSettings frcsettings = new FirebaseRemoteConfigSettings.Builder()
+                    .setDeveloperModeEnabled(BuildConfig.DEBUG).build();
+            frc.setConfigSettings(frcsettings);
 
-        handlerUpdate = new CheckUpdateHandler();
-
-        new HttpHelper().SetListener(new HttpHelperListener() {
-            @Override
-            public void onResponse(int nType, int nErrorCode, String sResponse) {
-                if(nErrorCode == 0) {
-
+            frc.fetch(0).addOnCompleteListener(task-> {
+                if( task.isSuccessful() ) {
                     try {
-                        JSONArray arr = new JSONArray(sResponse);
-                        JSONObject obj = arr.getJSONObject(0);
-                        String sRet = obj.getString("access");
-                        Global.obj().isKor = (sRet.compareTo("Y") == 0);
 
-                        Log.d("region", "Korea Region : " + Global.obj().isKor);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                        frc.activate();
+                        String sCurVer = BuildConfig.VERSION_NAME;
+                        int nCurMajor = Integer.parseInt( sCurVer.split("\\.")[0] );
+                        String s = frc.getString("last_ver");
+                        int nServerMajor = Integer.parseInt( s.split("\\.")[0] );
 
-
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Message msg = handlerUpdate.obtainMessage();
-                            try {
-                                String device_version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-                                int nState = MarketVersionChecker.getVersionState(device_version);
-                                msg.arg1 = nState;
-                                handlerUpdate.sendMessage(msg);
-                            } catch (PackageManager.NameNotFoundException e) {
-                                msg.arg1 = -1;
-                                handlerUpdate.sendMessage(msg);
-                                return;
-                            }
+                        if( nServerMajor > nCurMajor ) {
+                            e.onNext(-1);
+                            return;
                         }
-                    }).start();
+
+                    }catch(Exception ex) {
+                        finishApp();
+                    }
                 }
-                else {
-                    finishApp();
-                }
+
+                e.onNext(0);
+            });
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(ret-> {
+            if( ret == 0 ) {
+                LoadCommunityList();
             }
-        }).Request(0, "http://52.79.205.198:3000/check_ad");
+            else if( ret == -1 ) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoadingActivity.this);
+
+                builder.setTitle("업데이트 확인");
+                builder.setMessage("마켓에 새 버전이 있습니다. 업데이트 하시겠습니까?");
+                builder.setPositiveButton("네", (dlg,which)-> {
+                    Intent marketLaunch = new Intent(Intent.ACTION_VIEW);
+                    marketLaunch.setData(Uri.parse("market://details?id=com.sononpos.communityviwerex"));
+                    startActivity(marketLaunch);
+                    finish();
+                    dlg.dismiss();
+                });
+
+                builder.setNegativeButton("아니오", (dlg,which)-> {
+                    LoadCommunityList();
+                    dlg.dismiss();
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        });
     }
 
     private void LoadCommunityList() {
