@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto">
 <android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,7 +11,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
     <RelativeLayout
         android:id="@+id/rl_toolbar"
         android:layout_width="match_parent"
@@ -21,26 +20,16 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:src="@drawable/contop"/>
-        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/toolBar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            android:title=""
-            >
-            <ImageButton android:src="@drawable/icon_menu"
-                android:background="?attr/actionBarItemBackground"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:scaleType="centerInside"
-                android:id="@+id/btn_leftmenu"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="20dp"/>
-
-        </android.support.v7.widget.Toolbar>
+        <ImageButton android:src="@drawable/icon_menu"
+            android:background="?attr/actionBarItemBackground"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:scaleType="centerInside"
+            android:layout_margin="4dp"
+            android:padding="6dp"
+            android:id="@+id/btn_leftmenu"
+            />
     </RelativeLayout>
-
     <LinearLayout
         android:id="@+id/tabs_outer"
         android:layout_width="match_parent"
@@ -113,70 +102,51 @@
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#E49F00"
+        android:layout_height="60dp"
         android:orientation="horizontal">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/dino_icon"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"/>
-        <TextView
+            android:id="@+id/ivSetting"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:src="@drawable/icon_setting"
+            android:padding="15dp"
+            />
+        <Button
+            android:id="@+id/btn_settings"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="#E49F00"
-            android:textColor="#ffffff"
+            android:layout_height="match_parent"
+            android:text="@string/action_settings"
+            android:layout_margin="0dp"
+            android:textSize="16dp"
             android:gravity="left|center_vertical"
-            android:textSize="20dp"
-            android:height="28dp"
-            android:text="메뉴"
             android:paddingLeft="10dp"
             />
     </LinearLayout>
-    <Button
-        android:id="@+id/btn_settings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/action_settings"
-        android:layout_margin="0dp"
-        android:textSize="16dp"
-        android:gravity="left|center_vertical"
-        android:paddingLeft="10dp"
-        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#E49F00"
+        android:background="#fece00"
         android:orientation="horizontal">
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/dino_icon"
+            android:layout_height="40dp"
+            android:src="@drawable/left_filter_title"
             android:layout_marginLeft="10dp"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="#E49F00"
-            android:textColor="#ffffff"
-            android:gravity="left|center_vertical"
-            android:textSize="20dp"
-            android:height="28dp"
-            android:text="필터"
-            android:paddingLeft="10dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
             />
     </LinearLayout>
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/list_left"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#333333"
-        android:choiceMode="singleChoice"
-        android:dividerHeight="0px"
-        android:divider="#ffffff">
-    </ListView>
+        android:background="#ffffff"
+        >
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>
 </android.support.v4.widget.DrawerLayout>
+</layout>

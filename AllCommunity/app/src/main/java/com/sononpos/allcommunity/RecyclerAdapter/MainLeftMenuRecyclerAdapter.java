@@ -39,6 +39,7 @@ public class MainLeftMenuRecyclerAdapter extends RecyclerView.Adapter<MainLeftMe
         final ArticleTypeInfo info = listman.getCommunityList(true).get(position);
         holder.mBind.setItem(info);
         SetItemColor(holder);
+        holder.mBind.cbEnabled.setOnCheckedChangeListener(null);
         holder.mBind.cbEnabled.setChecked(!listman.isFilteredKey(info.mHashKey));
         holder.mBind.cbEnabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -49,9 +50,6 @@ public class MainLeftMenuRecyclerAdapter extends RecyclerView.Adapter<MainLeftMe
                 else if(!listman.isFilteredKey(info.mHashKey) && !isChecked) {
                     listman.toggleFilter(info.mHashKey);
                 }
-                listman.refreshListWithFiltered();
-                mBind.tabs.notifyDataSetChanged();
-                mBind.pager.getAdapter().notifyDataSetChanged();
                 SetItemColor(holder);
             }
         });

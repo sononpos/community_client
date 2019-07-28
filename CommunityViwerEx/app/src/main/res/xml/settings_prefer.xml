@@ -23,12 +23,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="리스트 표시">
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="list_show_recent"
-            android:summaryOn="표시합니다"
-            android:summaryOff="표시하지 않습니다"
-            android:title="최근 읽은 글 표시" />
         <Preference
             android:key="clear_recent"
             android:title="최근 읽은 글 목록 삭제"

@@ -42,7 +42,12 @@ public class SwipeWebView extends AdvancedWebView {
         public void closeCallback();
     }
 
+    public interface ScrollCallback {
+        public void onScrollChanged(int l, int t, int oldl, int oldt);
+    }
+
     private SwipeCallback _callback;
+    private ScrollCallback _scrollCallback;
 
     class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener {
         @Override
@@ -104,5 +109,14 @@ public class SwipeWebView extends AdvancedWebView {
 
     public void setCallback(SwipeCallback callback) {
         this._callback = callback;
+    }
+    public void setScrollCallback(ScrollCallback callback) { this._scrollCallback = callback; }
+
+    @Override
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+        super.onScrollChanged(l, t, oldl, oldt);
+        if(_scrollCallback != null) {
+            _scrollCallback.onScrollChanged(l, t, oldl, oldt);
+        }
     }
 }

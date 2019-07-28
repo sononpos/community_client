@@ -6,40 +6,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.sononpos.communityviwerex.FirstSettings.FirstSetting_ThemeActivity;
 import com.sononpos.communityviwerex.Funtional.KBONetworkInfo;
-import com.sononpos.communityviwerex.Funtional.RFData;
-import com.sononpos.communityviwerex.Funtional.RetrofitExService;
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
+import com.sononpos.communityviwerex.HttpHelper.HttpHelper;
+import com.sononpos.communityviwerex.HttpHelper.HttpHelperListener;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -60,21 +43,48 @@ public class LoadingActivity extends AppCompatActivity {
             }
 
             String response = (String)msg.obj;
-            G.LoadCommunityList(response);
+            TabItemManager timan = Global.obj().getTabItemManager();
+            ArticleListManager aiman = Global.obj().getArticleListManager();
+            timan.init();
+            if(Storage.have(getApplicationContext(), TabItemManager.KEY_FILTERED))
+            {
+                String sJsonList = Storage.load(getApplicationContext(), TabItemManager.KEY_FILTERED);
+                timan.setFilteredList(sJsonList);
+            }
+
+
+            if(!Parcer.communityList(response, timan)) {
+                finish();
+            }
+            timan.addItem(new TIRecent("hc_recent", "최근 본 글", -1));
+            timan.addItem(new TIFavorate("hc_scrap", "스크랩", -1));
+            //  저장 된 순서가 없다면 서버에서 받은 순서대로 일단 정렬
+            //  저장 된 순서가 있다면 새로 세팅하고 정렬
+            if(Storage.have(getApplicationContext(), "TabItemListSeq")) {
+                String sSeqJsonString = Storage.load(getApplicationContext(), "TabItemListSeq");
+                timan.setSeq(sSeqJsonString);
+                timan.sort();
+            }
+            else {
+                timan.sort();
+            }
+            timan.refreshList(getApplicationContext(), true);
+
+            if(Storage.have(getApplicationContext(), ArticleListManager.KEY_RECENT_ARTICLE)) {
+                String sRecentJsonList = Storage.load(getApplicationContext(), ArticleListManager.KEY_RECENT_ARTICLE);
+                aiman.loadRecent(sRecentJsonList);
+            }
+            if(Storage.have(getApplicationContext(), ArticleListManager.KEY_FAVORITE_ARTICLE)) {
+                String sRecentJsonList = Storage.load(getApplicationContext(), ArticleListManager.KEY_FAVORITE_ARTICLE);
+                aiman.loadFavorate(sRecentJsonList);
+            }
+
+            //G.LoadCommunityList(response);
             G.LoadRecentArticle(getApplicationContext());
             G.LoadReadedArticle(getApplicationContext());
 
-            Collections.sort(G.liCommTypeInfo, new Comparator<CommunityTypeInfo>() {
-                @Override
-                public int compare(CommunityTypeInfo o1, CommunityTypeInfo o2) {
-                    return o1.index < o2.index ? -1 : 1;
-                }
-            });
-
-            // 첫번째 실행이면 FirstSetting으로
-            if(G.IsFirstUse(getApplicationContext())){
-                //G.SetFirstUse();    //  이후부터는 첫번째 실행이 아니게 된다
-                Intent intent = new Intent(mainActivity, FirstSetting_ThemeActivity.class);
+            if( !G.IsReadPP(getApplicationContext())) {
+                Intent intent = new Intent(mainActivity, PrivatePolicyActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -87,23 +97,38 @@ public class LoadingActivity extends AppCompatActivity {
                 startActivity(intent);
             }
             else {
-                G.RefreshFilteredInfo();
+                // 첫번째 실행이면 FirstSetting으로
+                if(G.IsFirstUse(getApplicationContext())){
+                    //G.SetFirstUse();    //  이후부터는 첫번째 실행이 아니게 된다
+                    Intent intent = new Intent(mainActivity, FirstSetting_ThemeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-                Intent intent = new Intent(mainActivity, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    SharedPreferences setRefer = PreferenceManager
+                            .getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = setRefer.edit();
+                    editor.putString("list_backup", response);
+                    editor.apply();
+                    startActivity(intent);
+                }
+                else {
+                    Intent intent = new Intent(mainActivity, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-                SharedPreferences setRefer = PreferenceManager
-                        .getDefaultSharedPreferences(getApplicationContext());
-                int themeType = Integer.parseInt(setRefer.getString("theme_type", "0"));
-                int themeFontType = Integer.parseInt(setRefer.getString("theme_font_type", "1"));
-                ThemeManager.SetTheme(themeType);
-                ThemeManager.SetThemeFont(themeFontType);
-                SharedPreferences.Editor editor = setRefer.edit();
-                editor.putString("list_backup", response);
-                editor.apply();
-                startActivity(intent);
+                    SharedPreferences setRefer = PreferenceManager
+                            .getDefaultSharedPreferences(getApplicationContext());
+                    int themeType = Integer.parseInt(setRefer.getString("theme_type", "0"));
+                    int themeFontType = Integer.parseInt(setRefer.getString("theme_font_type", "1"));
+                    ThemeManager.SetTheme(themeType);
+                    ThemeManager.SetThemeFont(themeFontType);
+                    SharedPreferences.Editor editor = setRefer.edit();
+                    editor.putString("list_backup", response);
+                    editor.apply();
+                    startActivity(intent);
+                }
             }
         }
     }
@@ -117,7 +142,7 @@ public class LoadingActivity extends AppCompatActivity {
             super.handleMessage(msg);
 
             if(msg.arg1 == -1) {
-                finishApp();
+                LoadCommunityList();
                 return;
             }
 
@@ -175,130 +200,73 @@ public class LoadingActivity extends AppCompatActivity {
 
         FirebaseInstanceId.getInstance().getToken();
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(RetrofitExService.URL).addConverterFactory(GsonConverterFactory.create()).build();
-        RetrofitExService retrofitExService = retrofit.create(RetrofitExService.class);
-        retrofitExService.getData("1").enqueue(new Callback<RFData>() {
-            @Override
-            public void onResponse(Call<RFData> call, Response<RFData> response) {
-                if( response.isSuccessful() ) {
-                    RFData body = response.body();
-                    if( body != null ) {
-                        Log.d("nnnyyy", body.toString());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RFData> call, Throwable t) {
-
-            }
-        });
-
         CheckUpdate();
     }
 
     private void CheckUpdate() {
+
         handlerUpdate = new CheckUpdateHandler();
 
-        new Thread(new Runnable() {
+        new HttpHelper().SetListener(new HttpHelperListener() {
             @Override
-            public void run() {
-                final Message msg = handlerUpdate.obtainMessage();
-                try {
-                    final String device_version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-                    final FirebaseRemoteConfig config = FirebaseRemoteConfig.getInstance();
-                    FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-                            .setDeveloperModeEnabled(BuildConfig.DEBUG)
-                            .setMinimumFetchIntervalInSeconds(3600)
-                            .build();
-                    config.setConfigSettings(configSettings);
-                    config.fetchAndActivate().addOnCompleteListener(new OnCompleteListener<Boolean>() {
+            public void onResponse(int nType, int nErrorCode, String sResponse) {
+                if(nErrorCode == 0) {
+
+                    try {
+                        JSONArray arr = new JSONArray(sResponse);
+                        JSONObject obj = arr.getJSONObject(0);
+                        String sRet = obj.getString("access");
+                        Global.obj().isKor = (sRet.compareTo("Y") == 0);
+
+                        Log.d("region", "Korea Region : " + Global.obj().isKor);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+                    new Thread(new Runnable() {
                         @Override
-                        public void onComplete(@NonNull Task<Boolean> task) {
-                            String sVer = config.getString("last_ver");
-                            msg.arg1 = 0;
-                            handlerUpdate.sendMessage(msg);
+                        public void run() {
+                            Message msg = handlerUpdate.obtainMessage();
+                            try {
+                                String device_version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+                                int nState = MarketVersionChecker.getVersionState(device_version);
+                                msg.arg1 = nState;
+                                handlerUpdate.sendMessage(msg);
+                            } catch (PackageManager.NameNotFoundException e) {
+                                msg.arg1 = -1;
+                                handlerUpdate.sendMessage(msg);
+                                return;
+                            }
                         }
-                    });
-
-
-
-                    //int nState = MarketVersionChecker.getVersionState(device_version);
-                } catch (PackageManager.NameNotFoundException e) {
-                    msg.arg1 = -1;
-                    handlerUpdate.sendMessage(msg);
-                    return;
+                    }).start();
+                }
+                else {
+                    finishApp();
                 }
             }
-        }).start();
+        }).Request(0, "http://52.79.205.198:3000/check_ad");
     }
 
     private void LoadCommunityList() {
-        G.liCommTypeInfo.clear();
-        ArrayList<String> aFiltered = G.getStringArrayPref(this, G.KEY_FILTERED_COMM);
-        if(aFiltered != null) {
-            G.liFiltered = new HashSet<String>(aFiltered);
-        }
-        else {
-            G.liFiltered.clear();
-        }
         handlerPager = new MyHandler(this);
-
-        new Thread(new Runnable() {
+        new HttpHelper().SetListener(new HttpHelperListener() {
             @Override
-            public void run() {
-
-                try {
-                    Thread.sleep(750);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            public void onResponse(int nType, int nErrorCode, String sResponse) {
+                if(nErrorCode == 0) {
+                    Message msg = handlerPager.obtainMessage();
+                    msg.arg1 = 0;
+                    msg.obj = sResponse;
+                    handlerPager.sendMessage(msg);
                 }
-                try{
-                    URL url = new URL("http://52.79.205.198:3000/list");
-
-                    HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-                    conn.setRequestMethod("GET");
-                    conn.setConnectTimeout(3000);
-                    conn.setReadTimeout(3000);
-
-                    conn.connect();
-
-                    int responseCode = conn.getResponseCode();
-                    if( responseCode == HttpURLConnection.HTTP_OK){
-                        InputStream is   = null;
-                        ByteArrayOutputStream baos = null;
-                        String response;
-                        is = conn.getInputStream();
-                        baos = new ByteArrayOutputStream();
-                        byte[] byteBuffer = new byte[1024];
-                        byte[] byteData = null;
-                        int nLength = 0;
-
-                        while((nLength = is.read(byteBuffer, 0, byteBuffer.length)) != -1) {
-                            baos.write(byteBuffer, 0, nLength);
-                        }
-                        byteData = baos.toByteArray();
-                        response = new String(byteData);
-
-                        Message msg = handlerPager.obtainMessage();
-                        msg.arg1 = 0;
-                        msg.obj = response;
-                        handlerPager.sendMessage(msg);
-                    }
-                    else {
-                        Message msg = handlerPager.obtainMessage();
-                        msg.arg1 = -1;
-                        handlerPager.sendMessage(msg);
-                    }
-                }catch(IOException e){
-                    e.printStackTrace();
+                else {
                     Message msg = handlerPager.obtainMessage();
                     msg.arg1 = -1;
                     handlerPager.sendMessage(msg);
-                }finally {
                 }
             }
-        }).start();
+        }).Request(0, "http://52.79.205.198:3000/list");
     }
 
     public void finishApp() {

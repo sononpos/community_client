@@ -1,82 +1,84 @@
 package com.sononpos.communityviwerex;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.DataSetObserver;
+import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.TypedValue;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.Space;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.astuetz.PagerSlidingTabStrip;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
+import com.sononpos.communityviwerex.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-import java.util.jar.Attributes;
 
-public class MainActivity extends AppCompatActivity {
-
-    private PagerSlidingTabStrip tabs;
-    private ViewPager pager;
+public class MainActivity extends AppCompatActivity implements OnStartDragListener{
+    ActivityMainBinding mBind;
     private CommunityTypePagerAdapter adapter;
-    private LeftMenuItemAdapter adapterLeftMenu;
     private CommunityTypeInfo recent;
-    private Toolbar toolbar;
-    private DrawerLayout dl;
-    private View dlv;
-    private AdView mAdView;
-    ImageButton btnListComm;
     LinearLayout dropdownListLayout;
+    ItemTouchHelper mTouchHelper;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBind = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        //  실제 서비스가 시작되면 주석 제거
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-3598320494828213~8676238288");
+
+        // Load an ad into the AdMob banner view.
+        mBind.tabs.setTextSize(40);
+        dropdownListLayout = (LinearLayout)findViewById(R.id.grid_list_comm);
+        adapter = new CommunityTypePagerAdapter(getSupportFragmentManager());
+        recent = new CommunityTypeInfo("recent", "최근 본 글", -1);
+
+        ResetArticleList();
+        mBind.pager.setAdapter(adapter);
+        mBind.tabs.setViewPager(mBind.pager);
+
+        InitLeftMenu();
+        RefreshTheme();
+        ResetDropDownList();
+
+        if( Global.obj().isKor ) {
+            AdRequest adRequest = new AdRequest.Builder()
+                    .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
+                    .build();  // An example device ID
+            getAdView().loadAd(adRequest);
+        }
+    }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d("VLog","OnStart!");
     }
 
     @Override
     protected void onResume() {
-        Log.d("VLog","OnResume!");
-        if( G.GetCommunityList().size() <= 0 ) {
-            G.ReloadCommunityListFromSharedPref(getApplicationContext());
-            ResetArticleList();
-            adapter.notifyDataSetChanged();
-            tabs.notifyDataSetChanged();
-        }
-
+        super.onResume();
         //  테스트
         SharedPreferences setRefer = PreferenceManager
                 .getDefaultSharedPreferences(this);
@@ -85,93 +87,46 @@ public class MainActivity extends AppCompatActivity {
         int themeFontType = Integer.parseInt(setRefer.getString("theme_font_type", "1"));
         ThemeManager.SetThemeFont(themeFontType);
 
+        boolean bReload = true;
+        do {
+            if(Global.obj() == null) break;
+            TabItemManager timan = Global.obj().getTabItemManager();
+            if(timan == null) break;
+            if(timan.getListWithoutFiltered() == null) break;
+
+            bReload = false;
+
+            //return Global.obj().getTabItemManager().getListWithoutFiltered().size();
+        }while(false);
+
+        if(bReload) {
+            ReloadApp();
+            return;
+        }
+
         RefreshTheme();
         ResetDropDownList();
 
-        if(mAdView != null) {
-            mAdView.resume();
-            mAdView.refreshDrawableState();
+        if(getAdView() != null) {
+            getAdView().resume();
+            getAdView().refreshDrawableState();
         }
-
-        super.onResume();
     }
 
     @Override
     protected void onPause() {
-        if(mAdView != null) {
-            mAdView.pause();
+        if(getAdView() != null) {
+            getAdView().pause();
         }
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        if(mAdView != null) {
-            mAdView.destroy();
+        if(getAdView() != null) {
+            getAdView().destroy();
         }
         super.onDestroy();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        //  실제 서비스가 시작되면 주석 제거
-        MobileAds.initialize(getApplicationContext(), "ca-app-pub-3598320494828213~8676238288");
-
-        // Load an ad into the AdMob banner view.
-        tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        tabs.setTextSize(40);
-        pager = (ViewPager) findViewById(R.id.pager);
-        btnListComm = (ImageButton)findViewById(R.id.btn_list_comm);
-        dropdownListLayout = (LinearLayout)findViewById(R.id.grid_list_comm);
-        adapter = new CommunityTypePagerAdapter(getSupportFragmentManager());
-        recent = new CommunityTypeInfo("recent", "최근 본 글", -1);
-
-        ResetArticleList();
-        pager.setAdapter(adapter);
-        tabs.setViewPager(pager);
-
-        tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                List<Fragment> fragments = getSupportFragmentManager().getFragments();
-                for (Fragment f : fragments) {
-                    if (f instanceof CommunityListFragment) {
-                        Log.e("Error", "onPageSelected" + ((CommunityListFragment) f).getPageNum());
-                        CommunityListFragment cf = ((CommunityListFragment) f);
-                        if (G.IsShowRecent(getApplicationContext()) && cf.getPageNum() == 0) {
-                            cf.Reload();
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-        //  Setup ActionBar
-        toolbar = (Toolbar) findViewById(R.id.toolBar);
-        setSupportActionBar(toolbar);
-
-        InitLeftMenu();
-        RefreshTheme();
-        ResetDropDownList();
-
-        mAdView = (AdView) findViewById(R.id.adViewMain);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("AEA1198981C8725DFB7C153E9D1F2CFE")
-                .build();  // An example device ID
-        mAdView.loadAd(adRequest);
     }
 
     @Override
@@ -179,22 +134,6 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        /*
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        */
-
-        return super.onOptionsItemSelected(item);
     }
 
     private boolean exit = false;
@@ -219,34 +158,55 @@ public class MainActivity extends AppCompatActivity {
     public class CommunityTypePagerAdapter extends FragmentStatePagerAdapter {
 
         private static final String ARG_POSITION = "position";
-        ArrayList<CommunityTypeInfo> liData = new ArrayList<>();
-        Handler handler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-
-            }
-        };
-
         public CommunityTypePagerAdapter(FragmentManager fm) {
             super(fm);
-
-
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return liData.get(position).sName;
+            return Global.obj().getTabItemManager().getListWithoutFiltered().get(position).getName();
         }
 
         @Override
         public int getCount() {
-            return liData.size();
+            do {
+                if(Global.obj() == null) break;
+                TabItemManager timan = Global.obj().getTabItemManager();
+                if(timan == null) break;
+                if(timan.getListWithoutFiltered() == null) break;
+
+                return Global.obj().getTabItemManager().getListWithoutFiltered().size();
+            }while(false);
+
+            ReloadApp();
+            return 0;
         }
 
         @Override
         public Fragment getItem(int position) {
-            CommunityListFragment f = new CommunityListFragment();
+            final TabItemManager timan = Global.obj().getTabItemManager();
+            final ArrayList<TabItem> aList = timan.getList();
+            TabItem item = aList.get(position);
+
+            Fragment f = null;
+            switch(item.getType()) {
+                case TabItem.IT_COMMUNITY:
+                    f = new CommunityListFragment();
+                    break;
+
+                case TabItem.IT_RECENT:
+                    f = new RecentFragment();
+                    break;
+
+                case TabItem.IT_FAVORATE:
+                    f = new FavorateFragment();
+                    break;
+            }
+
+            if(f == null) {
+                finish();
+            }
+
             Bundle b = new Bundle();
             b.putInt(ARG_POSITION, position);
             f.setArguments(b);
@@ -255,19 +215,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getItemPosition(Object object) {
-            CommunityListFragment fragment = (CommunityListFragment)object;
-            int nPageNum = fragment.getPageNum();
-            if( nPageNum >= G.GetCommunityList().size()) {
-                return POSITION_NONE;
-            }
-
-            fragment.Reload();
-
-            if (nPageNum >= 0) {
-                return nPageNum;
-            } else {
-                return POSITION_NONE;
-            }
+            return POSITION_NONE;
         }
     }
 
@@ -275,112 +223,72 @@ public class MainActivity extends AppCompatActivity {
         ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
         ThemeManager.ThemeFontObject themeFont = ThemeManager.GetFont();
         //toolbar.setBackgroundColor(Color.parseColor(theme.BgTitle));
-        dl.setBackgroundColor(Color.parseColor(theme.BgList));
-        toolbar.getRootView().setBackgroundColor(Color.parseColor(theme.BgList));
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        tabs.setTextColor(Color.parseColor(theme.BasicFont));
-        tabs.setBackgroundColor(Color.parseColor(theme.BgList));
-        tabs.setIndicatorColor(Color.parseColor(theme.BasicFont));
-        tabs.setIndicatorHeight(8);
+        mBind.ivSetting.setBackgroundColor(Color.parseColor(theme.BgList));
+        mBind.drawerLayout.setBackgroundColor(Color.parseColor(theme.BgList));
+        mBind.listLeft.setBackgroundColor(Color.parseColor(theme.BgList));
+        mBind.tabs.setTextColor(Color.parseColor(theme.BasicFont));
+        mBind.tabs.setBackgroundColor(Color.parseColor(theme.BgList));
+        mBind.tabs.setIndicatorColor(Color.parseColor(theme.BasicFont));
+        mBind.tabs.setIndicatorHeight(8);
         int fontSize = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,themeFont.TabFont,getApplicationContext().getResources().getDisplayMetrics());
-        tabs.setTextSize(fontSize);
-        tabs.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
+        mBind.tabs.setTextSize(fontSize);
+        mBind.tabs.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
 
-        tabs.setUnderlineColor(Color.TRANSPARENT);
-        tabs.setDividerColor(Color.parseColor(theme.BasicFont));
+        mBind.tabs.setUnderlineColor(Color.TRANSPARENT);
+        mBind.tabs.setDividerColor(Color.parseColor(theme.BasicFont));
 
-        Button btnSettings = (Button)dlv.findViewById(R.id.btn_settings);
-        btnSettings.setBackgroundColor(Color.parseColor(theme.BgList));
-        btnSettings.setTextColor(Color.parseColor(theme.BasicFont));
+        mBind.btnSettings.setBackgroundColor(Color.parseColor(theme.BgList));
+        mBind.btnSettings.setTextColor(Color.parseColor(theme.BasicFont));
     }
 
     private void ResetArticleList() {
-        adapter.liData.clear();
-        ArrayList<CommunityTypeInfo> renew = new ArrayList<>(G.GetCommunityList());
-        if(G.IsShowRecent(getApplicationContext())){
-            renew.add(0,recent);
-        }
-        adapter.liData.addAll(renew);
+//        if(G.IsShowRecent(getApplicationContext())){
+//            renew.add(0,recent);
+//        }
     }
 
     private void InitLeftMenu() {
         //  Init DrawerLayout
-        dl = (DrawerLayout)findViewById(R.id.drawer_layout);
-        dlv = (View)findViewById(R.id.drawer);
-
         ArrayList<LeftMenuItem> leftMenuList = new ArrayList<LeftMenuItem>();
-        Iterator iter = G.liCommTypeInfo.iterator();
+        final TabItemManager timan = Global.obj().getTabItemManager();
+        final ArrayList<TabItem> aList = timan.getListAll();
+        if(aList == null) {
+            ReloadApp();
+            return;
+        }
+        Iterator iter = aList.iterator();
         while(iter.hasNext()) {
-            CommunityTypeInfo info = (CommunityTypeInfo)iter.next();
-            LeftMenuItem item = new LeftMenuItem(info.sName, info.sKey);
+            TabItem info = (TabItem)iter.next();
+            LeftMenuItem item = new LeftMenuItem(info.getName(), info.getKey());
             leftMenuList.add(item);
         }
-        adapterLeftMenu = new LeftMenuItemAdapter(this, R.layout.leftmenuitem, leftMenuList);
-        ListView listLeft = (ListView)findViewById(R.id.list_left);
-        listLeft.setAdapter(adapterLeftMenu);
-        listLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //  메뉴 아이템 클릭
-                LeftMenuItem item =  (LeftMenuItem)parent.getItemAtPosition(position);
-                TextView tvName = (TextView)view.findViewById(R.id.textViewName);
+        mBind.listLeft.setHasFixedSize(true);
+        mBind.listLeft.setLayoutManager(new LinearLayoutManager(mBind.getRoot().getContext()));
+        mBind.listLeft.setAdapter(new MainLeftMenuRecyclerAdapter(mBind, this));
+        mBind.listLeft.addItemDecoration(new SimpleDividerItemDecoration(mBind.getRoot().getContext()));
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback((MainLeftMenuRecyclerAdapter)mBind.listLeft.getAdapter());
+        mTouchHelper = new ItemTouchHelper(callback);
+        mTouchHelper.attachToRecyclerView(mBind.listLeft);
 
-                ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
-
-                int nPrevSize = G.GetCommunityList().size();
-
-                if( G.liFiltered.contains(item.sKey) ) {
-                    G.liFiltered.remove(item.sKey);
-                    tvName.setTextColor(Color.parseColor(theme.LeftEnable));
-                }
-                else {
-                    if(nPrevSize <= 1 ){
-                        Toast.makeText(view.getContext(), R.string.at_least_one_community, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    G.liFiltered.add(item.sKey);
-                    tvName.setTextColor(Color.parseColor(theme.LeftDisable));
-                    if( (nPrevSize-1) <= pager.getCurrentItem() ){
-                        pager.setCurrentItem(pager.getCurrentItem()-1);
-                    }
-                }
-
-                G.setStringArrayPref(getApplicationContext(), G.KEY_FILTERED_COMM, new ArrayList<String>(G.liFiltered));
-                G.RefreshFilteredInfo();
-
-                try{
-                    ResetArticleList();
-                    adapter.notifyDataSetChanged();
-                    tabs.notifyDataSetChanged();
-                }
-                catch(NullPointerException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        ImageButton ibtn = (ImageButton)toolbar.findViewById(R.id.btn_leftmenu);
+        ImageButton ibtn = (ImageButton)findViewById(R.id.btn_leftmenu);
         ibtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
-                dl.openDrawer(dlv);
+                mBind.drawerLayout.openDrawer(mBind.drawer);
                 closeDropdownList();
 
             }
         });
-        Button btnSettings = (Button)dlv.findViewById(R.id.btn_settings);
-        btnSettings.setOnClickListener(new View.OnClickListener() {
+
+        mBind.btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
 
-        dl.addDrawerListener(new DrawerLayout.DrawerListener() {
+        mBind.drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
 
@@ -393,7 +301,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onDrawerClosed(View drawerView) {
+                final TabItemManager timan = Global.obj().getTabItemManager();
+                timan.refreshList(getApplicationContext(), true);
                 ResetDropDownList();
+                mBind.tabs.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
+                Storage.save(getApplicationContext(), TabItemManager.KEY_FILTERED, timan.makeFilteredList());
             }
 
             @Override
@@ -409,8 +322,13 @@ public class MainActivity extends AppCompatActivity {
             dropdownListLayout.removeAllViewsInLayout();
             closeDropdownList();
 
+            ArrayList<TabItem> aList = Global.obj().getTabItemManager().getListWithoutFiltered();
             final int COLUMN_CNT_PER_ROW = 4;
-            int listCnt = adapter.liData.size();
+            if(aList == null) {
+                ReloadApp();
+                return;
+            }
+            int listCnt = aList.size();
             LinearLayout newLinear = null;
             for(int i = 0 ; i < listCnt ; ++i) {
                 if(i % COLUMN_CNT_PER_ROW == 0) {
@@ -419,13 +337,13 @@ public class MainActivity extends AppCompatActivity {
                     dropdownListLayout.addView(newLinear);
                 }
 
-                final CommunityTypeInfo info = adapter.liData.get(i);
+                final TabItem info = aList.get(i);
 
                 Button btn = new Button(getApplicationContext());
                 final int btn_height = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
                 LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(0, btn_height, 1.0f);
                 p.setMargins(2,2,2,2);
-                btn.setText(info.sName);
+                btn.setText(info.getName());
                 btn.setLayoutParams(p);
                 btn.setPadding(5,5,5,5);
                 btn.setTag(i);
@@ -438,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         int idx = (int)(((Button)v).getTag());
-                        pager.setCurrentItem(idx);
+                        mBind.pager.setCurrentItem(idx);
                         closeDropdownList();
                     }
                 });
@@ -455,8 +373,8 @@ public class MainActivity extends AppCompatActivity {
                 newLinear.addView(s);
             }
 
-            btnListComm.setImageResource(R.drawable.arrow_down);
-            btnListComm.setOnClickListener(new View.OnClickListener() {
+            mBind.btnListComm.setImageResource(R.drawable.arrow_down);
+            mBind.btnListComm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(dropdownListLayout.isShown()) {
@@ -473,13 +391,26 @@ public class MainActivity extends AppCompatActivity {
     private void openDropdownList() {
         dropdownListLayout.setVisibility(View.VISIBLE);
         dropdownListLayout.setClickable(true);
-        btnListComm.setImageResource(R.drawable.arrow_up);
+        mBind.btnListComm.setImageResource(R.drawable.arrow_up);
     }
 
     private void closeDropdownList() {
         dropdownListLayout.setVisibility(View.GONE);
         dropdownListLayout.setClickable(false);
-        btnListComm.setImageResource(R.drawable.arrow_down);
+        mBind.btnListComm.setImageResource(R.drawable.arrow_down);
     }
 
+    private void ReloadApp() {
+        Intent intent = new Intent(MainActivity.this, LoadingActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        getApplicationContext().startActivity(intent);
+    }
+    private AdView getAdView() { return mBind.adViewMain; }
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        mTouchHelper.startDrag(viewHolder);
+    }
 }

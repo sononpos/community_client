@@ -1,6 +1,9 @@
 package com.sononpos.communityviwerex;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,10 +15,15 @@ import android.text.Html;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
 
@@ -62,7 +70,7 @@ public class ListViewAdapter extends BaseAdapter {
 
         convertView.setBackgroundColor(Color.parseColor(theme.BgList));
 
-        TextView titleTextView = (TextView) convertView.findViewById(R.id.tvTitle) ;
+        final TextView titleTextView = (TextView) convertView.findViewById(R.id.tvTitle) ;
         titleTextView.setTextColor(Color.parseColor(theme.BasicFont));
         TextView nameTextView = (TextView) convertView.findViewById(R.id.tvName) ;
         TextView regDateTextView = (TextView) convertView.findViewById(R.id.tvRegDate) ;
@@ -80,7 +88,7 @@ public class ListViewAdapter extends BaseAdapter {
         }
         */
 
-        ListViewItem item = listViewItemList.get(position);
+        final ListViewItem item = listViewItemList.get(position);
         String sTitleRet = item.m_sTitle;
 
         if(G.isReaded(item.m_sTitle.hashCode())){
@@ -129,6 +137,53 @@ public class ListViewAdapter extends BaseAdapter {
         nameTextView.setText(item.m_sName); nameTextView.setTextSize(themeFont.SubFont);
         regDateTextView.setText(item.m_sRegDate); regDateTextView.setTextSize(themeFont.SubFont);
         countTextView.setText("조회수 : " + item.m_sViewCnt); countTextView.setTextSize(themeFont.SubFont);
+
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                final CharSequence[] items = {"스크랩 하기"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+                builder.setTitle("메뉴");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int itemid) {
+                        if(Global.obj().getArticleListManager().isFavorated(item.m_sTitle.hashCode())) {
+                            Toast.makeText(context, "이미 스크랩 되어 있습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Global.obj().getArticleListManager().addFavorate(item);
+                            Global.obj().getArticleListManager().saveFavorate(context);
+                            Toast.makeText(context, "스크랩 탭에 등록 되었습니다", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                builder.show();
+                return false;
+            }
+        });
+
+        //  커뮤니티 글 제목을 클릭했을 때, 상세 뷰로
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
+                titleTextView.setTextColor(Color.parseColor("#aaaaaa"));
+
+                G.readArticle(context, item.m_sTitle.hashCode());
+                Intent intent = new Intent(context, CommunityArticle.class);
+                intent.putExtra("OBJ", item);
+                intent.putExtra("URL", item.m_sLink);
+                intent.putExtra("TITLE", item.m_sTitle);
+                context.startActivity(intent);
+
+                if(!item.m_sJsonString.isEmpty()) {
+                    Global.obj().getArticleListManager().addRecent(item);
+                    Global.obj().getArticleListManager().saveRecent(context);
+                }
+            }
+        });
 
         return convertView;
     }

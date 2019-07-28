@@ -10,23 +10,24 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
-import com.sononpos.communityviwerex.util.*;
+import com.sononpos.communityviwerex.util.IabHelper;
+import com.sononpos.communityviwerex.util.IabResult;
+import com.sononpos.communityviwerex.util.Purchase;
 
 import org.json.JSONObject;
 
@@ -121,7 +122,7 @@ public class SettingsActivity extends AppCompatActivity {
                         builder.setPositiveButton("네", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                G.ClearRecentArticle(getActivity());
+                                Global.obj().getArticleListManager().clearRecent(getActivity());
                                 Toast.makeText(getActivity(), "최근 글 목록이 지워졌습니다", Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             }

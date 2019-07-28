@@ -17,33 +17,22 @@
 package com.sononpos.communityviwerex;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sononpos.communityviwerex.Funtional.ThemeManager;
-import com.sononpos.communityviwerex.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,10 +44,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 public class CommunityListFragment extends Fragment {
 
@@ -214,33 +199,6 @@ public class CommunityListFragment extends Fragment {
             }
         });
 
-        //  커뮤니티 글 제목을 클릭했을 때, 상세 뷰로
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Animation animation1 = new AlphaAnimation(0.3f, 1.0f);
-                animation1.setDuration(1000);
-                view.startAnimation(animation1);
-
-                if( !(parent.getItemAtPosition(position) instanceof ListViewItem) ) {
-                    return;
-                }
-
-                ThemeManager.ThemeColorObject theme = ThemeManager.GetTheme();
-                TextView titleTextView = (TextView) view.findViewById(R.id.tvTitle) ;
-                titleTextView.setTextColor(Color.parseColor("#aaaaaa"));
-
-                ListViewItem item = (ListViewItem)parent.getItemAtPosition(position);
-                G.readArticle(getContext(), item.m_sTitle.hashCode());
-                Intent intent = new Intent(getActivity(), CommunityArticle.class);
-                intent.putExtra("URL", item.m_sLink);
-                intent.putExtra("TITLE", item.m_sTitle);
-                startActivity(intent);
-
-                if(!item.m_sJsonString.isEmpty())
-                    G.SaveRecentArticle(getContext(), item);
-            }
-        });
         fl.addView(listView);
         LoadList();
 
@@ -283,15 +241,17 @@ public class CommunityListFragment extends Fragment {
     }
 
     private void LoadInner(){
-        if( G.GetCommunityList().size() == 0 ) return;
+        final ArrayList<TabItem> aList = Global.obj().getTabItemManager().getList();
+        if(aList == null) return;
+        if( aList.size() == 0 ) return;
         loadingMore = true;
         bLoading = true;
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ArrayList<CommunityTypeInfo> liTemp = new ArrayList<CommunityTypeInfo>(G.GetCommunityList());
+                ArrayList<TabItem> liTemp = new ArrayList<TabItem>(aList);
                 if(G.IsShowRecent(getContext())) {
-                    liTemp.add(0,new CommunityTypeInfo("recent", "최근 본 글", -1));
+                    liTemp.add(0,new TICommunity("recent", "최근 본 글", -1));
                 }
                 if( liTemp.get(position).index == -1 ) {
                     Message msg = handler.obtainMessage();
