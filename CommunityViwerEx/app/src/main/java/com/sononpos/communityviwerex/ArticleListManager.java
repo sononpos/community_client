@@ -116,14 +116,14 @@ class ArticleListManager {
 
     public void clearFavorate(Context context) {
         aFavorateItems.clear();
-        saveRecent(context);
+        saveFavorate(context);
     }
 
     public void removeFavorate(Context context, int idx) {
         ListViewItem item = aFavorateItems.get(idx);
         aFavorateHash.remove(item.m_sTitle.hashCode());
         aFavorateItems.remove(idx);
-        saveRecent(context);
+        saveFavorate(context);
     }
 
     public boolean isFavorated(int _hash) {
