@@ -143,63 +143,6 @@ public class LoadingActivity extends AppCompatActivity {
     }
     MyHandler handlerPager;
 
-    class CheckUpdateHandler extends Handler {
-        public CheckUpdateHandler(){}
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-            if(msg.arg1 == -1) {
-                LoadCommunityList();
-                return;
-            }
-
-            if( msg.arg1 == 0 ) {
-                LoadCommunityList();
-            }
-            else {
-                if( KBONetworkInfo.IsWifiAvailable(getApplicationContext()) ) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(LoadingActivity.this);
-
-                    builder.setTitle("업데이트 확인");
-                    builder.setMessage("마켓에 새 버전이 있습니다. 업데이트 하시겠습니까?");
-
-
-                    builder.setPositiveButton("네", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent marketLaunch = new Intent(Intent.ACTION_VIEW);
-                            marketLaunch.setData(Uri.parse("market://details?id=com.sononpos.communityviwerex"));
-                            startActivity(marketLaunch);
-                            finish();
-                            dialog.dismiss();
-                        }
-
-                    });
-
-                    builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            LoadCommunityList();
-                            dialog.dismiss();
-                        }
-                    });
-
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                }
-                else {
-                    LoadCommunityList();
-                }
-            }
-        }
-    }
-
-    CheckUpdateHandler handlerUpdate;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
