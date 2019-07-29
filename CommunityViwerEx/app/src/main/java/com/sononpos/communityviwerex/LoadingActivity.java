@@ -167,7 +167,7 @@ public class LoadingActivity extends AppCompatActivity {
                 if( task.isSuccessful() ) {
                     try {
 
-                        frc.activate();
+                        frc.activateFetched();
                         String sCurVer = BuildConfig.VERSION_NAME;
                         int nCurMajor = Integer.parseInt( sCurVer.split("\\.")[0] );
                         String s = frc.getString("last_ver");
